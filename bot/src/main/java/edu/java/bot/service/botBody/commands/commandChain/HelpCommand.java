@@ -34,7 +34,7 @@ public final class HelpCommand extends AbstractCommand {
 
     @Override
     public CommandComplete applyCommand() {
-        if (!valid()) {
+        if (notValid()) {
             return nextCommand.applyCommand();
         }
 
@@ -47,8 +47,8 @@ public final class HelpCommand extends AbstractCommand {
     }
 
     @Override
-    protected boolean valid() {
-        return messageTextNotNull() && message.text().equals("/help");
+    protected boolean notValid() {
+        return messageTextNull() || !message.text().equals("/help");
     }
 
     @Override

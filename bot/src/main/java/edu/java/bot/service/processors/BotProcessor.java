@@ -18,7 +18,7 @@ public final class BotProcessor implements Processor {
 
     @PostConstruct
     @Override
-    public void process() throws Exception {
+    public void process() {
         bot.start();
     }
 }

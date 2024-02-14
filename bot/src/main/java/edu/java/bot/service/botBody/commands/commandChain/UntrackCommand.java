@@ -36,7 +36,7 @@ public final class UntrackCommand extends AbstractCommand {
             return new LinkUntrackCommand(inMemoryDataBase, message).applyCommand();
         }
 
-        if (!valid()) {
+        if (notValid()) {
             return nextCommand.applyCommand();
         }
 
@@ -45,8 +45,8 @@ public final class UntrackCommand extends AbstractCommand {
     }
 
     @Override
-    protected boolean valid() {
-        return messageTextNotNull() && message.text().equals("/untrack");
+    protected boolean notValid() {
+        return messageTextNull() || !message.text().equals("/untrack");
     }
 
     @Override
@@ -64,7 +64,7 @@ public final class UntrackCommand extends AbstractCommand {
 
         @SneakyThrows @Override
         public CommandComplete applyCommand() {
-            if (!valid()) {
+            if (notValid()) {
                 return nextCommand.applyCommand();
             }
 
@@ -84,13 +84,13 @@ public final class UntrackCommand extends AbstractCommand {
         }
 
         @Override
-        protected boolean valid() {
+        protected boolean notValid() {
             try {
                 new Link(message.text());
             } catch (URISyntaxException e) {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
     }
 }

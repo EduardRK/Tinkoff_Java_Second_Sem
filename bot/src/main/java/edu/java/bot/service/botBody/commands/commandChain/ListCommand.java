@@ -24,7 +24,7 @@ public final class ListCommand extends AbstractCommand {
 
     @Override
     public CommandComplete applyCommand() {
-        if (!valid()) {
+        if (notValid()) {
             return nextCommand.applyCommand();
         }
 
@@ -43,8 +43,8 @@ public final class ListCommand extends AbstractCommand {
     }
 
     @Override
-    protected boolean valid() {
-        return messageTextNotNull() && message.text().equals("/list");
+    protected boolean notValid() {
+        return messageTextNull() || !message.text().equals("/list");
     }
 
     @Override

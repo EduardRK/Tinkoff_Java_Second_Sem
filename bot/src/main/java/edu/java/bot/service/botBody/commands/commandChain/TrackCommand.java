@@ -36,7 +36,7 @@ public final class TrackCommand extends AbstractCommand {
             return new LinkTrackCommand(inMemoryDataBase, message).applyCommand();
         }
 
-        if (!valid()) {
+        if (notValid()) {
             return nextCommand.applyCommand();
         }
 
@@ -45,8 +45,8 @@ public final class TrackCommand extends AbstractCommand {
     }
 
     @Override
-    protected boolean valid() {
-        return messageTextNotNull() && message.text().equals("/track");
+    protected boolean notValid() {
+        return messageTextNull() || !message.text().equals("/track");
     }
 
     @Override
@@ -64,7 +64,7 @@ public final class TrackCommand extends AbstractCommand {
         @SneakyThrows
         @Override
         public CommandComplete applyCommand() {
-            if (!valid()) {
+            if (notValid()) {
                 return nextCommand.applyCommand();
             }
 
@@ -79,13 +79,13 @@ public final class TrackCommand extends AbstractCommand {
         }
 
         @Override
-        protected boolean valid() {
+        protected boolean notValid() {
             try {
                 new Link(message.text());
             } catch (URISyntaxException e) {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
     }
 }

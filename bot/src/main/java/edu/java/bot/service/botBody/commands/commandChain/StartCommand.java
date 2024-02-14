@@ -25,13 +25,13 @@ public final class StartCommand extends AbstractCommand {
     }
 
     @Override
-    protected boolean valid() {
-        return messageTextNotNull() && message.text().equals("/start");
+    protected boolean notValid() {
+        return messageTextNull() || !message.text().equals("/start");
     }
 
     @Override
     public CommandComplete applyCommand() {
-        if (!valid()) {
+        if (notValid()) {
             return nextCommand.applyCommand();
         }
 

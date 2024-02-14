@@ -16,10 +16,10 @@ public abstract class AbstractCommand implements Command {
         this.nextCommand = command;
     }
 
-    protected abstract boolean valid();
+    protected abstract boolean notValid();
 
-    protected boolean messageTextNotNull() {
-        return message.text() != null;
+    protected boolean messageTextNull() {
+        return message.text() == null;
     }
 
     @Override
