@@ -73,7 +73,7 @@ class StartCommandTest {
 
     @Test
     void testToString() {
-       StartCommand startCommand = new StartCommand();
+        StartCommand startCommand = new StartCommand();
 
         Assertions.assertEquals(
             "/start - user registration",

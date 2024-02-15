@@ -1,11 +1,11 @@
 package edu.java.bot.service.dataBase;
 
 import edu.java.bot.service.botBody.dataClasses.Link;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 class InMemoryIdLinkDataBaseTest {
 

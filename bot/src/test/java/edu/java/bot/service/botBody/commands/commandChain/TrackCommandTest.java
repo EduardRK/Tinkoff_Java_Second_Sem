@@ -54,8 +54,8 @@ class TrackCommandTest {
 
         Assertions.assertTrue(
             inMemoryDataBase.dataBase()
-            .get(123L)
-            .contains(new Link("https://github.com/"))
+                .get(123L)
+                .contains(new Link("https://github.com/"))
         );
     }
 
