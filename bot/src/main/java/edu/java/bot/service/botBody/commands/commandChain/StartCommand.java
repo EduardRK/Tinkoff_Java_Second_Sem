@@ -7,6 +7,8 @@ import edu.java.bot.service.botBody.commands.EmptyCommand;
 import edu.java.bot.service.botBody.dataClasses.Link;
 import edu.java.bot.service.dataBase.InMemoryDataBase;
 import java.util.HashSet;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class StartCommand extends AbstractCommand {
     private static final String ALREADY_REGISTRATION = "The user is already registered.";
@@ -45,8 +47,9 @@ public final class StartCommand extends AbstractCommand {
         return new CommandComplete(USER_REGISTERED, id);
     }
 
+    @Contract(pure = true)
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "/start - user registration";
     }
 }

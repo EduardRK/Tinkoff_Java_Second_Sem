@@ -6,6 +6,8 @@ import edu.java.bot.service.botBody.commands.CommandComplete;
 import edu.java.bot.service.botBody.commands.EmptyCommand;
 import edu.java.bot.service.botBody.dataClasses.Link;
 import edu.java.bot.service.dataBase.InMemoryDataBase;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class ListCommand extends AbstractCommand {
     private static final String NOTHING_TRACK = "No links are tracked.";
@@ -47,13 +49,15 @@ public final class ListCommand extends AbstractCommand {
         return messageTextNull() || !message.text().equals("/list");
     }
 
+    @Contract(pure = true)
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "/list - list of tracked links";
     }
 
     private boolean nothingTrack() {
         long id = message.chat().id();
+
         return !(inMemoryDataBase.dataBase().containsKey(id)
             && !inMemoryDataBase.dataBase().get(id).isEmpty());
     }

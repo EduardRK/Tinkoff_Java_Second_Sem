@@ -7,6 +7,7 @@ import edu.java.bot.service.dataBase.InMemoryDataBase;
 import edu.java.bot.service.dataBase.InMemoryIdLinkDataBase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.jetbrains.annotations.NotNull;
 
 public final class UpdateHandler implements Handler<UpdatesWithExecutor> {
     private final ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
@@ -16,7 +17,7 @@ public final class UpdateHandler implements Handler<UpdatesWithExecutor> {
     }
 
     @Override
-    public void put(UpdatesWithExecutor value) {
+    public void put(@NotNull UpdatesWithExecutor value) {
         for (Update update : value.updates()) {
             executorService.execute(
                 new UpdateExecutionTask(

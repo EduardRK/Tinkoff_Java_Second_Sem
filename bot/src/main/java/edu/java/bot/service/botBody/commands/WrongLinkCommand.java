@@ -1,8 +1,10 @@
 package edu.java.bot.service.botBody.commands;
 
 import com.pengrad.telegrambot.model.Message;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-public class WrongLinkCommand implements Command {
+public final class WrongLinkCommand implements Command {
     private static final String WRONG_LINK = "Wrong link. Try again.";
     private final Message message;
 
@@ -10,8 +12,9 @@ public class WrongLinkCommand implements Command {
         this.message = message;
     }
 
+    @Contract(" -> new")
     @Override
-    public CommandComplete applyCommand() {
+    public @NotNull CommandComplete applyCommand() {
         return new CommandComplete(WRONG_LINK, message.chat().id());
     }
 }

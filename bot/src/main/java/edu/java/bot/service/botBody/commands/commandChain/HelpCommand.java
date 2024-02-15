@@ -8,6 +8,8 @@ import edu.java.bot.service.botBody.dataClasses.Link;
 import edu.java.bot.service.dataBase.InMemoryDataBase;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class HelpCommand extends AbstractCommand {
     private final static List<AbstractCommand> COMMAND_LIST = new ArrayList<>(
@@ -51,8 +53,9 @@ public final class HelpCommand extends AbstractCommand {
         return messageTextNull() || !message.text().equals("/help");
     }
 
+    @Contract(pure = true)
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "/help - print all commands";
     }
 }

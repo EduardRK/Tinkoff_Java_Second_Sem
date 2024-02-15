@@ -1,8 +1,10 @@
 package edu.java.bot.service.botBody.commands;
 
 import com.pengrad.telegrambot.model.Message;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-public class EmptyCommand implements Command {
+public final class EmptyCommand implements Command {
     private static final String WRONG_COMMAND = "Wrong command. Try again or use /help.";
     private final Message message;
 
@@ -10,8 +12,9 @@ public class EmptyCommand implements Command {
         this.message = message;
     }
 
+    @Contract(" -> new")
     @Override
-    public CommandComplete applyCommand() {
+    public @NotNull CommandComplete applyCommand() {
         return new CommandComplete(WRONG_COMMAND, message.chat().id());
     }
 }

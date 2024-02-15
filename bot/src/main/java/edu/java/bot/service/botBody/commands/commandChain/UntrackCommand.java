@@ -10,6 +10,8 @@ import edu.java.bot.service.dataBase.InMemoryDataBase;
 import java.net.URISyntaxException;
 import java.util.Set;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class UntrackCommand extends AbstractCommand {
     private static final String UNTRACK = "untrack";
@@ -49,8 +51,9 @@ public final class UntrackCommand extends AbstractCommand {
         return messageTextNull() || !message.text().equals("/untrack");
     }
 
+    @Contract(pure = true)
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "/untrack - stop tracking link";
     }
 

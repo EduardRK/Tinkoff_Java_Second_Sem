@@ -11,12 +11,12 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public final class NotificationsCollectorBot implements Bot {
+public final class LinkTrackerBot implements Bot {
     private static final Handler<UpdatesWithExecutor> HANDLER = new UpdateHandler();
     private final TelegramBot telegramBot;
 
     @Autowired
-    public NotificationsCollectorBot(@NotNull ApplicationConfig applicationConfig) {
+    public LinkTrackerBot(@NotNull ApplicationConfig applicationConfig) {
         this.telegramBot = new TelegramBot.Builder(applicationConfig.telegramToken()).debug().build();
     }
 

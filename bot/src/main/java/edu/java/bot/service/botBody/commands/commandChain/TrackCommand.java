@@ -10,6 +10,8 @@ import edu.java.bot.service.dataBase.InMemoryDataBase;
 import java.net.URISyntaxException;
 import java.util.Set;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class TrackCommand extends AbstractCommand {
     private static final String TRACK = "track";
@@ -49,8 +51,9 @@ public final class TrackCommand extends AbstractCommand {
         return messageTextNull() || !message.text().equals("/track");
     }
 
+    @Contract(pure = true)
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "/track - start tracking link";
     }
 
