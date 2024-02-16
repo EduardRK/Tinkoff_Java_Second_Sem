@@ -19,18 +19,22 @@ public class CommandChain implements Command {
         this(new StartCommand(
                 inMemoryDataBase,
                 message,
-                new HelpCommand(
+                new UserRegistrationCheckCommand(
                     inMemoryDataBase,
                     message,
-                    new ListCommand(
+                    new HelpCommand(
                         inMemoryDataBase,
                         message,
-                        new TrackCommand(
+                        new ListCommand(
                             inMemoryDataBase,
                             message,
-                            new UntrackCommand(
+                            new TrackCommand(
                                 inMemoryDataBase,
-                                message
+                                message,
+                                new UntrackCommand(
+                                    inMemoryDataBase,
+                                    message
+                                )
                             )
                         )
                     )
