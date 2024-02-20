@@ -1,8 +1,8 @@
 package edu.java.bot.service.processors;
 
 import edu.java.bot.configuration.ApplicationConfig;
-import edu.java.bot.service.botBody.telegramBots.Bot;
-import edu.java.bot.service.botBody.telegramBots.LinkTrackerBot;
+import edu.java.bot.service.bot_body.telegram_bots.Bot;
+import edu.java.bot.service.bot_body.telegram_bots.LinkTrackerBot;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
