@@ -56,7 +56,7 @@ public final class StartCommand extends AbstractCommand {
     private static final class UserRegistrationCheckCommand extends AbstractCommand {
         private static final String USER_NOT_REGISTER = "You are not registered. Use the command /start.";
 
-        public UserRegistrationCheckCommand(
+        UserRegistrationCheckCommand(
             InMemoryDataBase<Long, Link> inMemoryDataBase,
             Message message,
             Command command
