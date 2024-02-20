@@ -44,41 +44,6 @@ public final class CommandChain implements Command {
         this(inMemoryDataBase, update.message());
     }
 
-//    public static CommandChain newChain(
-//        Update update,
-//        AbstractCommand... commands
-//    ) {
-//        return newChain(update.message(), commands);
-//    }
-//
-//    public static CommandChain newChain(
-//        Message message,
-//        AbstractCommand... commands
-//    ) {
-//        return newChain(message, List.of(commands));
-//    }
-//
-//    public static CommandChain newChain(
-//        Update update,
-//        List<? extends AbstractCommand> commands
-//    ) {
-//        return newChain(update.message(), commands);
-//    }
-//
-//    public static CommandChain newChain(
-//        Message message,
-//        List<? extends AbstractCommand> commands
-//    ) {
-//        AbstractCommand chain = commands.getFirst();
-//        AbstractCommand nextElement;
-//
-//        for (int i = 1; i < commands.size(); ++i) {
-//        }
-//
-//        previousCommand.linkCommand(new EmptyCommand(message));
-//        return new CommandChain(previousCommand);
-//    }
-
     @Override
     public CommandComplete applyCommand() {
         return chain.applyCommand();

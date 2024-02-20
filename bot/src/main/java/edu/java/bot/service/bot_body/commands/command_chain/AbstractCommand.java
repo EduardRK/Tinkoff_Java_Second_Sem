@@ -22,15 +22,6 @@ public abstract class AbstractCommand implements Command {
         return message.text() == null;
     }
 
-//    public void linkCommand(Command command) {
-//        if (nextCommand == null) {
-//            this.nextCommand = command;
-//        } else
-//        {
-//            nextCommand.
-//        }
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

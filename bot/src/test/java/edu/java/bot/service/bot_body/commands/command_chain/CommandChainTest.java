@@ -50,14 +50,6 @@ class CommandChainTest {
         Mockito.when(chat.id()).thenReturn(123L);
         Mockito.when(update.message()).thenReturn(message);
 
-//        CommandChain commandChain = CommandChain.newChain(
-//            message,
-//            new StartCommand(IN_MEMORY_DATA_BASE, message),
-//            new HelpCommand(IN_MEMORY_DATA_BASE, message),
-//            new ListCommand(IN_MEMORY_DATA_BASE, message),
-//            new TrackCommand(IN_MEMORY_DATA_BASE, message),
-//            new UntrackCommand(IN_MEMORY_DATA_BASE, message)
-//        );
         CommandChain commandChain = new CommandChain(IN_MEMORY_DATA_BASE, message);
 
         CommandComplete commandComplete = new CommandComplete(
