@@ -80,4 +80,28 @@ class StartCommandTest {
             startCommand.toString()
         );
     }
+
+    @Test
+    void testUserNotRegistration() {
+        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+
+        Message messageFirst = Mockito.mock(Message.class);
+        Chat chat = Mockito.mock(Chat.class);
+
+        Mockito.when(messageFirst.text()).thenReturn("/help");
+        Mockito.when(messageFirst.chat()).thenReturn(chat);
+        Mockito.when(chat.id()).thenReturn(123L);
+
+        StartCommand startCommand = new StartCommand(inMemoryDataBase, messageFirst);
+
+        CommandComplete commandComplete = new CommandComplete(
+            "You are not registered. Use the command /start.",
+            123L
+        );
+
+        Assertions.assertEquals(
+            commandComplete,
+            startCommand.applyCommand()
+        );
+    }
 }
