@@ -15,33 +15,18 @@ public final class CommandChain implements Command {
         this.chain = chain;
     }
 
-    public CommandChain(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
-        this(
-            new StartCommand(
-                inMemoryDataBase,
-                message,
-                new HelpCommand(
-                    inMemoryDataBase,
-                    message,
-                    new ListCommand(
-                        inMemoryDataBase,
-                        message,
-                        new TrackCommand(
-                            inMemoryDataBase,
-                            message,
-                            new UntrackCommand(
-                                inMemoryDataBase,
-                                message
-                            )
-                        )
-                    )
-                )
-            )
-        );
+    public static @NotNull CommandChain defaultChain(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
+        UntrackCommand untrackCommand = new UntrackCommand(inMemoryDataBase, message);
+        TrackCommand trackCommand = new TrackCommand(inMemoryDataBase, message, untrackCommand);
+        ListCommand listCommand = new ListCommand(inMemoryDataBase, message, trackCommand);
+        HelpCommand helpCommand = new HelpCommand(inMemoryDataBase, message, listCommand);
+        StartCommand startCommand = new StartCommand(inMemoryDataBase, message, helpCommand);
+
+        return new CommandChain(startCommand);
     }
 
-    public CommandChain(InMemoryDataBase<Long, Link> inMemoryDataBase, @NotNull Update update) {
-        this(inMemoryDataBase, update.message());
+    public static @NotNull CommandChain defaultChain(InMemoryDataBase<Long, Link> inMemoryDataBase, Update update) {
+        return defaultChain(inMemoryDataBase, update.message());
     }
 
     @Override

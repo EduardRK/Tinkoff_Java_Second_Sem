@@ -50,7 +50,7 @@ class CommandChainTest {
         Mockito.when(chat.id()).thenReturn(123L);
         Mockito.when(update.message()).thenReturn(message);
 
-        CommandChain commandChain = new CommandChain(IN_MEMORY_DATA_BASE, message);
+        CommandChain commandChain = CommandChain.defaultChain(IN_MEMORY_DATA_BASE, message);
 
         CommandComplete commandComplete = new CommandComplete(
             response,

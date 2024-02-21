@@ -24,7 +24,7 @@ public final class UpdateExecutionTask implements Runnable {
 
     @Override
     public void run() {
-        CommandChain commandChain = new CommandChain(dataBase, update);
+        CommandChain commandChain = CommandChain.defaultChain(dataBase, update);
         CommandComplete commandComplete = commandChain.applyCommand();
         telegramBot.execute(GENERATOR.nextObject(commandComplete));
     }
