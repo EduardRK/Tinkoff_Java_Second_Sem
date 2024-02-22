@@ -1,7 +1,8 @@
-package edu.java.scrapper_body.clients.clients_body;
+package edu.java.scrapper_body.clients_body;
+
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.URI;
-import org.springframework.web.reactive.function.client.WebClient;
 
 public abstract class AbstractClient implements Client {
     protected final WebClient webClient;
@@ -13,4 +14,5 @@ public abstract class AbstractClient implements Client {
     }
 
     protected abstract boolean notValid(URI uri);
+
 }

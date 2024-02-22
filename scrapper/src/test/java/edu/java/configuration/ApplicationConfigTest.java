@@ -1,16 +1,25 @@
 package edu.java.configuration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.java.scrapper_body.clients.github_client.GitHubCommitUpdateClient;
-import edu.java.scrapper_body.clients.stackoverflow_client.StackOverflowQuestionClient;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.time.Duration;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ApplicationConfigTest {
 
     @Test
-    void scheduler() throws URISyntaxException, JsonProcessingException {
+    void scheduler() {
+        ApplicationConfig applicationConfig = new ApplicationConfig(
+            new ApplicationConfig.Scheduler(false, Duration.ZERO, Duration.ZERO)
+        );
 
+        Assertions.assertFalse(applicationConfig.scheduler().enable());
+        Assertions.assertEquals(
+            applicationConfig.scheduler().interval(),
+            Duration.ZERO
+        );
+        Assertions.assertEquals(
+            applicationConfig.scheduler().forceCheckDelay(),
+            Duration.ZERO
+        );
     }
 }

@@ -3,7 +3,6 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-src/main/resources/variables.env
 ### STS ###
 .apt_generated
 .classpath

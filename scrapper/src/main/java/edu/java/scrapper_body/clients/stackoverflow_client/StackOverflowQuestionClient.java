@@ -3,10 +3,14 @@ package edu.java.scrapper_body.clients.stackoverflow_client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.java.scrapper_body.clients.clients_body.AbstractClient;
-import edu.java.scrapper_body.clients.clients_body.Client;
-import edu.java.scrapper_body.clients.clients_body.Response;
 import edu.java.scrapper_body.clients.unsupported_client.UnsupportedClient;
+import edu.java.scrapper_body.clients_body.AbstractClient;
+import edu.java.scrapper_body.clients_body.Client;
+import edu.java.scrapper_body.clients_body.Response;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import java.net.URI;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -16,9 +20,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.client.WebClient;
 
 public final class StackOverflowQuestionClient extends AbstractClient {
     private static final String BASE_URI = "https://api.stackexchange.com/2.3";
@@ -52,22 +53,22 @@ public final class StackOverflowQuestionClient extends AbstractClient {
         matcher.matches();
 
         String json = webClient
-            .get()
-            .uri("/questions/" + matcher.group(2) + "/answers" + FILTERS)
-            .accept(MediaType.APPLICATION_JSON)
-            .retrieve()
-            .bodyToMono(String.class)
-            .onErrorReturn("")
-            .block();
+                .get()
+                .uri("/questions/" + matcher.group(2) + "/answers" + FILTERS)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class)
+                .onErrorReturn("")
+                .block();
 
         if (Objects.requireNonNull(json).isEmpty()) {
             return new ArrayList<>();
         }
 
         return answersFromJSON(json)
-            .stream()
-            .map(answer -> new Response(uri, answer.author, answer.message, answer.date))
-            .toList();
+                .stream()
+                .map(answer -> new Response(uri, answer.author, answer.message, answer.date))
+                .toList();
     }
 
     @Override
@@ -84,16 +85,16 @@ public final class StackOverflowQuestionClient extends AbstractClient {
             JsonNode arrayNode = root.get(i);
 
             answers.add(
-                new Answer(
-                    arrayNode.get("owner").get("display_name").asText(),
-                    arrayNode.get("body").asText(),
-                    OffsetDateTime.ofInstant(
-                        Instant.ofEpochSecond(
-                            arrayNode.get("creation_date").asInt()
-                        ),
-                        ZoneOffset.UTC
+                    new Answer(
+                            arrayNode.get("owner").get("display_name").asText(),
+                            arrayNode.get("body").asText(),
+                            OffsetDateTime.ofInstant(
+                                    Instant.ofEpochSecond(
+                                            arrayNode.get("creation_date").asInt()
+                                    ),
+                                    ZoneOffset.UTC
+                            )
                     )
-                )
             );
         }
 
@@ -101,9 +102,9 @@ public final class StackOverflowQuestionClient extends AbstractClient {
     }
 
     private record Answer(
-        String author,
-        String message,
-        OffsetDateTime date
+            String author,
+            String message,
+            OffsetDateTime date
     ) {
 
     }

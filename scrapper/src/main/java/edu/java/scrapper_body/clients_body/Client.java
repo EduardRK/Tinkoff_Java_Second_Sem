@@ -1,6 +1,7 @@
-package edu.java.scrapper_body.clients.clients_body;
+package edu.java.scrapper_body.clients_body;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.net.URI;
 import java.util.List;
 
