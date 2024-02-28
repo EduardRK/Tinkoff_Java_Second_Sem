@@ -72,7 +72,7 @@ class StackOverflowQuestionClientTest {
 
     @Test
     void newUpdates() throws URISyntaxException, JsonProcessingException {
-        StackOverflowQuestionClient client = new StackOverflowQuestionClient();
+        StackOverflowQuestionClient client = new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl());
         List<Response> responses = new ArrayList<>(
             List.of(
                 new Response(
@@ -97,10 +97,10 @@ class StackOverflowQuestionClientTest {
 
     @Test
     void notValid() throws URISyntaxException {
-        StackOverflowQuestionClient stackOverflowQuestionClient = new StackOverflowQuestionClient();
+        StackOverflowQuestionClient client = new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl());
 
         Assertions.assertTrue(
-            stackOverflowQuestionClient.notValid(new URI(
+            client.notValid(new URI(
                 "https://github.com/gunnarmorling/1brc"))
         );
     }
@@ -109,7 +109,7 @@ class StackOverflowQuestionClientTest {
     void constructorsTest() {
         Assertions.assertDoesNotThrow(
             () -> {
-                new StackOverflowQuestionClient("other.api.stackoverflow.com");
+                new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl());
                 new StackOverflowQuestionClient();
             }
         );

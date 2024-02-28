@@ -1,10 +1,12 @@
-package edu.java.shadulers;
+package edu.java.schedulers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-public record LinkUpdaterScheduler() implements UpdateScheduler {
+@Component
+public final class LinkUpdaterScheduler implements UpdateScheduler {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Override

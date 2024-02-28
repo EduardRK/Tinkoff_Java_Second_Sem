@@ -1,4 +1,4 @@
-package edu.java.shadulers;
+package edu.java.schedulers;
 
 import org.junit.jupiter.api.Test;
 
