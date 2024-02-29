@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import edu.java.scrapper_body.clients.stackoverflow_client.StackOverflowQuestionClient;
+import edu.java.scrapper_body.clients.support.FileContent;
 import edu.java.scrapper_body.clients_body.Response;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
@@ -20,7 +22,7 @@ class GitHubCommitUpdateClientTest {
     private static final String REPOSITORY_LINK = "https://github.com/EduardRK/Fractal-Flame";
 
     @BeforeAll
-    public static void serverStart() {
+    public static void serverStart() throws IOException {
         WIRE_MOCK_SERVER
             .stubFor(
                 WireMock.get(WireMock.urlEqualTo("/repos/EduardRK/Fractal-Flame/commits"))
@@ -28,37 +30,7 @@ class GitHubCommitUpdateClientTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(
-                            """
-                                [
-                                    {
-                                        "sha": "30084aa6abd951f6bf9a730e882fb63cbe5b05dd",
-                                        "node_id": "C_kwDOLDsvgNoAKDMwMDg0YWE2YWJkOTUxZjZiZjlhNzMwZTg4MmZiNjNjYmU1YjA1ZGQ",
-                                        "commit": {
-                                            "author": {
-                                                "name": "EduardRK",
-                                                "date": "2024-01-11T18:51:01Z"
-                                            },
-                                            "committer": {
-                                                "name": "EduardRK",
-                                                "date": "2024-01-11T18:51:01Z"
-                                            },
-                                            "message": "Fractal flame",
-                                            "tree": {
-                                                "sha": "219e04b962d9111bc113f580dc3284a349a8c7fe",
-                                                "url": "https://api.github.com/repos/EduardRK/Fractal-Flame/git/trees/219e04b962d9111bc113f580dc3284a349a8c7fe"
-                                            },
-                                            "url": "https://api.github.com/repos/EduardRK/Fractal-Flame/git/commits/30084aa6abd951f6bf9a730e882fb63cbe5b05dd",
-                                            "comment_count": 0,
-                                            "verification": {
-                                                "verified": false,
-                                                "reason": "unsigned",
-                                                "signature": null,
-                                                "payload": null
-                                            }
-                                        }
-                                    }
-                                ]
-                                """
+                            new FileContent("src/main/resources/github-test-data.json").content()
                         )
                     )
             );
@@ -73,6 +45,7 @@ class GitHubCommitUpdateClientTest {
     @Test
     void newUpdates() throws URISyntaxException, JsonProcessingException {
         GitHubCommitUpdateClient client = new GitHubCommitUpdateClient(WIRE_MOCK_SERVER.baseUrl());
+
         List<Response> responses = new ArrayList<>(
             List.of(
                 new Response(

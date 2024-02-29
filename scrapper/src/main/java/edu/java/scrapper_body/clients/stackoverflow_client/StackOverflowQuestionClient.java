@@ -1,16 +1,11 @@
 package edu.java.scrapper_body.clients.stackoverflow_client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.scrapper_body.clients.unsupported_client.UnsupportedClient;
 import edu.java.scrapper_body.clients_body.AbstractClient;
 import edu.java.scrapper_body.clients_body.Client;
 import edu.java.scrapper_body.clients_body.Response;
 import java.net.URI;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,60 +46,27 @@ public final class StackOverflowQuestionClient extends AbstractClient {
         Matcher matcher = PATTERN.matcher(uri.toString());
         matcher.matches();
 
-        String json = webClient
+        Answers answers = webClient
             .get()
             .uri("/questions/" + matcher.group(2) + "/answers" + FILTERS)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(String.class)
-            .onErrorReturn("")
+            .bodyToMono(Answers.class)
+            .onErrorReturn(new Answers(new ArrayList<>()))
             .block();
 
-        if (Objects.requireNonNull(json).isEmpty()) {
+        if (Objects.requireNonNull(answers).answers().isEmpty()) {
             return new ArrayList<>();
         }
 
-        return answersFromJSON(json)
+        return answers.answers()
             .stream()
-            .map(answer -> new Response(uri, answer.author, answer.message, answer.date))
+            .map(answer -> new Response(uri, answer.author(), answer.message(), answer.date()))
             .toList();
     }
 
     @Override
     protected boolean notValid(@NotNull URI uri) {
         return !uri.getHost().equals(HOST);
-    }
-
-    private @NotNull List<Answer> answersFromJSON(String json) throws JsonProcessingException {
-        List<Answer> answers = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(json).get("items");
-
-        for (int i = 0; i < root.size(); ++i) {
-            JsonNode arrayNode = root.get(i);
-
-            answers.add(
-                new Answer(
-                    arrayNode.get("owner").get("display_name").asText(),
-                    arrayNode.get("body").asText(),
-                    OffsetDateTime.ofInstant(
-                        Instant.ofEpochSecond(
-                            arrayNode.get("creation_date").asInt()
-                        ),
-                        ZoneOffset.UTC
-                    )
-                )
-            );
-        }
-
-        return answers;
-    }
-
-    private record Answer(
-        String author,
-        String message,
-        OffsetDateTime date
-    ) {
-
     }
 }
