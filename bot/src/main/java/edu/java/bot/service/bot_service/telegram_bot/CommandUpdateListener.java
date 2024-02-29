@@ -1,0 +1,21 @@
+package edu.java.bot.service.bot_service.telegram_bot;
+
+import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.Update;
+import edu.java.bot.service.bot_service.handlers.Handler;
+import edu.java.bot.service.bot_service.handlers.UpdateHandler;
+import java.util.List;
+
+public final class CommandUpdateListener implements UpdatesListener {
+    private final Handler<List<Update>> handler;
+
+    public CommandUpdateListener(UpdateHandler handler) {
+        this.handler = handler;
+    }
+
+    @Override
+    public int process(List<Update> updates) {
+        handler.put(updates);
+        return CONFIRMED_UPDATES_ALL;
+    }
+}
