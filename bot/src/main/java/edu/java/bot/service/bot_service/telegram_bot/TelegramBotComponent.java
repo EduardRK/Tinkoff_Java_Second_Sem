@@ -9,7 +9,7 @@ public final class TelegramBotComponent {
     private final TelegramBot telegramBot;
 
     public TelegramBotComponent(ApplicationConfig applicationConfig) {
-        this.telegramBot = new TelegramBot.Builder("6466351131:AAGICxkGHk7xYMy8cjvjM9r_3AtFfhz5cVI").debug().build();
+        this.telegramBot = new TelegramBot.Builder(applicationConfig.telegramToken()).debug().build();
     }
 
     public TelegramBot telegramBot() {
