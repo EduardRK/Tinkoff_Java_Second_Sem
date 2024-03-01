@@ -1,11 +1,11 @@
 package edu.java.bot.service.bot_service.handlers;
 
-import edu.java.bot.api.requests.LinkUpdateRequest;
 import edu.java.bot.service.bot_service.bot_body.data_classes.Link;
-import edu.java.bot.service.bot_service.exceptions.ChatNotRegisteredException;
-import edu.java.bot.service.bot_service.exceptions.UriNotTrackedException;
 import edu.java.bot.service.bot_service.handlers.tasks.LinkUpdateExecutionTask;
 import edu.java.bot.service.bot_service.telegram_bot.DefaultTelegramBotComponent;
+import edu.java.exceptions.ChatsNotRegisteredException;
+import edu.java.exceptions.ChatsNotTrackedUriException;
+import edu.java.requests.LinkUpdateRequest;
 import java.net.URISyntaxException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
             .toList();
 
         if (!ids.isEmpty()) {
-            throw new ChatNotRegisteredException(ids);
+            throw new ChatsNotRegisteredException(ids);
         }
     }
 
@@ -55,7 +55,7 @@ public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
             .toList();
 
         if (!ids.isEmpty()) {
-            throw new UriNotTrackedException(ids, linkUpdateRequest.url());
+            throw new ChatsNotTrackedUriException(ids, linkUpdateRequest.url());
         }
     }
 }

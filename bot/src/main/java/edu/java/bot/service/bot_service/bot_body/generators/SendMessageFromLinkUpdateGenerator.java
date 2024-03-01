@@ -2,7 +2,7 @@ package edu.java.bot.service.bot_service.bot_body.generators;
 
 import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.api.requests.LinkUpdateRequest;
+import edu.java.requests.LinkUpdateRequest;
 import java.util.List;
 
 public final class SendMessageFromLinkUpdateGenerator implements Generator<List<SendMessage>, LinkUpdateRequest> {

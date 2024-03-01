@@ -1,8 +1,8 @@
 package edu.java.bot.api.controllers;
 
-import edu.java.bot.api.responses.ApiErrorResponse;
-import edu.java.bot.service.bot_service.exceptions.ChatNotRegisteredException;
-import edu.java.bot.service.bot_service.exceptions.UriNotTrackedException;
+import edu.java.exceptions.ChatsNotRegisteredException;
+import edu.java.exceptions.ChatsNotTrackedUriException;
+import edu.java.responses.ApiErrorResponse;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,10 @@ public final class ExceptionController {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ChatNotRegisteredException.class)
-    public ResponseEntity<ApiErrorResponse> chatNotRegistered(ChatNotRegisteredException exception) {
+    @ExceptionHandler(ChatsNotRegisteredException.class)
+    public ResponseEntity<ApiErrorResponse> chatsNotRegistered(ChatsNotRegisteredException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
-            chatNotRegisteredDescription(exception),
+            chatsNotRegisteredDescription(exception),
             String.valueOf(HttpStatus.NOT_FOUND.value()),
             "ChatNotRegisteredException",
             exception.getMessage(),
@@ -30,8 +30,8 @@ public final class ExceptionController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UriNotTrackedException.class)
-    public ResponseEntity<ApiErrorResponse> uriNotTracked(UriNotTrackedException exception) {
+    @ExceptionHandler(ChatsNotTrackedUriException.class)
+    public ResponseEntity<ApiErrorResponse> uriNotTracked(ChatsNotTrackedUriException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
             uriNotTrackedDescription(exception),
             String.valueOf(HttpStatus.BAD_REQUEST.value()),
@@ -43,23 +43,23 @@ public final class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    private String chatNotRegisteredDescription(ChatNotRegisteredException exception) {
+    private String chatsNotRegisteredDescription(ChatsNotRegisteredException exception) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("These chats were not found:").append(' ');
 
-        for (Integer id : exception.chatIds()) {
+        for (Integer id : exception.ids()) {
             stringBuilder.append(id).append(' ');
         }
 
         return stringBuilder.toString();
     }
 
-    private String uriNotTrackedDescription(UriNotTrackedException exception) {
+    private String uriNotTrackedDescription(ChatsNotTrackedUriException exception) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("These chats do not track the link:").append('\n');
 
         for (Integer id : exception.ids()) {
-            stringBuilder.append(id).append(": ").append(exception.url());
+            stringBuilder.append(id).append(": ").append(exception.uri());
         }
 
         return stringBuilder.toString();
