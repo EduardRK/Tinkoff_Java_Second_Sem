@@ -1,10 +1,10 @@
 package edu.java.api.controllers;
 
-import edu.java.api.responses.ApiErrorResponse;
 import edu.java.exceptions.ChatAlreadyRegisteredException;
 import edu.java.exceptions.ChatNotRegisteredException;
 import edu.java.exceptions.IncorrectDataException;
 import edu.java.exceptions.UriNotTrackedException;
+import edu.java.responses.ApiErrorResponse;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,10 +1,10 @@
 package edu.java.api.controllers;
 
-import edu.java.api.requests.AddLinkRequest;
-import edu.java.api.requests.RemoveLinkRequest;
-import edu.java.api.responses.LinkResponse;
-import edu.java.api.responses.ListLinksResponse;
 import edu.java.database.DataBase;
+import edu.java.requests.AddLinkRequest;
+import edu.java.requests.RemoveLinkRequest;
+import edu.java.responses.LinkResponse;
+import edu.java.responses.ListLinksResponse;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

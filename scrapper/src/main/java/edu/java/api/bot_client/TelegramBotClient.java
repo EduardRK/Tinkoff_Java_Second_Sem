@@ -1,8 +1,8 @@
 package edu.java.api.bot_client;
 
-import edu.java.api.requests.LinkUpdateRequest;
 import edu.java.exceptions.ChatNotRegisteredException;
 import edu.java.exceptions.UriNotTrackedException;
+import edu.java.requests.LinkUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,20 +26,20 @@ public final class TelegramBotClient implements BotClient {
     @Override
     public void sendUpdate(LinkUpdateRequest linkUpdateRequest) {
         webClient.post()
-                .uri("/update")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(linkUpdateRequest)
-                .retrieve()
-                .onStatus(
-                        httpStatusCode -> httpStatusCode.equals(HttpStatus.BAD_REQUEST),
-                        clientResponse -> clientResponse.bodyToMono(UriNotTrackedException.class)
-                )
-                .onStatus(
-                        httpStatusCode -> httpStatusCode.equals(HttpStatus.NOT_FOUND),
-                        clientResponse -> clientResponse.bodyToMono(ChatNotRegisteredException.class)
-                )
-                .bodyToMono(Void.class)
-                .block();
+            .uri("/update")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(linkUpdateRequest)
+            .retrieve()
+            .onStatus(
+                httpStatusCode -> httpStatusCode.equals(HttpStatus.BAD_REQUEST),
+                clientResponse -> clientResponse.bodyToMono(UriNotTrackedException.class)
+            )
+            .onStatus(
+                httpStatusCode -> httpStatusCode.equals(HttpStatus.NOT_FOUND),
+                clientResponse -> clientResponse.bodyToMono(ChatNotRegisteredException.class)
+            )
+            .bodyToMono(Void.class)
+            .block();
     }
 }

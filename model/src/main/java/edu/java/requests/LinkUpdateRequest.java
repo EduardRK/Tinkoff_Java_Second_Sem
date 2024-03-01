@@ -1,4 +1,4 @@
-package edu.java.api.requests;
+package edu.java.requests;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package edu.java.api.responses;
+package edu.java.responses;
 
 public record LinkResponse(
     int id,

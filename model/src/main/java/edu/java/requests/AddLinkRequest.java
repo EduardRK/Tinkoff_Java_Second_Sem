@@ -1,4 +1,4 @@
-package edu.java.api.requests;
+package edu.java.requests;
 
 public record AddLinkRequest(
     String link
