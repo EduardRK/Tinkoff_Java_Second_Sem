@@ -20,11 +20,15 @@ public final class LinkTrackerBot implements Bot {
 
     @Override
     public void close() {
-        telegramBotComponent.telegramBot().removeGetUpdatesListener();
+        telegramBotComponent.telegramBot()
+            .removeGetUpdatesListener();
     }
 
     @Override
     public void start() {
-        telegramBotComponent.telegramBot().setUpdatesListener(new CommandUpdateListener(handler));
+        telegramBotComponent.telegramBot()
+            .setUpdatesListener(
+                new CommandUpdateListener(handler)
+            );
     }
 }
