@@ -6,27 +6,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class LinkTrackerBot implements TrackerBot {
-    private final DefaultTelegramBotComponent defaultTelegramBotComponent;
+    private final TelegramBotComponent telegramBotComponent;
     private final UpdateHandler handler;
 
     @Autowired
     public LinkTrackerBot(
-        DefaultTelegramBotComponent defaultTelegramBotComponent,
+        TelegramBotComponent telegramBotComponent,
         UpdateHandler handler
     ) {
-        this.defaultTelegramBotComponent = defaultTelegramBotComponent;
+        this.telegramBotComponent = telegramBotComponent;
         this.handler = handler;
     }
 
     @Override
     public void close() {
-        defaultTelegramBotComponent.telegramBot()
+        telegramBotComponent.telegramBot()
             .removeGetUpdatesListener();
     }
 
     @Override
     public void start() {
-        defaultTelegramBotComponent.telegramBot()
+        telegramBotComponent.telegramBot()
             .setUpdatesListener(
                 new CommandUpdateListener(handler)
             );
