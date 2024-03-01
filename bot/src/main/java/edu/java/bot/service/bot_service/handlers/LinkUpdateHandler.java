@@ -2,10 +2,10 @@ package edu.java.bot.service.bot_service.handlers;
 
 import edu.java.bot.api.requests.LinkUpdateRequest;
 import edu.java.bot.service.bot_service.bot_body.data_classes.Link;
-import edu.java.bot.service.bot_service.exeptions.ChatNotRegisteredException;
-import edu.java.bot.service.bot_service.exeptions.UriNotTrackedException;
+import edu.java.bot.service.bot_service.exceptions.ChatNotRegisteredException;
+import edu.java.bot.service.bot_service.exceptions.UriNotTrackedException;
 import edu.java.bot.service.bot_service.handlers.tasks.LinkUpdateExecutionTask;
-import edu.java.bot.service.bot_service.telegram_bot.TelegramBotComponent;
+import edu.java.bot.service.bot_service.telegram_bot.DefaultTelegramBotComponent;
 import java.net.URISyntaxException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
     @Autowired
-    public LinkUpdateHandler(TelegramBotComponent telegramBotComponent) {
-        super(telegramBotComponent);
+    public LinkUpdateHandler(DefaultTelegramBotComponent defaultTelegramBotComponent) {
+        super(defaultTelegramBotComponent);
     }
 
     @Override
@@ -25,7 +25,7 @@ public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
 
         EXECUTOR_SERVICE.execute(
             new LinkUpdateExecutionTask(
-                telegramBotComponent.telegramBot(),
+                defaultTelegramBotComponent.telegramBot(),
                 value
             )
         );

@@ -4,12 +4,15 @@ import edu.java.bot.api.requests.AddLinkRequest;
 import edu.java.bot.api.requests.RemoveLinkRequest;
 import edu.java.bot.api.responses.LinkResponse;
 import edu.java.bot.api.responses.ListLinksResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-public class LinkScrapperClient implements ScrapperClient {
+@Component
+public final class LinkScrapperClient implements ScrapperClient {
     private static final String TG_CHAT_ID = "tg_chat/{id}";
     private static final String LINKS = "/links";
     private static final String ID = "id";
@@ -20,6 +23,7 @@ public class LinkScrapperClient implements ScrapperClient {
         this.webClient = WebClient.create(baseUri);
     }
 
+    @Autowired
     public LinkScrapperClient() {
         this(BASE_URI);
     }

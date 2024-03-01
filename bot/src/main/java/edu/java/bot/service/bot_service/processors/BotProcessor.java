@@ -1,22 +1,22 @@
 package edu.java.bot.service.bot_service.processors;
 
-import edu.java.bot.service.bot_service.telegram_bot.Bot;
+import edu.java.bot.service.bot_service.telegram_bot.TrackerBot;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public final class BotProcessor implements Processor {
-    private final Bot bot;
+    private final TrackerBot trackerBot;
 
     @Autowired
-    public BotProcessor(Bot bot) {
-        this.bot = bot;
+    public BotProcessor(TrackerBot trackerBot) {
+        this.trackerBot = trackerBot;
     }
 
     @PostConstruct
     @Override
     public void process() {
-        bot.start();
+        trackerBot.start();
     }
 }

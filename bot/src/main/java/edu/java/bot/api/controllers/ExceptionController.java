@@ -1,8 +1,8 @@
 package edu.java.bot.api.controllers;
 
 import edu.java.bot.api.responses.ApiErrorResponse;
-import edu.java.bot.service.bot_service.exeptions.ChatNotRegisteredException;
-import edu.java.bot.service.bot_service.exeptions.UriNotTrackedException;
+import edu.java.bot.service.bot_service.exceptions.ChatNotRegisteredException;
+import edu.java.bot.service.bot_service.exceptions.UriNotTrackedException;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

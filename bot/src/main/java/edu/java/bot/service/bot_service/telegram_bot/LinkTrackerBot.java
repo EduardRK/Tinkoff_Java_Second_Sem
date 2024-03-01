@@ -5,28 +5,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class LinkTrackerBot implements Bot {
-    private final TelegramBotComponent telegramBotComponent;
+public final class LinkTrackerBot implements TrackerBot {
+    private final DefaultTelegramBotComponent defaultTelegramBotComponent;
     private final UpdateHandler handler;
 
     @Autowired
     public LinkTrackerBot(
-        TelegramBotComponent telegramBotComponent,
+        DefaultTelegramBotComponent defaultTelegramBotComponent,
         UpdateHandler handler
     ) {
-        this.telegramBotComponent = telegramBotComponent;
+        this.defaultTelegramBotComponent = defaultTelegramBotComponent;
         this.handler = handler;
     }
 
     @Override
     public void close() {
-        telegramBotComponent.telegramBot()
+        defaultTelegramBotComponent.telegramBot()
             .removeGetUpdatesListener();
     }
 
     @Override
     public void start() {
-        telegramBotComponent.telegramBot()
+        defaultTelegramBotComponent.telegramBot()
             .setUpdatesListener(
                 new CommandUpdateListener(handler)
             );

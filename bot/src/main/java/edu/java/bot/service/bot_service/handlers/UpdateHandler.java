@@ -2,7 +2,7 @@ package edu.java.bot.service.bot_service.handlers;
 
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.service.bot_service.handlers.tasks.UpdateExecutionTask;
-import edu.java.bot.service.bot_service.telegram_bot.TelegramBotComponent;
+import edu.java.bot.service.bot_service.telegram_bot.DefaultTelegramBotComponent;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 public final class UpdateHandler extends BaseHandler<List<Update>> {
 
     @Autowired
-    public UpdateHandler(TelegramBotComponent telegramBotComponent) {
-        super(telegramBotComponent);
+    public UpdateHandler(DefaultTelegramBotComponent defaultTelegramBotComponent) {
+        super(defaultTelegramBotComponent);
     }
 
     @Override
     public void put(List<Update> value) {
         value.forEach(update -> EXECUTOR_SERVICE.execute(
                 new UpdateExecutionTask(
-                    telegramBotComponent.telegramBot(),
+                    defaultTelegramBotComponent.telegramBot(),
                     DATA_BASE,
                     update
                 )

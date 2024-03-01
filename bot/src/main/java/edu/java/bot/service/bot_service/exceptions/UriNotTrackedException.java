@@ -1,4 +1,4 @@
-package edu.java.bot.service.bot_service.exeptions;
+package edu.java.bot.service.bot_service.exceptions;
 
 import java.util.List;
 
