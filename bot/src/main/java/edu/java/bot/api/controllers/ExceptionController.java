@@ -1,12 +1,13 @@
 package edu.java.bot.api.controllers;
 
 import edu.java.bot.api.responses.ApiErrorResponse;
-import edu.java.bot.service.bot_service.bot_body.exeptions.ChatNotRegisteredException;
-import edu.java.bot.service.bot_service.bot_body.exeptions.UriNotTrackedException;
+import edu.java.bot.service.bot_service.exeptions.ChatNotRegisteredException;
+import edu.java.bot.service.bot_service.exeptions.UriNotTrackedException;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -14,19 +15,21 @@ public final class ExceptionController {
     public ExceptionController() {
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ChatNotRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatNotRegistered(ChatNotRegisteredException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
             chatNotRegisteredDescription(exception),
-            String.valueOf(HttpStatus.BAD_REQUEST.value()),
+            String.valueOf(HttpStatus.NOT_FOUND.value()),
             "ChatNotRegisteredException",
             exception.getMessage(),
             Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
         );
 
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UriNotTrackedException.class)
     public ResponseEntity<ApiErrorResponse> uriNotTracked(UriNotTrackedException exception) {
         ApiErrorResponse response = new ApiErrorResponse(

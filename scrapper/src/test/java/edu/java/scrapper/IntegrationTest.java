@@ -7,7 +7,6 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-
 @Testcontainers
 @Ignore
 public abstract class IntegrationTest {

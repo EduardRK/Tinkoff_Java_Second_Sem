@@ -1,4 +1,4 @@
-package edu.java.bot.service.bot_service.bot_body.exeptions;
+package edu.java.bot.service.bot_service.exeptions;
 
 import java.util.List;
 

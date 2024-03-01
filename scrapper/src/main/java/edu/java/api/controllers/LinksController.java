@@ -6,7 +6,6 @@ import edu.java.api.responses.LinkResponse;
 import edu.java.api.responses.ListLinksResponse;
 import edu.java.database.DataBase;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public final class LinksController {
     public ResponseEntity<ListLinksResponse> allTrackedLinks(
         @RequestHeader("id") int id
     ) {
-        Set<String> links = dataBase.allDataByKey(id);
+        List<String> links = dataBase.allDataByKey(id);
 
         List<LinkResponse> linkResponses = links.stream()
             .map(link -> new LinkResponse(id, link))

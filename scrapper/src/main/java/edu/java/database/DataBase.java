@@ -1,9 +1,9 @@
 package edu.java.database;
 
-import java.util.Set;
+import java.util.List;
 
 public interface DataBase<K, V> {
-    Set<V> allDataByKey(K key);
+    List<V> allDataByKey(K key);
 
     void addValue(K key, V value);
 

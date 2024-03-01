@@ -9,6 +9,7 @@ import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -18,6 +19,7 @@ public final class ExceptionController {
     public ExceptionController() {
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IncorrectDataException.class)
     public ResponseEntity<ApiErrorResponse> incorrectDataException(IncorrectDataException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
@@ -31,6 +33,7 @@ public final class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ChatNotRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatNotRegistered(ChatNotRegisteredException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
@@ -44,6 +47,7 @@ public final class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ChatAlreadyRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatAlreadyRegistered(ChatAlreadyRegisteredException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
@@ -57,6 +61,7 @@ public final class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UriNotTrackedException.class)
     public ResponseEntity<ApiErrorResponse> uriNotTracked(UriNotTrackedException exception) {
         ApiErrorResponse response = new ApiErrorResponse(

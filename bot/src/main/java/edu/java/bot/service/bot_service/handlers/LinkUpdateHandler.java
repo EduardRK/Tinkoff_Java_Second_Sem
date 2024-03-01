@@ -2,8 +2,8 @@ package edu.java.bot.service.bot_service.handlers;
 
 import edu.java.bot.api.requests.LinkUpdateRequest;
 import edu.java.bot.service.bot_service.bot_body.data_classes.Link;
-import edu.java.bot.service.bot_service.bot_body.exeptions.ChatNotRegisteredException;
-import edu.java.bot.service.bot_service.bot_body.exeptions.UriNotTrackedException;
+import edu.java.bot.service.bot_service.exeptions.ChatNotRegisteredException;
+import edu.java.bot.service.bot_service.exeptions.UriNotTrackedException;
 import edu.java.bot.service.bot_service.handlers.tasks.LinkUpdateExecutionTask;
 import edu.java.bot.service.bot_service.telegram_bot.TelegramBotComponent;
 import java.net.URISyntaxException;
