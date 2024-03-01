@@ -46,20 +46,20 @@ public final class StackOverflowQuestionClient extends AbstractClient {
         Matcher matcher = PATTERN.matcher(uri.toString());
         matcher.matches();
 
-        Answers answers = webClient
+        StackOverflowResponse stackOverflowResponse = webClient
             .get()
             .uri("/questions/" + matcher.group(2) + "/answers" + FILTERS)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(Answers.class)
-            .onErrorReturn(new Answers(new ArrayList<>()))
+            .bodyToMono(StackOverflowResponse.class)
+            .onErrorReturn(new StackOverflowResponse(new ArrayList<>()))
             .block();
 
-        if (Objects.requireNonNull(answers).answers().isEmpty()) {
+        if (Objects.requireNonNull(stackOverflowResponse).answers().isEmpty()) {
             return new ArrayList<>();
         }
 
-        return answers.answers()
+        return stackOverflowResponse.answers()
             .stream()
             .map(answer -> new Response(uri, answer.author(), answer.message(), answer.date()))
             .toList();

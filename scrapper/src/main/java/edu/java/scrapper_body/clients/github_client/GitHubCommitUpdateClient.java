@@ -39,23 +39,28 @@ public final class GitHubCommitUpdateClient extends AbstractClient {
             return nextClient.newUpdates(uri);
         }
 
-        List<Commit> commits = webClient
+        List<GitHubResponse> gitHubResponses = webClient
             .get()
             .uri("/repos" + uri.getPath() + "/commits")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(new ParameterizedTypeReference<List<Commit>>() {
+            .bodyToMono(new ParameterizedTypeReference<List<GitHubResponse>>() {
             })
             .onErrorReturn(new ArrayList<>())
             .block();
 
-        if (Objects.requireNonNull(commits).isEmpty()) {
+        if (Objects.requireNonNull(gitHubResponses).isEmpty()) {
             return new ArrayList<>();
         }
 
-        return commits
+        return gitHubResponses
             .stream()
-            .map(commit -> new Response(uri, commit.author(), commit.message(), commit.date()))
+            .map(gitHubResponse -> new Response(
+                uri,
+                gitHubResponse.author(),
+                gitHubResponse.message(),
+                gitHubResponse.date()
+            ))
             .toList();
     }
 
