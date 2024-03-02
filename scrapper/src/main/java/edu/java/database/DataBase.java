@@ -2,7 +2,6 @@ package edu.java.database;
 
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
-import java.util.List;
 import java.util.Set;
 
 public interface DataBase<K, V> {
