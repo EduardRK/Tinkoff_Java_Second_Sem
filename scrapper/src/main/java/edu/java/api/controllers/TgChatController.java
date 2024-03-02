@@ -1,6 +1,8 @@
 package edu.java.api.controllers;
 
 import edu.java.database.DataBase;
+import edu.java.exceptions.BadRequestException.BadRequestException;
+import edu.java.exceptions.NotFoundException.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +23,13 @@ public final class TgChatController {
     }
 
     @PostMapping(produces = "application/json")
-    public ResponseEntity<?> registerChat(@PathVariable int id) {
+    public ResponseEntity<?> registerChat(@PathVariable int id) throws BadRequestException {
         dataBase.addNewUserByKey(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(produces = "application/json")
-    public ResponseEntity<?> deleteChat(@PathVariable int id) {
+    public ResponseEntity<?> deleteChat(@PathVariable int id) throws BadRequestException, NotFoundException {
         dataBase.deleteUserByKey(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

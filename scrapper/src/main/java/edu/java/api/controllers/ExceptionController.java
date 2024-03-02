@@ -1,9 +1,9 @@
 package edu.java.api.controllers;
 
-import edu.java.exceptions.ChatAlreadyRegisteredException;
-import edu.java.exceptions.ChatNotRegisteredException;
-import edu.java.exceptions.IncorrectDataException;
-import edu.java.exceptions.UriNotTrackedException;
+import edu.java.exceptions.BadRequestException.ChatAlreadyRegisteredException;
+import edu.java.exceptions.BadRequestException.IncorrectDataException;
+import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
+import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
 import edu.java.responses.ApiErrorResponse;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public final class ExceptionController {
     public ExceptionController() {
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IncorrectDataException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = IncorrectDataException.class)
     public ResponseEntity<ApiErrorResponse> incorrectDataException(IncorrectDataException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
             "Incorrect id: " + exception.id(),
@@ -33,8 +33,8 @@ public final class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ChatNotRegisteredException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = ChatNotRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatNotRegistered(ChatNotRegisteredException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
             CHAT_WITH_ID + exception.id() + " not registered",
@@ -47,8 +47,8 @@ public final class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ChatAlreadyRegisteredException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = ChatAlreadyRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatAlreadyRegistered(ChatAlreadyRegisteredException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
             CHAT_WITH_ID + exception.id() + " already registered",
@@ -61,9 +61,9 @@ public final class ExceptionController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UriNotTrackedException.class)
-    public ResponseEntity<ApiErrorResponse> uriNotTracked(UriNotTrackedException exception) {
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = ChatNotTrackedUriException.class)
+    public ResponseEntity<ApiErrorResponse> chatNotTrackedUri(ChatNotTrackedUriException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
             CHAT_WITH_ID + exception.id() + " doesn't track link " + exception.uri(),
             String.valueOf(HttpStatus.NOT_FOUND),

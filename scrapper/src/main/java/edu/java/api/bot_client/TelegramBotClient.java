@@ -1,7 +1,6 @@
 package edu.java.api.bot_client;
 
-import edu.java.exceptions.ChatNotRegisteredException;
-import edu.java.exceptions.UriNotTrackedException;
+import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.requests.LinkUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,12 +31,8 @@ public final class TelegramBotClient implements BotClient {
             .bodyValue(linkUpdateRequest)
             .retrieve()
             .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.BAD_REQUEST),
-                clientResponse -> clientResponse.bodyToMono(UriNotTrackedException.class)
-            )
-            .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.NOT_FOUND),
-                clientResponse -> clientResponse.bodyToMono(ChatNotRegisteredException.class)
+                HttpStatus.BAD_REQUEST::equals,
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
             )
             .bodyToMono(Void.class)
             .block();

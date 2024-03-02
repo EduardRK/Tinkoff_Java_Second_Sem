@@ -1,7 +1,7 @@
 package edu.java.bot.api.controllers;
 
-import edu.java.exceptions.ChatsNotRegisteredException;
-import edu.java.exceptions.ChatsNotTrackedUriException;
+import edu.java.exceptions.BadRequestException.ChatsNotRegisteredException;
+import edu.java.exceptions.BadRequestException.ChatsNotTrackedUriException;
 import edu.java.responses.ApiErrorResponse;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
@@ -15,27 +15,27 @@ public final class ExceptionController {
     public ExceptionController() {
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ChatsNotRegisteredException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = ChatsNotRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatsNotRegistered(ChatsNotRegisteredException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
             chatsNotRegisteredDescription(exception),
-            String.valueOf(HttpStatus.NOT_FOUND.value()),
-            "ChatNotRegisteredException",
+            String.valueOf(HttpStatus.BAD_REQUEST.value()),
+            "ChatsNotRegisteredException",
             exception.getMessage(),
             Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
         );
 
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ChatsNotTrackedUriException.class)
-    public ResponseEntity<ApiErrorResponse> uriNotTracked(ChatsNotTrackedUriException exception) {
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = ChatsNotTrackedUriException.class)
+    public ResponseEntity<ApiErrorResponse> chatsNotTrackedUri(ChatsNotTrackedUriException exception) {
         ApiErrorResponse response = new ApiErrorResponse(
             uriNotTrackedDescription(exception),
             String.valueOf(HttpStatus.BAD_REQUEST.value()),
-            "UriNotTrackedException",
+            "ChatsNotTrackedUriException",
             exception.getMessage(),
             Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
         );

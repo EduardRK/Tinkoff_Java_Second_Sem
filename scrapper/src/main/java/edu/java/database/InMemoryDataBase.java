@@ -1,9 +1,11 @@
 package edu.java.database;
 
-import edu.java.exceptions.ChatAlreadyRegisteredException;
-import edu.java.exceptions.ChatNotRegisteredException;
-import edu.java.exceptions.IncorrectDataException;
-import edu.java.exceptions.UriNotTrackedException;
+import edu.java.exceptions.BadRequestException.BadRequestException;
+import edu.java.exceptions.BadRequestException.ChatAlreadyRegisteredException;
+import edu.java.exceptions.BadRequestException.IncorrectDataException;
+import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
+import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
+import edu.java.exceptions.NotFoundException.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public List<String> allDataByKey(Integer key) {
+    public List<String> allDataByKey(Integer key) throws BadRequestException {
         if (notCorrectId(key) || !DATA_BASE.containsKey(key)) {
             throw new IncorrectDataException(key);
         }
@@ -30,7 +32,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public void addValue(Integer key, String value) {
+    public void addValue(Integer key, String value) throws BadRequestException {
         if (notCorrectId(key) || !DATA_BASE.containsKey(key)) {
             throw new IncorrectDataException(key);
         }
@@ -39,20 +41,20 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public void deleteValue(Integer key, String value) {
+    public void deleteValue(Integer key, String value) throws BadRequestException, NotFoundException {
         if (notCorrectId(key) || !DATA_BASE.containsKey(key)) {
             throw new IncorrectDataException(key);
         }
 
         if (!DATA_BASE.get(key).contains(value)) {
-            throw new UriNotTrackedException(key, value);
+            throw new ChatNotTrackedUriException(key, value);
         }
 
         DATA_BASE.get(key).remove(value);
     }
 
     @Override
-    public void addNewUserByKey(Integer key) {
+    public void addNewUserByKey(Integer key) throws BadRequestException {
         if (notCorrectId(key)) {
             throw new IncorrectDataException(key);
         }
@@ -65,7 +67,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public void deleteUserByKey(Integer key) {
+    public void deleteUserByKey(Integer key) throws BadRequestException, NotFoundException {
         if (notCorrectId(key)) {
             throw new IncorrectDataException(key);
         }

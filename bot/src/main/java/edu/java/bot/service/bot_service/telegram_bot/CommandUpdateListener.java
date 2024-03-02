@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.service.bot_service.handlers.Handler;
 import edu.java.bot.service.bot_service.handlers.UpdateHandler;
 import java.util.List;
+import lombok.SneakyThrows;
 
 public final class CommandUpdateListener implements UpdatesListener {
     private final Handler<List<Update>> handler;
@@ -13,6 +14,7 @@ public final class CommandUpdateListener implements UpdatesListener {
         this.handler = handler;
     }
 
+    @SneakyThrows
     @Override
     public int process(List<Update> updates) {
         handler.put(updates);

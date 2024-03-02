@@ -2,6 +2,7 @@ package edu.java.bot.api.controllers;
 
 import edu.java.bot.service.bot_service.handlers.Handler;
 import edu.java.bot.service.bot_service.handlers.LinkUpdateHandler;
+import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.requests.LinkUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public final class UpdateController {
     }
 
     @PostMapping(produces = "application/json")
-    ResponseEntity<?> newUpdateFromClient(@RequestBody LinkUpdateRequest linkUpdateRequest) {
+    ResponseEntity<?> newUpdateFromClient(@RequestBody LinkUpdateRequest linkUpdateRequest) throws BadRequestException {
         handler.put(linkUpdateRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,6 +1,8 @@
 package edu.java.api.controllers;
 
 import edu.java.database.DataBase;
+import edu.java.exceptions.BadRequestException.BadRequestException;
+import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.LinkResponse;
@@ -30,7 +32,7 @@ public final class LinksController {
     @GetMapping(produces = "application/json")
     public ResponseEntity<ListLinksResponse> allTrackedLinks(
         @RequestHeader("id") int id
-    ) {
+    ) throws BadRequestException {
         List<String> links = dataBase.allDataByKey(id);
 
         List<LinkResponse> linkResponses = links.stream()
@@ -49,8 +51,7 @@ public final class LinksController {
     public ResponseEntity<LinkResponse> addNewTrackLink(
         @RequestHeader("id") int id,
         @RequestBody AddLinkRequest addLinkRequest
-    ) {
-
+    ) throws BadRequestException {
         dataBase.addValue(id, addLinkRequest.link());
 
         LinkResponse linkResponse = new LinkResponse(
@@ -65,7 +66,7 @@ public final class LinksController {
     public ResponseEntity<LinkResponse> untrackLink(
         @RequestHeader("id") int id,
         @RequestBody RemoveLinkRequest removeLinkRequest
-    ) {
+    ) throws BadRequestException, NotFoundException {
         dataBase.deleteValue(id, removeLinkRequest.link());
 
         LinkResponse linkResponse = new LinkResponse(

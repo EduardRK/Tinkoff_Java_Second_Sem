@@ -1,5 +1,7 @@
 package edu.java.bot.api.scrapper_client;
 
+import edu.java.exceptions.BadRequestException.BadRequestException;
+import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.LinkResponse;
@@ -35,8 +37,8 @@ public final class LinkScrapperClient implements ScrapperClient {
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.BAD_REQUEST),
-                clientResponse -> clientResponse.bodyToMono(RuntimeException.class)
+                HttpStatus.BAD_REQUEST::equals,
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
             )
             .bodyToMono(Void.class)
             .block();
@@ -48,12 +50,12 @@ public final class LinkScrapperClient implements ScrapperClient {
             .uri(TG_CHAT_ID, id)
             .retrieve()
             .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.BAD_REQUEST),
-                clientResponse -> clientResponse.bodyToMono(RuntimeException.class)
+                HttpStatus.BAD_REQUEST::equals,
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
             )
             .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.NOT_FOUND),
-                clientResponse -> clientResponse.bodyToMono(RuntimeException.class)
+                HttpStatus.NOT_FOUND::equals,
+                clientResponse -> clientResponse.bodyToMono(NotFoundException.class)
             )
             .bodyToMono(Void.class)
             .block();
@@ -67,7 +69,7 @@ public final class LinkScrapperClient implements ScrapperClient {
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.BAD_REQUEST),
+                HttpStatus.BAD_REQUEST::equals,
                 clientResponse -> clientResponse.bodyToMono(RuntimeException.class)
             )
             .bodyToMono(ListLinksResponse.class)
@@ -83,8 +85,8 @@ public final class LinkScrapperClient implements ScrapperClient {
             .bodyValue(addLinkRequest)
             .retrieve()
             .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.BAD_REQUEST),
-                clientResponse -> clientResponse.bodyToMono(RuntimeException.class)
+                HttpStatus.BAD_REQUEST::equals,
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
             )
             .bodyToMono(LinkResponse.class)
             .block();
@@ -99,12 +101,12 @@ public final class LinkScrapperClient implements ScrapperClient {
             .bodyValue(removeLinkRequest)
             .retrieve()
             .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.BAD_REQUEST),
-                clientResponse -> clientResponse.bodyToMono(RuntimeException.class)
+                HttpStatus.BAD_REQUEST::equals,
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
             )
             .onStatus(
-                httpStatusCode -> httpStatusCode.equals(HttpStatus.NOT_FOUND),
-                clientResponse -> clientResponse.bodyToMono(RuntimeException.class)
+                HttpStatus.NOT_FOUND::equals,
+                clientResponse -> clientResponse.bodyToMono(NotFoundException.class)
             )
             .bodyToMono(LinkResponse.class)
             .block();
