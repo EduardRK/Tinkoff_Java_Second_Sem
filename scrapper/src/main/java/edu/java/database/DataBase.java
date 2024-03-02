@@ -3,9 +3,10 @@ package edu.java.database;
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
 import java.util.List;
+import java.util.Set;
 
 public interface DataBase<K, V> {
-    List<V> allDataByKey(K key) throws BadRequestException;
+    Set<V> allDataByKey(K key) throws BadRequestException;
 
     void addValue(K key, V value) throws BadRequestException;
 

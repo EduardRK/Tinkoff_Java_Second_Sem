@@ -6,16 +6,15 @@ import edu.java.exceptions.BadRequestException.IncorrectDataException;
 import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
 import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public final class InMemoryDataBase implements DataBase<Integer, String> {
-    private static final Map<Integer, List<String>> DATA_BASE = new ConcurrentHashMap<>();
+    private static final Map<Integer, Set<String>> DATA_BASE = new ConcurrentHashMap<>();
 
     @Autowired
     public InMemoryDataBase() {
@@ -23,7 +22,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public List<String> allDataByKey(Integer key) throws BadRequestException {
+    public Set<String> allDataByKey(Integer key) throws BadRequestException {
         if (notCorrectId(key) || !DATA_BASE.containsKey(key)) {
             throw new IncorrectDataException(key);
         }
@@ -63,7 +62,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
             throw new ChatAlreadyRegisteredException(key);
         }
 
-        DATA_BASE.put(key, new ArrayList<>());
+        DATA_BASE.put(key, ConcurrentHashMap.newKeySet());
     }
 
     @Override

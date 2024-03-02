@@ -8,6 +8,7 @@ import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public final class LinksController {
     public ResponseEntity<ListLinksResponse> allTrackedLinks(
         @RequestHeader("id") int id
     ) throws BadRequestException {
-        List<String> links = dataBase.allDataByKey(id);
+        Set<String> links = dataBase.allDataByKey(id);
 
         List<LinkResponse> linkResponses = links.stream()
             .map(link -> new LinkResponse(id, link))
