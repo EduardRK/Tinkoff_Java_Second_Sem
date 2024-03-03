@@ -15,6 +15,6 @@ public final class EmptyCommand implements Command {
     @Contract(" -> new")
     @Override
     public @NotNull CommandComplete applyCommand() {
-        return new CommandComplete(WRONG_COMMAND, message.chat().id());
+        return new CommandComplete(WRONG_COMMAND, message.chat().id().intValue());
     }
 }

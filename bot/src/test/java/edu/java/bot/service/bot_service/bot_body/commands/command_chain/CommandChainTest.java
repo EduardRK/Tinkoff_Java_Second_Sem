@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 class CommandChainTest {
-    private static final InMemoryDataBase<Long, Link> IN_MEMORY_DATA_BASE = new InMemoryIdLinkDataBase();
+    private static final InMemoryDataBase<Integer, Link> IN_MEMORY_DATA_BASE = new InMemoryIdLinkDataBase();
 
     private static Arguments[] helpData() {
         return new Arguments[] {
@@ -54,7 +54,7 @@ class CommandChainTest {
 
         CommandComplete commandComplete = new CommandComplete(
             response,
-            123L
+            123
         );
 
         Assertions.assertEquals(

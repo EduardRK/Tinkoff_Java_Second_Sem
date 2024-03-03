@@ -17,11 +17,11 @@ public final class UntrackCommand extends AbstractCommand {
     private static final String UNTRACK = "untrack";
     private static final String LINK_TO_UNTRACK = "Which link should I untrack?";
 
-    public UntrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command command) {
+    public UntrackCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message, Command command) {
         super(inMemoryDataBase, message, command);
     }
 
-    public UntrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
+    public UntrackCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message) {
         this(inMemoryDataBase, message, new EmptyCommand(message));
     }
 
@@ -31,7 +31,7 @@ public final class UntrackCommand extends AbstractCommand {
 
     @Override
     public CommandComplete applyCommand() {
-        long id = message.chat().id();
+        int id = message.chat().id().intValue();
 
         if (inMemoryDataBase.waitingNextCommand().getOrDefault(id, "").equals(UNTRACK)) {
             inMemoryDataBase.waitingNextCommand().remove(id);
@@ -43,7 +43,7 @@ public final class UntrackCommand extends AbstractCommand {
         }
 
         inMemoryDataBase.waitingNextCommand().put(id, UNTRACK);
-        return new CommandComplete(LINK_TO_UNTRACK, message.chat().id());
+        return new CommandComplete(LINK_TO_UNTRACK, message.chat().id().intValue());
     }
 
     @Override
@@ -61,7 +61,7 @@ public final class UntrackCommand extends AbstractCommand {
         private static final String LINK_NOT_TRACKED = "Link is not tracked.";
         private static final String LINK_STOP_TRACKED = "The link is no longer being tracked.";
 
-        LinkUntrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
+        LinkUntrackCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message) {
             super(inMemoryDataBase, message, new WrongLinkCommand(message));
         }
 
@@ -71,7 +71,7 @@ public final class UntrackCommand extends AbstractCommand {
                 return nextCommand.applyCommand();
             }
 
-            long id = message.chat().id();
+            int id = message.chat().id().intValue();
 
             Link link = new Link(message.text());
             Set<Link> linkSet = inMemoryDataBase.dataBase().get(id);

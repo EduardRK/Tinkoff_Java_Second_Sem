@@ -15,6 +15,6 @@ public final class WrongLinkCommand implements Command {
     @Contract(" -> new")
     @Override
     public @NotNull CommandComplete applyCommand() {
-        return new CommandComplete(WRONG_LINK, message.chat().id());
+        return new CommandComplete(WRONG_LINK, message.chat().id().intValue());
     }
 }

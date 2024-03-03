@@ -19,7 +19,7 @@ class ListCommandTest {
 
     @Test
     void applyCommand() throws URISyntaxException {
-        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
         Message message = Mockito.mock(Message.class);
         Chat chat = Mockito.mock(Chat.class);
 
@@ -30,7 +30,7 @@ class ListCommandTest {
         ListCommand listCommand = new ListCommand(inMemoryDataBase, message);
         CommandComplete commandComplete = new CommandComplete(
             "No links are tracked.",
-            123L
+            123
         );
 
         Assertions.assertEquals(
@@ -39,13 +39,13 @@ class ListCommandTest {
         );
 
         inMemoryDataBase.dataBase().put(
-            123L,
+            123,
             new HashSet<>(Set.of(new Link("https://github.com/")))
         );
 
         commandComplete = new CommandComplete(
             "https://github.com/" + System.lineSeparator(),
-            123L
+            123
         );
 
         Assertions.assertEquals(
@@ -60,7 +60,7 @@ class ListCommandTest {
         "/otherCommand, true"
     })
     void notValid(String command, boolean notValid) {
-        InMemoryDataBase<Long, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
+        InMemoryDataBase<Integer, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
         Message message = Mockito.mock(Message.class);
 
         Mockito.when(message.text()).thenReturn(command);

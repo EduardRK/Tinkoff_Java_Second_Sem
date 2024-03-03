@@ -18,7 +18,7 @@ class TrackCommandTest {
 
     @Test
     void applyCommand() throws URISyntaxException {
-        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
         Message messageFirst = Mockito.mock(Message.class);
         Message messageSecond = Mockito.mock(Message.class);
         Chat chat = Mockito.mock(Chat.class);
@@ -29,18 +29,18 @@ class TrackCommandTest {
         Mockito.when(messageSecond.text()).thenReturn("https://github.com/");
         Mockito.when(chat.id()).thenReturn(123L);
 
-        inMemoryDataBase.dataBase().put(123L, new HashSet<>());
+        inMemoryDataBase.dataBase().put(123, new HashSet<>());
 
         TrackCommand trackCommandFirst = new TrackCommand(inMemoryDataBase, messageFirst);
         TrackCommand trackCommandSecond = new TrackCommand(inMemoryDataBase, messageSecond);
 
         CommandComplete commandCompleteFirst = new CommandComplete(
             "Which link should I track?",
-            123L
+            123
         );
         CommandComplete commandCompleteSecond = new CommandComplete(
             "The link is being tracked.",
-            123L
+            123
         );
 
         Assertions.assertEquals(
@@ -54,7 +54,7 @@ class TrackCommandTest {
 
         Assertions.assertTrue(
             inMemoryDataBase.dataBase()
-                .get(123L)
+                .get(123)
                 .contains(new Link("https://github.com/"))
         );
     }
@@ -65,7 +65,7 @@ class TrackCommandTest {
         "/otherCommand, true"
     })
     void notValid(String command, boolean notValid) {
-        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
         Message message = Mockito.mock(Message.class);
 
         Mockito.when(message.text()).thenReturn(command);

@@ -17,11 +17,11 @@ public final class TrackCommand extends AbstractCommand {
     private static final String TRACK = "track";
     private static final String LINK_TO_TRACK = "Which link should I track?";
 
-    public TrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command next) {
+    public TrackCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message, Command next) {
         super(inMemoryDataBase, message, next);
     }
 
-    public TrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
+    public TrackCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message) {
         this(inMemoryDataBase, message, new EmptyCommand(message));
     }
 
@@ -31,7 +31,7 @@ public final class TrackCommand extends AbstractCommand {
 
     @Override
     public CommandComplete applyCommand() {
-        long id = message.chat().id();
+        int id = message.chat().id().intValue();
 
         if (inMemoryDataBase.waitingNextCommand().getOrDefault(id, "").equals(TRACK)) {
             inMemoryDataBase.waitingNextCommand().remove(id);
@@ -43,7 +43,7 @@ public final class TrackCommand extends AbstractCommand {
         }
 
         inMemoryDataBase.waitingNextCommand().put(id, TRACK);
-        return new CommandComplete(LINK_TO_TRACK, message.chat().id());
+        return new CommandComplete(LINK_TO_TRACK, message.chat().id().intValue());
     }
 
     @Override
@@ -60,7 +60,7 @@ public final class TrackCommand extends AbstractCommand {
     private static final class LinkTrackCommand extends AbstractCommand {
         private static final String LINK_START_TRACKED = "The link is being tracked.";
 
-        LinkTrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
+        LinkTrackCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message) {
             super(inMemoryDataBase, message, new WrongLinkCommand(message));
         }
 
@@ -71,7 +71,7 @@ public final class TrackCommand extends AbstractCommand {
                 return nextCommand.applyCommand();
             }
 
-            long id = message.chat().id();
+            int id = message.chat().id().intValue();
 
             Link link = new Link(message.text());
             Set<Link> linkSet = inMemoryDataBase.dataBase().get(id);

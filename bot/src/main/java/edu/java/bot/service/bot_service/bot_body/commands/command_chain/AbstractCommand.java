@@ -6,11 +6,11 @@ import edu.java.bot.service.bot_service.bot_body.data_base.InMemoryDataBase;
 import edu.java.bot.service.bot_service.bot_body.data_classes.Link;
 
 public abstract class AbstractCommand implements Command {
-    protected final InMemoryDataBase<Long, Link> inMemoryDataBase;
+    protected final InMemoryDataBase<Integer, Link> inMemoryDataBase;
     protected final Message message;
     protected final Command nextCommand;
 
-    protected AbstractCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command command) {
+    protected AbstractCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message, Command command) {
         this.inMemoryDataBase = inMemoryDataBase;
         this.message = message;
         this.nextCommand = command;

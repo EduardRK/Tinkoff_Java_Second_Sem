@@ -22,11 +22,11 @@ public final class HelpCommand extends AbstractCommand {
         )
     );
 
-    public HelpCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command next) {
+    public HelpCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message, Command next) {
         super(inMemoryDataBase, message, next);
     }
 
-    public HelpCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
+    public HelpCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message) {
         this(inMemoryDataBase, message, new EmptyCommand(message));
     }
 
@@ -45,7 +45,7 @@ public final class HelpCommand extends AbstractCommand {
             stringBuilder.append(command.toString()).append(System.lineSeparator());
         }
 
-        return new CommandComplete(stringBuilder.toString(), message.chat().id());
+        return new CommandComplete(stringBuilder.toString(), message.chat().id().intValue());
     }
 
     @Override

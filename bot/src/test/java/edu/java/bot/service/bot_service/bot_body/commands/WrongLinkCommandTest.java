@@ -20,7 +20,7 @@ class WrongLinkCommandTest {
 
         CommandComplete commandComplete = new CommandComplete(
             "Wrong link. Try again.",
-            123L
+            123
         );
 
         Assertions.assertEquals(

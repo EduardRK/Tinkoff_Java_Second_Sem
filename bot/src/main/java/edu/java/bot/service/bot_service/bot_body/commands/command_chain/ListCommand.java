@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 public final class ListCommand extends AbstractCommand {
     private static final String NOTHING_TRACK = "No links are tracked.";
 
-    public ListCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command next) {
+    public ListCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message, Command next) {
         super(inMemoryDataBase, message, next);
     }
 
-    public ListCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
+    public ListCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message) {
         super(inMemoryDataBase, message, new EmptyCommand(message));
     }
 
@@ -30,7 +30,7 @@ public final class ListCommand extends AbstractCommand {
             return nextCommand.applyCommand();
         }
 
-        long id = message.chat().id();
+        int id = message.chat().id().intValue();
 
         if (nothingTrack()) {
             return new CommandComplete(NOTHING_TRACK, id);
@@ -56,7 +56,7 @@ public final class ListCommand extends AbstractCommand {
     }
 
     private boolean nothingTrack() {
-        long id = message.chat().id();
+        int id = message.chat().id().intValue();
 
         return !(inMemoryDataBase.dataBase().containsKey(id)
             && !inMemoryDataBase.dataBase().get(id).isEmpty());

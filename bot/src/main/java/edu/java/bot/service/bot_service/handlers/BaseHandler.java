@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 
 public abstract class BaseHandler<T> implements Handler<T> {
     protected static final ExecutorService EXECUTOR_SERVICE = Executors.newVirtualThreadPerTaskExecutor();
-    protected static final InMemoryDataBase<Long, Link> DATA_BASE = new InMemoryIdLinkDataBase();
+    protected static final InMemoryDataBase<Integer, Link> DATA_BASE = new InMemoryIdLinkDataBase();
     protected final DefaultTelegramBotComponent defaultTelegramBotComponent;
 
     protected BaseHandler(DefaultTelegramBotComponent defaultTelegramBotComponent) {
