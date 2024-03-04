@@ -15,10 +15,7 @@ public final class CommandChain implements Command {
         this.chain = chain;
     }
 
-    public static @NotNull CommandChain defaultChain(
-        InMemoryDataBase<Integer, Link> inMemoryDataBase,
-        Message message
-    ) {
+    public static @NotNull CommandChain defaultChain(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
         UntrackCommand untrackCommand = new UntrackCommand(inMemoryDataBase, message);
         TrackCommand trackCommand = new TrackCommand(inMemoryDataBase, message, untrackCommand);
         ListCommand listCommand = new ListCommand(inMemoryDataBase, message, trackCommand);
@@ -28,7 +25,7 @@ public final class CommandChain implements Command {
         return new CommandChain(startCommand);
     }
 
-    public static @NotNull CommandChain defaultChain(InMemoryDataBase<Integer, Link> inMemoryDataBase, Update update) {
+    public static @NotNull CommandChain defaultChain(InMemoryDataBase<Long, Link> inMemoryDataBase, Update update) {
         return defaultChain(inMemoryDataBase, update.message());
     }
 

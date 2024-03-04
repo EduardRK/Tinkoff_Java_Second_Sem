@@ -15,11 +15,11 @@ public final class StartCommand extends AbstractCommand {
     private static final String USER_REGISTERED = "The user has been successfully registered.";
     private static final String USER_NOT_REGISTER = "You are not registered. Use the command /start.";
 
-    public StartCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message, Command next) {
+    public StartCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command next) {
         super(inMemoryDataBase, message, next);
     }
 
-    public StartCommand(InMemoryDataBase<Integer, Link> inMemoryDataBase, Message message) {
+    public StartCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
         this(inMemoryDataBase, message, new EmptyCommand(message));
     }
 
@@ -33,14 +33,14 @@ public final class StartCommand extends AbstractCommand {
             if (!userRegistered()) {
                 return new CommandComplete(
                     USER_NOT_REGISTER,
-                    message.chat().id().intValue()
+                    message.chat().id()
                 );
             }
 
             return nextCommand.applyCommand();
         }
 
-        int id = message.chat().id().intValue();
+        long id = message.chat().id();
 
         if (inMemoryDataBase.dataBase().containsKey(id)) {
             return new CommandComplete(ALREADY_REGISTRATION, id);
@@ -56,7 +56,7 @@ public final class StartCommand extends AbstractCommand {
     }
 
     private boolean userRegistered() {
-        return inMemoryDataBase.dataBase().containsKey(message.chat().id().intValue());
+        return inMemoryDataBase.dataBase().containsKey(message.chat().id());
     }
 
     @Contract(pure = true)

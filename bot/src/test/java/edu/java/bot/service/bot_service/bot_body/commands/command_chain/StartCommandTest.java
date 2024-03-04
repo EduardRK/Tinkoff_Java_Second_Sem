@@ -20,7 +20,7 @@ class StartCommandTest {
         "/otherCommand, true"
     })
     void notValid(String command, boolean notValid) {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
+        InMemoryDataBase<Long, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
         Message message = Mockito.mock(Message.class);
 
         Mockito.when(message.text()).thenReturn(command);
@@ -35,7 +35,7 @@ class StartCommandTest {
 
     @Test
     void applyCommand() {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
 
         Message messageFirst = Mockito.mock(Message.class);
         Message messageSecond = Mockito.mock(Message.class);
@@ -54,11 +54,11 @@ class StartCommandTest {
 
         CommandComplete commandCompleteFirst = new CommandComplete(
             "The user has been successfully registered.",
-            123
+            123L
         );
         CommandComplete commandCompleteSecond = new CommandComplete(
             "The user is already registered.",
-            123
+            123L
         );
 
         Assertions.assertEquals(
@@ -83,7 +83,7 @@ class StartCommandTest {
 
     @Test
     void testUserNotRegistration() {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
 
         Message messageFirst = Mockito.mock(Message.class);
         Chat chat = Mockito.mock(Chat.class);
@@ -96,7 +96,7 @@ class StartCommandTest {
 
         CommandComplete commandComplete = new CommandComplete(
             "You are not registered. Use the command /start.",
-            123
+            123L
         );
 
         Assertions.assertEquals(

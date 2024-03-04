@@ -19,7 +19,7 @@ class UntrackCommandTest {
 
     @Test
     void applyCommand() throws URISyntaxException {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
         Message messageFirst = Mockito.mock(Message.class);
         Message messageSecond = Mockito.mock(Message.class);
         Chat chat = Mockito.mock(Chat.class);
@@ -30,18 +30,18 @@ class UntrackCommandTest {
         Mockito.when(messageSecond.text()).thenReturn("https://github.com/");
         Mockito.when(chat.id()).thenReturn(123L);
 
-        inMemoryDataBase.dataBase().put(123, new HashSet<>());
+        inMemoryDataBase.dataBase().put(123L, new HashSet<>());
 
         UntrackCommand untrackCommandFirst = new UntrackCommand(inMemoryDataBase, messageFirst);
         UntrackCommand untrackCommandSecond = new UntrackCommand(inMemoryDataBase, messageSecond);
 
         CommandComplete commandCompleteFirst = new CommandComplete(
             "Which link should I untrack?",
-            123
+            123L
         );
         CommandComplete commandCompleteSecond = new CommandComplete(
             "Link is not tracked.",
-            123
+            123L
         );
 
         Assertions.assertEquals(
@@ -53,11 +53,11 @@ class UntrackCommandTest {
             untrackCommandSecond.applyCommand()
         );
 
-        inMemoryDataBase.dataBase().put(123, new HashSet<>(Set.of(new Link("https://github.com/"))));
+        inMemoryDataBase.dataBase().put(123L, new HashSet<>(Set.of(new Link("https://github.com/"))));
 
         commandCompleteSecond = new CommandComplete(
             "The link is no longer being tracked.",
-            123
+            123L
         );
 
         Assertions.assertEquals(
@@ -70,7 +70,7 @@ class UntrackCommandTest {
         );
         Assertions.assertFalse(
             inMemoryDataBase.dataBase()
-                .get(123)
+                .get(123L)
                 .contains(new Link("https://github.com/"))
         );
     }
@@ -81,7 +81,7 @@ class UntrackCommandTest {
         "/otherCommand, true"
     })
     void notValid(String command, boolean notValid) {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
         Message message = Mockito.mock(Message.class);
 
         Mockito.when(message.text()).thenReturn(command);

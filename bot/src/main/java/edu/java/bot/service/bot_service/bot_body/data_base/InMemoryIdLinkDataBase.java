@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class InMemoryIdLinkDataBase implements InMemoryDataBase<Integer, Link> {
-    private final Map<Integer, Set<Link>> dataBase = new ConcurrentHashMap<>();
-    private final Map<Integer, String> waitingNextCommand = new ConcurrentHashMap<>();
+public final class InMemoryIdLinkDataBase implements InMemoryDataBase<Long, Link> {
+    private final Map<Long, Set<Link>> dataBase = new ConcurrentHashMap<>();
+    private final Map<Long, String> waitingNextCommand = new ConcurrentHashMap<>();
 
     @Autowired
     public InMemoryIdLinkDataBase() {
@@ -18,12 +18,12 @@ public final class InMemoryIdLinkDataBase implements InMemoryDataBase<Integer, L
     }
 
     @Override
-    public Map<Integer, Set<Link>> dataBase() {
+    public Map<Long, Set<Link>> dataBase() {
         return dataBase;
     }
 
     @Override
-    public Map<Integer, String> waitingNextCommand() {
+    public Map<Long, String> waitingNextCommand() {
         return waitingNextCommand;
     }
 }

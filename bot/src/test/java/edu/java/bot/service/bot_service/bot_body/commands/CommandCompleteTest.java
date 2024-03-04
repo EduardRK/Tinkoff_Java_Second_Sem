@@ -10,7 +10,7 @@ class CommandCompleteTest {
 
     @Test
     void message() {
-        int id = 123;
+        long id = 123L;
         String string = "Some text for user";
         CommandComplete commandComplete = new CommandComplete(string, id);
 
@@ -22,7 +22,7 @@ class CommandCompleteTest {
 
     @Test
     void id() {
-        int id = 123;
+        long id = 123L;
         String string = "Some text for user";
         CommandComplete commandComplete = new CommandComplete(string, id);
 
@@ -48,7 +48,7 @@ class CommandCompleteTest {
             commandComplete.message()
         );
         Assertions.assertEquals(
-            123,
+            123L,
             commandComplete.id()
         );
     }

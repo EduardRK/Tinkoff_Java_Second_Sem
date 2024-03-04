@@ -20,7 +20,7 @@ class EmptyCommandTest {
 
         CommandComplete commandComplete = new CommandComplete(
             "Wrong command. Try again or use /help.",
-            123
+            123L
         );
 
         Assertions.assertEquals(

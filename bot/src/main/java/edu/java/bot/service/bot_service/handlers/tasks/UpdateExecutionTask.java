@@ -14,12 +14,12 @@ public final class UpdateExecutionTask implements Runnable {
     private static final Generator<SendMessage, CommandComplete> GENERATOR =
         new SendMessageFromCommandCompleteGenerator();
     private final TelegramBot telegramBot;
-    private final InMemoryDataBase<Integer, Link> dataBase;
+    private final InMemoryDataBase<Long, Link> dataBase;
     private final Update update;
 
     public UpdateExecutionTask(
         TelegramBot telegramBot,
-        InMemoryDataBase<Integer, Link> dataBase,
+        InMemoryDataBase<Long, Link> dataBase,
         Update update
     ) {
         this.telegramBot = telegramBot;

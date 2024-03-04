@@ -16,7 +16,7 @@ class HelpCommandTest {
 
     @Test
     void applyCommand() {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
+        InMemoryDataBase<Long, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
         Message message = Mockito.mock(Message.class);
         Chat chat = Mockito.mock(Chat.class);
 
@@ -31,7 +31,7 @@ class HelpCommandTest {
                 "/list - list of tracked links" + System.lineSeparator() +
                 "/track - start tracking link" + System.lineSeparator() +
                 "/untrack - stop tracking link" + System.lineSeparator(),
-            123
+            123L
         );
 
         Assertions.assertEquals(
@@ -46,7 +46,7 @@ class HelpCommandTest {
         "/otherCommand, true"
     })
     void notValid(String command, boolean notValid) {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
+        InMemoryDataBase<Long, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
         Message message = Mockito.mock(Message.class);
 
         Mockito.when(message.text()).thenReturn(command);

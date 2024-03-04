@@ -1,7 +1,6 @@
 package edu.java.api.controllers;
 
 import edu.java.database.DataBase;
-import edu.java.database.InMemoryDataBase;
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.requests.AddLinkRequest;
@@ -33,8 +32,8 @@ public final class LinksController {
     private final DataBase<Integer, String> dataBase;
 
     @Autowired
-    public LinksController(InMemoryDataBase inMemoryDataBase) {
-        this.dataBase = inMemoryDataBase;
+    public LinksController(DataBase<Integer, String> dataBase) {
+        this.dataBase = dataBase;
     }
 
     @Operation(summary = "Получить все отслеживаемые ссылки")

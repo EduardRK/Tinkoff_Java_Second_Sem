@@ -12,7 +12,7 @@ class SendMessageFromCommandCompleteGeneratorTest {
         Generator<SendMessage, CommandComplete> generator = new SendMessageFromCommandCompleteGenerator();
         CommandComplete commandComplete = new CommandComplete(
             "Some text",
-            123
+            123L
         );
 
         Assertions.assertNotNull(

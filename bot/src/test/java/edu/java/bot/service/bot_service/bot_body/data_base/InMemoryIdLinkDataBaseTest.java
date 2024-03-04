@@ -11,8 +11,8 @@ class InMemoryIdLinkDataBaseTest {
 
     @Test
     void dataBase() {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
-        Map<Integer, Set<Link>> map = new ConcurrentHashMap<>();
+        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        Map<Long, Set<Link>> map = new ConcurrentHashMap<>();
 
         Assertions.assertEquals(
             map,
@@ -22,8 +22,8 @@ class InMemoryIdLinkDataBaseTest {
 
     @Test
     void waitingNextCommand() {
-        InMemoryDataBase<Integer, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
-        Map<Integer, String> map = new ConcurrentHashMap<>();
+        InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
+        Map<Long, String> map = new ConcurrentHashMap<>();
 
         Assertions.assertEquals(
             map,
