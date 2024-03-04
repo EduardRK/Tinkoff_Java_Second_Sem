@@ -12,7 +12,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tg-chat/{id}")
@@ -26,17 +30,17 @@ public final class TgChatController {
 
     @Operation(summary = "Зарегистрировать чат")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Чат зарегистрирован",
-                    content = @Content(mediaType = "application/json")
-            ),
-            @ApiResponse(responseCode = "400",
-                    description = "Некорректные параметры запроса",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiErrorResponse.class)
-                    )
-            )
+        @ApiResponse(responseCode = "200",
+                     description = "Чат зарегистрирован",
+                     content = @Content(mediaType = "application/json")
+        ),
+        @ApiResponse(responseCode = "400",
+                     description = "Некорректные параметры запроса",
+                     content = @Content(
+                         mediaType = "application/json",
+                         schema = @Schema(implementation = ApiErrorResponse.class)
+                     )
+        )
     })
     @PostMapping(produces = "application/json")
     public ResponseEntity<?> registerChat(@PathVariable int id) throws BadRequestException {
@@ -46,24 +50,24 @@ public final class TgChatController {
 
     @Operation(summary = "Удалить чат")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Чат успешно удалён",
-                    content = @Content(mediaType = "application/json")
-            ),
-            @ApiResponse(responseCode = "400",
-                    description = "Некорректные параметры запроса",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(responseCode = "404",
-                    description = "Чат не существует",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiErrorResponse.class)
-                    )
-            )
+        @ApiResponse(responseCode = "200",
+                     description = "Чат успешно удалён",
+                     content = @Content(mediaType = "application/json")
+        ),
+        @ApiResponse(responseCode = "400",
+                     description = "Некорректные параметры запроса",
+                     content = @Content(
+                         mediaType = "application/json",
+                         schema = @Schema(implementation = ApiErrorResponse.class)
+                     )
+        ),
+        @ApiResponse(responseCode = "404",
+                     description = "Чат не существует",
+                     content = @Content(
+                         mediaType = "application/json",
+                         schema = @Schema(implementation = ApiErrorResponse.class)
+                     )
+        )
     })
     @DeleteMapping(produces = "application/json")
     public ResponseEntity<?> deleteChat(@PathVariable int id) throws BadRequestException, NotFoundException {

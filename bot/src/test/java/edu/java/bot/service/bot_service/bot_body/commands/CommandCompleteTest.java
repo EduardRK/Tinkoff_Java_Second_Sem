@@ -15,8 +15,8 @@ class CommandCompleteTest {
         CommandComplete commandComplete = new CommandComplete(string, id);
 
         Assertions.assertEquals(
-                string,
-                commandComplete.message()
+            string,
+            commandComplete.message()
         );
     }
 
@@ -27,8 +27,8 @@ class CommandCompleteTest {
         CommandComplete commandComplete = new CommandComplete(string, id);
 
         Assertions.assertEquals(
-                id,
-                commandComplete.id()
+            id,
+            commandComplete.id()
         );
     }
 
@@ -44,12 +44,12 @@ class CommandCompleteTest {
         CommandComplete commandComplete = new CommandComplete(message);
 
         Assertions.assertEquals(
-                "Some text",
-                commandComplete.message()
+            "Some text",
+            commandComplete.message()
         );
         Assertions.assertEquals(
-                123L,
-                commandComplete.id()
+            123L,
+            commandComplete.id()
         );
     }
 }

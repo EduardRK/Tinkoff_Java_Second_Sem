@@ -6,15 +6,14 @@ import edu.java.bot.service.bot_service.bot_body.commands.CommandComplete;
 import edu.java.bot.service.bot_service.bot_body.data_base.InMemoryDataBase;
 import edu.java.bot.service.bot_service.bot_body.data_base.InMemoryIdLinkDataBase;
 import edu.java.bot.service.bot_service.bot_body.data_classes.Link;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
-
-import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.Set;
 
 class ListCommandTest {
 
@@ -30,35 +29,35 @@ class ListCommandTest {
 
         ListCommand listCommand = new ListCommand(inMemoryDataBase, message);
         CommandComplete commandComplete = new CommandComplete(
-                "No links are tracked.",
-                123L
+            "No links are tracked.",
+            123L
         );
 
         Assertions.assertEquals(
-                commandComplete,
-                listCommand.applyCommand()
+            commandComplete,
+            listCommand.applyCommand()
         );
 
         inMemoryDataBase.dataBase().put(
-                123L,
-                new HashSet<>(Set.of(new Link("https://github.com/")))
+            123L,
+            new HashSet<>(Set.of(new Link("https://github.com/")))
         );
 
         commandComplete = new CommandComplete(
-                "https://github.com/" + System.lineSeparator(),
-                123L
+            "https://github.com/" + System.lineSeparator(),
+            123L
         );
 
         Assertions.assertEquals(
-                commandComplete,
-                listCommand.applyCommand()
+            commandComplete,
+            listCommand.applyCommand()
         );
     }
 
     @ParameterizedTest
     @CsvSource(value = {
-            "/list, false",
-            "/otherCommand, true"
+        "/list, false",
+        "/otherCommand, true"
     })
     void notValid(String command, boolean notValid) {
         InMemoryDataBase<Long, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
@@ -69,8 +68,8 @@ class ListCommandTest {
         ListCommand listCommand = new ListCommand(inMemoryDataBase, message);
 
         Assertions.assertEquals(
-                notValid,
-                listCommand.notValid()
+            notValid,
+            listCommand.notValid()
         );
     }
 
@@ -79,8 +78,8 @@ class ListCommandTest {
         ListCommand listCommand = new ListCommand();
 
         Assertions.assertEquals(
-                "/list - list of tracked links",
-                listCommand.toString()
+            "/list - list of tracked links",
+            listCommand.toString()
         );
     }
 }
