@@ -1,8 +1,6 @@
 package edu.java.api.controllers;
 
-//@SpringBootTest
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-//@AutoConfigureMockMvc
+//@WebMvcTest(LinksController.class)
 //class LinksControllerTest {
 //    @Autowired
 //    private MockMvc mockMvc;
