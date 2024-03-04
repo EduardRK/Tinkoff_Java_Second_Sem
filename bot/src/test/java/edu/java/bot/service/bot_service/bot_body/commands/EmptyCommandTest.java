@@ -19,13 +19,13 @@ class EmptyCommandTest {
         EmptyCommand emptyCommand = new EmptyCommand(message);
 
         CommandComplete commandComplete = new CommandComplete(
-            "Wrong command. Try again or use /help.",
-            123L
+                "Wrong command. Try again or use /help.",
+                123L
         );
 
         Assertions.assertEquals(
-            commandComplete,
-            emptyCommand.applyCommand()
+                commandComplete,
+                emptyCommand.applyCommand()
         );
     }
 }

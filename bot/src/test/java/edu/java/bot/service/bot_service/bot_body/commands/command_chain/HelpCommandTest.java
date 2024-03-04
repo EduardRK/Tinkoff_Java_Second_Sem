@@ -26,24 +26,24 @@ class HelpCommandTest {
 
         HelpCommand helpCommand = new HelpCommand(inMemoryDataBase, message);
         CommandComplete commandComplete = new CommandComplete(
-            "/start - user registration" + System.lineSeparator() +
-                "/help - print all commands" + System.lineSeparator() +
-                "/list - list of tracked links" + System.lineSeparator() +
-                "/track - start tracking link" + System.lineSeparator() +
-                "/untrack - stop tracking link" + System.lineSeparator(),
-            123L
+                "/start - user registration" + System.lineSeparator() +
+                        "/help - print all commands" + System.lineSeparator() +
+                        "/list - list of tracked links" + System.lineSeparator() +
+                        "/track - start tracking link" + System.lineSeparator() +
+                        "/untrack - stop tracking link" + System.lineSeparator(),
+                123L
         );
 
         Assertions.assertEquals(
-            commandComplete,
-            helpCommand.applyCommand()
+                commandComplete,
+                helpCommand.applyCommand()
         );
     }
 
     @ParameterizedTest
     @CsvSource(value = {
-        "/help, false",
-        "/otherCommand, true"
+            "/help, false",
+            "/otherCommand, true"
     })
     void notValid(String command, boolean notValid) {
         InMemoryDataBase<Long, Link> inMemoryDataBase = Mockito.mock(InMemoryIdLinkDataBase.class);
@@ -54,8 +54,8 @@ class HelpCommandTest {
         HelpCommand helpCommand = new HelpCommand(inMemoryDataBase, message);
 
         Assertions.assertEquals(
-            notValid,
-            helpCommand.notValid()
+                notValid,
+                helpCommand.notValid()
         );
     }
 
@@ -64,8 +64,8 @@ class HelpCommandTest {
         HelpCommand helpCommand = new HelpCommand();
 
         Assertions.assertEquals(
-            "/help - print all commands",
-            helpCommand.toString()
+                "/help - print all commands",
+                helpCommand.toString()
         );
     }
 }

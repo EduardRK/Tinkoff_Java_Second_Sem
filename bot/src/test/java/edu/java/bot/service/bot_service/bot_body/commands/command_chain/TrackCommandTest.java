@@ -6,13 +6,14 @@ import edu.java.bot.service.bot_service.bot_body.commands.CommandComplete;
 import edu.java.bot.service.bot_service.bot_body.data_base.InMemoryDataBase;
 import edu.java.bot.service.bot_service.bot_body.data_base.InMemoryIdLinkDataBase;
 import edu.java.bot.service.bot_service.bot_body.data_classes.Link;
-import java.net.URISyntaxException;
-import java.util.HashSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
+
+import java.net.URISyntaxException;
+import java.util.HashSet;
 
 class TrackCommandTest {
 
@@ -35,34 +36,34 @@ class TrackCommandTest {
         TrackCommand trackCommandSecond = new TrackCommand(inMemoryDataBase, messageSecond);
 
         CommandComplete commandCompleteFirst = new CommandComplete(
-            "Which link should I track?",
-            123L
+                "Which link should I track?",
+                123L
         );
         CommandComplete commandCompleteSecond = new CommandComplete(
-            "The link is being tracked.",
-            123L
+                "The link is being tracked.",
+                123L
         );
 
         Assertions.assertEquals(
-            commandCompleteFirst,
-            trackCommandFirst.applyCommand()
+                commandCompleteFirst,
+                trackCommandFirst.applyCommand()
         );
         Assertions.assertEquals(
-            commandCompleteSecond,
-            trackCommandSecond.applyCommand()
+                commandCompleteSecond,
+                trackCommandSecond.applyCommand()
         );
 
         Assertions.assertTrue(
-            inMemoryDataBase.dataBase()
-                .get(123L)
-                .contains(new Link("https://github.com/"))
+                inMemoryDataBase.dataBase()
+                        .get(123L)
+                        .contains(new Link("https://github.com/"))
         );
     }
 
     @ParameterizedTest
     @CsvSource(value = {
-        "/track, false",
-        "/otherCommand, true"
+            "/track, false",
+            "/otherCommand, true"
     })
     void notValid(String command, boolean notValid) {
         InMemoryDataBase<Long, Link> inMemoryDataBase = new InMemoryIdLinkDataBase();
@@ -73,8 +74,8 @@ class TrackCommandTest {
         TrackCommand trackCommand = new TrackCommand(inMemoryDataBase, message);
 
         Assertions.assertEquals(
-            notValid,
-            trackCommand.notValid()
+                notValid,
+                trackCommand.notValid()
         );
     }
 
@@ -83,8 +84,8 @@ class TrackCommandTest {
         TrackCommand trackCommand = new TrackCommand();
 
         Assertions.assertEquals(
-            "/track - start tracking link",
-            trackCommand.toString()
+                "/track - start tracking link",
+                trackCommand.toString()
         );
     }
 }
