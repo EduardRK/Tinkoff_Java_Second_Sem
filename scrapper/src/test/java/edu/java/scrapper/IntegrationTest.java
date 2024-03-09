@@ -1,6 +1,5 @@
 package edu.java.scrapper;
 
-import org.junit.Ignore;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -8,12 +7,11 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-@Ignore
 public abstract class IntegrationTest {
     public static PostgreSQLContainer<?> POSTGRES;
 
     static {
-        POSTGRES = new PostgreSQLContainer<>("postgres:15")
+        POSTGRES = new PostgreSQLContainer<>("postgres:16")
             .withDatabaseName("scrapper")
             .withUsername("postgres")
             .withPassword("postgres");

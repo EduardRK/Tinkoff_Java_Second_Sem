@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 
 bot/src/main/resources/variables.env
+environment_variables.env
 
 ### STS ###
 .apt_generated
