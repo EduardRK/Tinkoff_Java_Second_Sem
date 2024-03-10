@@ -22,9 +22,16 @@ public class DatabaseIntegrationTest extends IntegrationTest {
         );
 
         DatabaseMetaData databaseMetaData = connection.getMetaData();
-        ResultSet resultSet = databaseMetaData
-            .getTables(null, null, null, new String[] {"TABLE"});
+
+        ResultSet resultSet = databaseMetaData.getTables(
+            null,
+            null,
+            null,
+            new String[] {"TABLE"}
+        );
+
         List<String> tables = new ArrayList<>();
+
         while (resultSet.next()) {
             tables.add(resultSet.getString("TABLE_NAME"));
         }
