@@ -13,7 +13,7 @@ services:
       - backend
 
   liquibase-migrations:
-    image: liquibase/liquibase:4.25.1
+    image: liquibase/liquibase:4.25
     depends_on:
       - postgresql
     command:

@@ -1,4 +1,36 @@
 package edu.java.scrapper;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 public class DatabaseIntegrationTest extends IntegrationTest {
+    @Test
+    void dataBaseTest() throws SQLException {
+        Assertions.assertTrue(POSTGRES.isRunning());
+
+        Connection connection = DriverManager.getConnection(
+            POSTGRES.getJdbcUrl(),
+            POSTGRES.getUsername(),
+            POSTGRES.getPassword()
+        );
+
+        DatabaseMetaData databaseMetaData = connection.getMetaData();
+        ResultSet resultSet = databaseMetaData
+            .getTables(null, null, null, new String[] {"TABLE"});
+        List<String> tables = new ArrayList<>();
+        while (resultSet.next()) {
+            tables.add(resultSet.getString("TABLE_NAME"));
+        }
+
+        Assertions.assertTrue(tables.contains("chats"));
+        Assertions.assertTrue(tables.contains("chatlink"));
+        Assertions.assertTrue(tables.contains("links"));
+    }
 }
