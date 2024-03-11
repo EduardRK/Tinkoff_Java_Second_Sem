@@ -10,7 +10,7 @@ package edu.java.api.controllers;
 //
 //    @Test
 //    public void allTrackedLinksTest() throws Exception {
-//        Mockito.when(inMemoryDataBase.allDataByKey(12)).thenReturn(Set.of("SomeLink.com"));
+////        Mockito.when(inMemoryDataBase.allDataByKey(12)).thenReturn(Set.of("SomeLink.com"));
 //
 //        mockMvc.perform(
 //                MockMvcRequestBuilders.get("/links")
