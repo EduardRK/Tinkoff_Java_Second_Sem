@@ -15,17 +15,17 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
 
 @RestControllerAdvice
 public final class ExceptionController extends ResponseEntityExceptionHandler {
-    private final ExceptionService badRequestExceptionExceptionService;
+    private final ExceptionService exceptionService;
 
     @Autowired
     public ExceptionController(BadRequestExceptionService badRequestExceptionExceptionService) {
-        this.badRequestExceptionExceptionService = badRequestExceptionExceptionService;
+        this.exceptionService = badRequestExceptionExceptionService;
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ChatsNotRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatsNotRegistered(ChatsNotRegisteredException exception) {
-        ApiErrorResponse response = badRequestExceptionExceptionService.chatsNotRegistered(exception);
+        ApiErrorResponse response = exceptionService.chatsNotRegistered(exception);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -33,7 +33,7 @@ public final class ExceptionController extends ResponseEntityExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ChatsNotTrackedUriException.class)
     public ResponseEntity<ApiErrorResponse> chatsNotTrackedUri(ChatsNotTrackedUriException exception) {
-        ApiErrorResponse response = badRequestExceptionExceptionService.chatsNotTrackedUri(exception);
+        ApiErrorResponse response = exceptionService.chatsNotTrackedUri(exception);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
