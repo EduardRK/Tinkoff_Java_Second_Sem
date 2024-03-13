@@ -1,6 +1,5 @@
 package edu.java.controller;
 
-import edu.java.domain.DataBase;
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.requests.AddLinkRequest;
@@ -8,32 +7,32 @@ import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.ApiErrorResponse;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
+import edu.java.service.services.default_service.ScrapperService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.List;
-import java.util.Set;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "default")
 @RestController
-@RequestMapping(value = "/links")
-public final class LinksController {
-    private final DataBase<Integer, String> dataBase;
+public final class DefaultController {
+    private final ScrapperService scrapperService;
 
     @Autowired
-    public LinksController(DataBase<Integer, String> dataBase) {
-        this.dataBase = dataBase;
+    public DefaultController(ScrapperService scrapperService) {
+        this.scrapperService = scrapperService;
     }
 
     @Operation(summary = "Получить все отслеживаемые ссылки")
@@ -52,20 +51,14 @@ public final class LinksController {
                      )
         )
     })
-    @GetMapping(produces = "application/json")
+    @GetMapping(
+        value = "/links",
+        produces = "application/json"
+    )
     public ResponseEntity<ListLinksResponse> allTrackedLinks(
         @RequestHeader("id") int id
     ) throws BadRequestException {
-        Set<String> links = dataBase.allDataByKey(id);
-
-        List<LinkResponse> linkResponses = links.stream()
-            .map(link -> new LinkResponse(id, link))
-            .toList();
-
-        ListLinksResponse listLinksResponse = new ListLinksResponse(
-            linkResponses,
-            linkResponses.size()
-        );
+        ListLinksResponse listLinksResponse = scrapperService.allTrackedLinks(id);
 
         return new ResponseEntity<>(listLinksResponse, HttpStatus.OK);
     }
@@ -86,17 +79,15 @@ public final class LinksController {
                      )
         )
     })
-    @PostMapping(produces = "application/json")
+    @PostMapping(
+        value = "/links",
+        produces = "application/json"
+    )
     public ResponseEntity<LinkResponse> addNewTrackLink(
         @RequestHeader("id") int id,
         @RequestBody AddLinkRequest addLinkRequest
     ) throws BadRequestException {
-        dataBase.addValue(id, addLinkRequest.link());
-
-        LinkResponse linkResponse = new LinkResponse(
-            id,
-            addLinkRequest.link()
-        );
+        LinkResponse linkResponse = scrapperService.addNewTrackLink(id, addLinkRequest);
 
         return new ResponseEntity<>(linkResponse, HttpStatus.OK);
     }
@@ -125,18 +116,71 @@ public final class LinksController {
                      )
         )
     })
-    @DeleteMapping(produces = "application/json")
+    @DeleteMapping(
+        value = "/links",
+        produces = "application/json"
+    )
     public ResponseEntity<LinkResponse> untrackLink(
         @RequestHeader("id") int id,
         @RequestBody RemoveLinkRequest removeLinkRequest
     ) throws BadRequestException, NotFoundException {
-        dataBase.deleteValue(id, removeLinkRequest.link());
-
-        LinkResponse linkResponse = new LinkResponse(
-            id,
-            removeLinkRequest.link()
-        );
+        LinkResponse linkResponse = scrapperService.untrackLink(id, removeLinkRequest);
 
         return new ResponseEntity<>(linkResponse, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Зарегистрировать чат")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+                     description = "Чат зарегистрирован",
+                     content = @Content(mediaType = "application/json")
+        ),
+        @ApiResponse(responseCode = "400",
+                     description = "Некорректные параметры запроса",
+                     content = @Content(
+                         mediaType = "application/json",
+                         schema = @Schema(implementation = ApiErrorResponse.class)
+                     )
+        )
+    })
+    @PostMapping(
+        value = "/tg-chat/{id}",
+        produces = "application/json"
+    )
+    public ResponseEntity<?> registerChat(@PathVariable int id) throws BadRequestException {
+        scrapperService.registerChat(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Удалить чат")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+                     description = "Чат успешно удалён",
+                     content = @Content(mediaType = "application/json")
+        ),
+        @ApiResponse(responseCode = "400",
+                     description = "Некорректные параметры запроса",
+                     content = @Content(
+                         mediaType = "application/json",
+                         schema = @Schema(implementation = ApiErrorResponse.class)
+                     )
+        ),
+        @ApiResponse(responseCode = "404",
+                     description = "Чат не существует",
+                     content = @Content(
+                         mediaType = "application/json",
+                         schema = @Schema(implementation = ApiErrorResponse.class)
+                     )
+        )
+    })
+    @DeleteMapping(
+        value = "/tg-chat/{id}",
+        produces = "application/json"
+    )
+    public ResponseEntity<?> deleteChat(@PathVariable int id) throws BadRequestException, NotFoundException {
+        scrapperService.deleteChat(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
