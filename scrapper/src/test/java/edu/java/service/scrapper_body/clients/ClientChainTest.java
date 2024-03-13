@@ -3,7 +3,6 @@ package edu.java.service.scrapper_body.clients;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import edu.java.service.scrapper_body.clients.ClientChain;
 import edu.java.service.scrapper_body.clients.github_client.GitHubCommitUpdateClient;
 import edu.java.service.scrapper_body.clients.stackoverflow_client.StackOverflowQuestionClient;
 import edu.java.service.scrapper_body.clients_body.Response;

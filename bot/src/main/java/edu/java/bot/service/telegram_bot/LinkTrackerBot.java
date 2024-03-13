@@ -11,8 +11,8 @@ public final class LinkTrackerBot implements TrackerBot {
 
     @Autowired
     public LinkTrackerBot(
-            TelegramBotComponent telegramBotComponent,
-            UpdateHandler handler
+        TelegramBotComponent telegramBotComponent,
+        UpdateHandler handler
     ) {
         this.telegramBotComponent = telegramBotComponent;
         this.handler = handler;
@@ -21,14 +21,14 @@ public final class LinkTrackerBot implements TrackerBot {
     @Override
     public void close() {
         telegramBotComponent.telegramBot()
-                .removeGetUpdatesListener();
+            .removeGetUpdatesListener();
     }
 
     @Override
     public void start() {
         telegramBotComponent.telegramBot()
-                .setUpdatesListener(
-                        new CommandUpdateListener(handler)
-                );
+            .setUpdatesListener(
+                new CommandUpdateListener(handler)
+            );
     }
 }

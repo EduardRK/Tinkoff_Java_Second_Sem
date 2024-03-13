@@ -3,8 +3,6 @@ package edu.java.service.scrapper_body.clients_body;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
-
-import edu.java.service.scrapper_body.clients_body.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
