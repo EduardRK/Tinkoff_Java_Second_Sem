@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Component
 public final class LinkScrapperClient implements ScrapperClient {
@@ -38,7 +39,7 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
             .bodyToMono(Void.class)
             .block();
@@ -51,11 +52,11 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
-                clientResponse -> clientResponse.bodyToMono(NotFoundException.class)
+                clientResponse -> clientResponse.bodyToMono(NotFoundException.class).flatMap(Mono::error)
             )
             .bodyToMono(Void.class)
             .block();
@@ -70,7 +71,7 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                clientResponse -> clientResponse.bodyToMono(RuntimeException.class)
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
             .bodyToMono(ListLinksResponse.class)
             .block();
@@ -86,7 +87,7 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
             .bodyToMono(LinkResponse.class)
             .block();
@@ -102,11 +103,11 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                clientResponse -> clientResponse.bodyToMono(BadRequestException.class)
+                clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
-                clientResponse -> clientResponse.bodyToMono(NotFoundException.class)
+                clientResponse -> clientResponse.bodyToMono(NotFoundException.class).flatMap(Mono::error)
             )
             .bodyToMono(LinkResponse.class)
             .block();

@@ -2,7 +2,8 @@ package edu.java.bot.controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import edu.java.bot.service.handlers.LinkUpdateHandler;
+import edu.java.bot.service.services.exception_service.BadRequestExceptionService;
+import edu.java.bot.service.services.update_service.UpdateHandlerService;
 import edu.java.requests.LinkUpdateRequest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(UpdateController.class)
@@ -21,7 +23,10 @@ class UpdateControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private LinkUpdateHandler linkUpdateHandler;
+    private UpdateHandlerService updateService;
+
+    @MockBean
+    private BadRequestExceptionService exceptionService;
 
     @Test
     @DisplayName("Status code OK")

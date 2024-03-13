@@ -1,9 +1,11 @@
 package edu.java.bot.controller;
 
+import edu.java.bot.service.services.exception_service.BadRequestExceptionService;
+import edu.java.bot.service.services.exception_service.ExceptionService;
 import edu.java.exceptions.BadRequestException.ChatsNotRegisteredException;
 import edu.java.exceptions.BadRequestException.ChatsNotTrackedUriException;
 import edu.java.responses.ApiErrorResponse;
-import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,19 +14,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public final class ExceptionController {
-    public ExceptionController() {
+    private final ExceptionService badRequestExceptionExceptionService;
+
+    @Autowired
+    public ExceptionController(BadRequestExceptionService badRequestExceptionExceptionService) {
+        this.badRequestExceptionExceptionService = badRequestExceptionExceptionService;
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ChatsNotRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatsNotRegistered(ChatsNotRegisteredException exception) {
-        ApiErrorResponse response = new ApiErrorResponse(
-            chatsNotRegisteredDescription(exception),
-            String.valueOf(HttpStatus.BAD_REQUEST.value()),
-            "ChatsNotRegisteredException",
-            exception.getMessage(),
-            Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
-        );
+        ApiErrorResponse response = badRequestExceptionExceptionService.chatsNotRegistered(exception);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -32,36 +32,8 @@ public final class ExceptionController {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ChatsNotTrackedUriException.class)
     public ResponseEntity<ApiErrorResponse> chatsNotTrackedUri(ChatsNotTrackedUriException exception) {
-        ApiErrorResponse response = new ApiErrorResponse(
-            uriNotTrackedDescription(exception),
-            String.valueOf(HttpStatus.BAD_REQUEST.value()),
-            "ChatsNotTrackedUriException",
-            exception.getMessage(),
-            Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
-        );
+        ApiErrorResponse response = badRequestExceptionExceptionService.chatsNotTrackedUri(exception);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    private String chatsNotRegisteredDescription(ChatsNotRegisteredException exception) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("These chats were not found:").append(' ');
-
-        for (Integer id : exception.ids()) {
-            stringBuilder.append(id).append(' ');
-        }
-
-        return stringBuilder.toString();
-    }
-
-    private String uriNotTrackedDescription(ChatsNotTrackedUriException exception) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("These chats do not track the link:").append('\n');
-
-        for (Integer id : exception.ids()) {
-            stringBuilder.append(id).append(": ").append(exception.uri());
-        }
-
-        return stringBuilder.toString();
     }
 }
