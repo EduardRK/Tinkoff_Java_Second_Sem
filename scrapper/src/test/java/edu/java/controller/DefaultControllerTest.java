@@ -123,11 +123,11 @@ class DefaultControllerTest {
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/tg-chat/12")
-                                .contentType("application/json")
-                )
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
+                MockMvcRequestBuilders.post("/tg-chat/12")
+                    .contentType("application/json")
+            )
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn();
     }
 
     @Test
@@ -136,10 +136,10 @@ class DefaultControllerTest {
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/tg-chat/12")
-                                .contentType("application/json")
-                )
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
+                MockMvcRequestBuilders.delete("/tg-chat/12")
+                    .contentType("application/json")
+            )
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn();
     }
 }
