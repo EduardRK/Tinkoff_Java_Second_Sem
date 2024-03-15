@@ -9,6 +9,9 @@ import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import edu.java.service.services.default_service.ScrapperService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,19 +39,32 @@ public final class DefaultController {
     }
 
     @Operation(summary = "Получить все отслеживаемые ссылки")
+    @Parameters(value = {
+        @Parameter(
+            name = "Tg-Chat-Id",
+            in = ParameterIn.HEADER,
+            required = true,
+            schema = @Schema(
+                type = "integer",
+                format = "int64"
+            )
+        )
+    })
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Ссылки успешно получены",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ListLinksResponse.class))
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ссылки успешно получены",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ListLinksResponse.class))
         ),
-        @ApiResponse(responseCode = "400",
-                     description = "Некорректные параметры запроса",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ApiErrorResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "400",
+            description = "Некорректные параметры запроса",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiErrorResponse.class)
+            )
         )
     })
     @GetMapping(
@@ -56,27 +72,43 @@ public final class DefaultController {
         produces = "application/json"
     )
     public ResponseEntity<ListLinksResponse> allTrackedLinks(
-        @RequestHeader("id") int id
+        @RequestHeader(
+            name = "Tg-Chat-Id",
+            value = "Tg-Chat-Id"
+        ) int tgChatId
     ) throws BadRequestException {
-        ListLinksResponse listLinksResponse = scrapperService.allTrackedLinks(id);
+        ListLinksResponse listLinksResponse = scrapperService.allTrackedLinks(tgChatId);
 
         return new ResponseEntity<>(listLinksResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "Добавить отслеживание ссылки")
+    @Parameters(value = {
+        @Parameter(
+            name = "Tg-Chat-Id",
+            in = ParameterIn.HEADER,
+            required = true,
+            schema = @Schema(
+                type = "integer",
+                format = "int64"
+            )
+        )
+    })
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Ссылка успешно добавлена",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = LinkResponse.class))
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ссылка успешно добавлена",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = LinkResponse.class))
         ),
-        @ApiResponse(responseCode = "400",
-                     description = "Некорректные параметры запроса",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ApiErrorResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "400",
+            description = "Некорректные параметры запроса",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiErrorResponse.class)
+            )
         )
     })
     @PostMapping(
@@ -84,36 +116,59 @@ public final class DefaultController {
         produces = "application/json"
     )
     public ResponseEntity<LinkResponse> addNewTrackLink(
-        @RequestHeader("id") int id,
+        @RequestHeader(
+            name = "Tg-Chat-Id",
+            value = "Tg-Chat-Id"
+        ) int tgChatId,
         @RequestBody AddLinkRequest addLinkRequest
     ) throws BadRequestException {
-        LinkResponse linkResponse = scrapperService.addNewTrackLink(id, addLinkRequest);
+        LinkResponse linkResponse = scrapperService.addNewTrackLink(tgChatId, addLinkRequest);
 
         return new ResponseEntity<>(linkResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "Убрать отслеживание ссылки")
+    @Parameters(value = {
+        @Parameter(
+            name = "Tg-Chat-Id",
+            in = ParameterIn.HEADER,
+            required = true,
+            schema = @Schema(
+                type = "integer",
+                format = "int64"
+            )
+        )
+    })
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Ссылка успешно убрана",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = LinkResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ссылка успешно убрана",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(
+                    implementation = LinkResponse.class
+                )
+            )
         ),
-        @ApiResponse(responseCode = "400",
-                     description = "Некорректные параметры запроса",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ApiErrorResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "400",
+            description = "Некорректные параметры запроса",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(
+                    implementation = ApiErrorResponse.class
+                )
+            )
         ),
-        @ApiResponse(responseCode = "404",
-                     description = "Ссылка не найдена",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ApiErrorResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "404",
+            description = "Ссылка не найдена",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(
+                    implementation = ApiErrorResponse.class
+                )
+            )
         )
     })
     @DeleteMapping(
@@ -121,31 +176,49 @@ public final class DefaultController {
         produces = "application/json"
     )
     public ResponseEntity<LinkResponse> untrackLink(
-        @RequestHeader("id") int id,
+        @RequestHeader(
+            name = "Tg-Chat-Id",
+            value = "Tg-Chat-Id"
+        ) int tgChatId,
         @RequestBody RemoveLinkRequest removeLinkRequest
     ) throws BadRequestException, NotFoundException {
-        LinkResponse linkResponse = scrapperService.untrackLink(id, removeLinkRequest);
+        LinkResponse linkResponse = scrapperService.untrackLink(tgChatId, removeLinkRequest);
 
         return new ResponseEntity<>(linkResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "Зарегистрировать чат")
+    @Parameters(value = {
+        @Parameter(
+            name = "id",
+            in = ParameterIn.PATH,
+            required = true,
+            schema = @Schema(
+                type = "integer",
+                format = "int64"
+            )
+        )
+    })
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Чат зарегистрирован",
-                     content = @Content(mediaType = "application/json")
+        @ApiResponse(
+            responseCode = "200",
+            description = "Чат зарегистрирован",
+            content = @Content(
+            )
         ),
-        @ApiResponse(responseCode = "400",
-                     description = "Некорректные параметры запроса",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ApiErrorResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "400",
+            description = "Некорректные параметры запроса",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(
+                    implementation = ApiErrorResponse.class
+                )
+            )
         )
     })
     @PostMapping(
-        value = "/tg-chat/{id}",
-        produces = "application/json"
+        value = "/tg-chat/{id}"
     )
     public ResponseEntity<?> registerChat(@PathVariable int id) throws BadRequestException {
         scrapperService.registerChat(id);
@@ -154,29 +227,47 @@ public final class DefaultController {
     }
 
     @Operation(summary = "Удалить чат")
+    @Parameters(value = {
+        @Parameter(
+            name = "id",
+            in = ParameterIn.PATH,
+            required = true,
+            schema = @Schema(
+                type = "integer",
+                format = "int64"
+            )
+        )
+    })
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Чат успешно удалён",
-                     content = @Content(mediaType = "application/json")
+        @ApiResponse(
+            responseCode = "200",
+            description = "Чат успешно удалён",
+            content = @Content(
+            )
         ),
-        @ApiResponse(responseCode = "400",
-                     description = "Некорректные параметры запроса",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ApiErrorResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "400",
+            description = "Некорректные параметры запроса",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(
+                    implementation = ApiErrorResponse.class
+                )
+            )
         ),
-        @ApiResponse(responseCode = "404",
-                     description = "Чат не существует",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ApiErrorResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "404",
+            description = "Чат не существует",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(
+                    implementation = ApiErrorResponse.class
+                )
+            )
         )
     })
     @DeleteMapping(
-        value = "/tg-chat/{id}",
-        produces = "application/json"
+        value = "/tg-chat/{id}"
     )
     public ResponseEntity<?> deleteChat(@PathVariable int id) throws BadRequestException, NotFoundException {
         scrapperService.deleteChat(id);

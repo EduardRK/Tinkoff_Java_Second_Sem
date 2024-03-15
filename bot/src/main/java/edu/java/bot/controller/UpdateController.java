@@ -32,16 +32,18 @@ public final class UpdateController {
 
     @Operation(summary = "Отправить обновление")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-                     description = "Обновление обработано",
-                     content = @Content(mediaType = "application/json")
+        @ApiResponse(
+            responseCode = "200",
+            description = "Обновление обработано",
+            content = @Content(mediaType = "application/json")
         ),
-        @ApiResponse(responseCode = "400",
-                     description = "Некорректные параметры запроса",
-                     content = @Content(
-                         mediaType = "application/json",
-                         schema = @Schema(implementation = ApiErrorResponse.class)
-                     )
+        @ApiResponse(
+            responseCode = "400",
+            description = "Некорректные параметры запроса",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiErrorResponse.class)
+            )
         )
     })
     @PostMapping(produces = "application/json")
