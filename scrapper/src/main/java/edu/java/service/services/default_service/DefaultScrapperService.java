@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultScrapperService implements ScrapperService {
+public final class DefaultScrapperService implements ScrapperService {
     private final DataBase<Integer, String> dataBase;
 
     @Autowired
