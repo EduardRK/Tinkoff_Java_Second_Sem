@@ -5,14 +5,15 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class DatabaseIntegrationTest extends IntegrationTest {
     @Test
-    void dataBaseTest() throws SQLException {
+    void dataBaseCreateTest() throws SQLException {
         Assertions.assertTrue(POSTGRES.isRunning());
 
         Connection connection = DriverManager.getConnection(
@@ -30,7 +31,7 @@ public class DatabaseIntegrationTest extends IntegrationTest {
             new String[] {"TABLE"}
         );
 
-        List<String> tables = new ArrayList<>();
+        Set<String> tables = new HashSet<>();
 
         while (resultSet.next()) {
             tables.add(resultSet.getString("TABLE_NAME"));
@@ -39,5 +40,53 @@ public class DatabaseIntegrationTest extends IntegrationTest {
         Assertions.assertTrue(tables.contains("chats"));
         Assertions.assertTrue(tables.contains("chatlink"));
         Assertions.assertTrue(tables.contains("links"));
+    }
+
+    @Test
+    void chatsInsertTest() throws SQLException {
+        Assertions.assertTrue(POSTGRES.isRunning());
+
+        Connection connection = DriverManager.getConnection(
+            POSTGRES.getJdbcUrl(),
+            POSTGRES.getUsername(),
+            POSTGRES.getPassword()
+        );
+
+        Statement statement = connection.createStatement();
+        statement.execute("INSERT INTO chats (id) VALUES (12)");
+
+        ResultSet resultSet = statement.executeQuery("SELECT id FROM chats");
+
+        resultSet.next();
+        Assertions.assertEquals(
+            12,
+            resultSet.getInt("id")
+        );
+    }
+
+    @Test
+    void linksInsertTest() throws SQLException {
+        Assertions.assertTrue(POSTGRES.isRunning());
+
+        Connection connection = DriverManager.getConnection(
+            POSTGRES.getJdbcUrl(),
+            POSTGRES.getUsername(),
+            POSTGRES.getPassword()
+        );
+
+        Statement statement = connection.createStatement();
+        statement.execute("INSERT INTO links (uri) VALUES ('somelink.com')");
+
+        ResultSet resultSet = statement.executeQuery("SELECT id, uri FROM links");
+
+        resultSet.next();
+        Assertions.assertEquals(
+            1,
+            resultSet.getInt("id")
+        );
+        Assertions.assertEquals(
+            "somelink.com",
+            resultSet.getString("uri")
+        );
     }
 }
