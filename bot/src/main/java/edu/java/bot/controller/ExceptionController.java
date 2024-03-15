@@ -22,7 +22,6 @@ public final class ExceptionController extends ResponseEntityExceptionHandler {
         this.exceptionService = badRequestExceptionExceptionService;
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ChatsNotRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatsNotRegistered(ChatsNotRegisteredException exception) {
         ApiErrorResponse response = exceptionService.chatsNotRegistered(exception);
@@ -30,7 +29,6 @@ public final class ExceptionController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ChatsNotTrackedUriException.class)
     public ResponseEntity<ApiErrorResponse> chatsNotTrackedUri(ChatsNotTrackedUriException exception) {
         ApiErrorResponse response = exceptionService.chatsNotTrackedUri(exception);
