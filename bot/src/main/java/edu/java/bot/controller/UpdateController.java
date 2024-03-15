@@ -35,14 +35,17 @@ public final class UpdateController {
         @ApiResponse(
             responseCode = "200",
             description = "Обновление обработано",
-            content = @Content(mediaType = "application/json")
+            content = @Content(
+            )
         ),
         @ApiResponse(
             responseCode = "400",
             description = "Некорректные параметры запроса",
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = ApiErrorResponse.class)
+                schema = @Schema(
+                    implementation = ApiErrorResponse.class
+                )
             )
         )
     })
