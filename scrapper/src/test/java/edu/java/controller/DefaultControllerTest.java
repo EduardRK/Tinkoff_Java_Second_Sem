@@ -53,7 +53,7 @@ class DefaultControllerTest {
 
         MvcResult mvcResult = mockMvc.perform(
                 MockMvcRequestBuilders.get("/links")
-                    .header("id", 12)
+                    .header("Tg-Chat-Id", 12)
                     .contentType("application/json")
             )
             .andExpect(MockMvcResultMatchers.status().isOk())
@@ -78,7 +78,7 @@ class DefaultControllerTest {
 
         MvcResult mvcResult = mockMvc.perform(
                 MockMvcRequestBuilders.post("/links")
-                    .header("id", 12)
+                    .header("Tg-Chat-Id", 12)
                     .contentType("application/json")
                     .content(objectMapper.writeValueAsString(addLinkRequest))
             )
@@ -104,7 +104,7 @@ class DefaultControllerTest {
 
         MvcResult mvcResult = mockMvc.perform(
                 MockMvcRequestBuilders.delete("/links")
-                    .header("id", 12)
+                    .header("Tg-Chat-Id", 12)
                     .contentType("application/json")
                     .content(objectMapper.writeValueAsString(removeLinkRequest))
             )
