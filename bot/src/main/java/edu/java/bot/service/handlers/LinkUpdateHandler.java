@@ -33,22 +33,22 @@ public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
     }
 
     private void chatsNotRegistered(LinkUpdateRequest linkUpdateRequest) throws BadRequestException {
-        List<Integer> ids = linkUpdateRequest.tgChatIds()
+        List<Long> ids = linkUpdateRequest.tgChatIds()
             .stream()
-            .filter(id -> !DATA_BASE.dataBase().containsKey(id.longValue()))
+            .filter(id -> !DATA_BASE.dataBase().containsKey(id))
             .toList();
 
         if (!ids.isEmpty()) {
-            throw new ChatsNotRegisteredException(ids, linkUpdateRequest.url());
+            throw new ChatsNotRegisteredException(ids, linkUpdateRequest.uri());
         }
     }
 
     private void uriNotTracked(LinkUpdateRequest linkUpdateRequest) throws BadRequestException {
-        List<Integer> ids = linkUpdateRequest.tgChatIds()
+        List<Long> ids = linkUpdateRequest.tgChatIds()
             .stream()
             .filter(id -> {
                 try {
-                    return !DATA_BASE.dataBase().get(id.longValue()).contains(new Link(linkUpdateRequest.url()));
+                    return !DATA_BASE.dataBase().get(id).contains(new Link(linkUpdateRequest.uri()));
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
@@ -56,7 +56,7 @@ public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
             .toList();
 
         if (!ids.isEmpty()) {
-            throw new ChatsNotTrackedUriException(ids, linkUpdateRequest.url());
+            throw new ChatsNotTrackedUriException(ids, linkUpdateRequest.uri());
         }
     }
 }

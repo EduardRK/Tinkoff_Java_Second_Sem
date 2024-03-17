@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class InMemoryDataBase implements DataBase<Integer, String> {
-    private static final Map<Integer, Set<String>> DATA_BASE = new ConcurrentHashMap<>();
+public final class InMemoryDataBase implements DataBase<Long, String> {
+    private static final Map<Long, Set<String>> DATA_BASE = new ConcurrentHashMap<>();
 
     @Autowired
     public InMemoryDataBase() {
@@ -22,7 +22,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public Set<String> allDataByKey(Integer key) throws BadRequestException {
+    public Set<String> allDataByKey(Long key) throws BadRequestException {
         if (notCorrectId(key) || !DATA_BASE.containsKey(key)) {
             throw new IncorrectDataException(key);
         }
@@ -31,7 +31,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public void addValue(Integer key, String value) throws BadRequestException {
+    public void addValue(Long key, String value) throws BadRequestException {
         if (notCorrectId(key) || !DATA_BASE.containsKey(key)) {
             throw new IncorrectDataException(key);
         }
@@ -40,7 +40,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public void deleteValue(Integer key, String value) throws BadRequestException, NotFoundException {
+    public void deleteValue(Long key, String value) throws BadRequestException, NotFoundException {
         if (notCorrectId(key) || !DATA_BASE.containsKey(key)) {
             throw new IncorrectDataException(key);
         }
@@ -53,7 +53,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public void addNewUserByKey(Integer key) throws BadRequestException {
+    public void addNewUserByKey(Long key) throws BadRequestException {
         if (notCorrectId(key)) {
             throw new IncorrectDataException(key);
         }
@@ -66,7 +66,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
     }
 
     @Override
-    public void deleteUserByKey(Integer key) throws BadRequestException, NotFoundException {
+    public void deleteUserByKey(Long key) throws BadRequestException, NotFoundException {
         if (notCorrectId(key)) {
             throw new IncorrectDataException(key);
         }
@@ -78,7 +78,7 @@ public final class InMemoryDataBase implements DataBase<Integer, String> {
         DATA_BASE.remove(key);
     }
 
-    private boolean notCorrectId(int key) {
+    private boolean notCorrectId(long key) {
         return key <= 0;
     }
 }

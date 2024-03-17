@@ -4,11 +4,11 @@ import java.util.List;
 
 public class ChatsNotTrackedUriException extends BadRequestException {
 
-    public ChatsNotTrackedUriException(List<Integer> ids, String uri, String message) {
+    public ChatsNotTrackedUriException(List<Long> ids, String uri, String message) {
         super(ids, uri, message);
     }
 
-    public ChatsNotTrackedUriException(List<Integer> ids, String uri) {
+    public ChatsNotTrackedUriException(List<Long> ids, String uri) {
         this(ids, uri, DEFAULT_MESSAGE);
     }
 }

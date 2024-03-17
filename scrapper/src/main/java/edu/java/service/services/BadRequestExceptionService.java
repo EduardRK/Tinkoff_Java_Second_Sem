@@ -1,4 +1,4 @@
-package edu.java.service.services.exception_service;
+package edu.java.service.services;
 
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.responses.ApiErrorResponse;

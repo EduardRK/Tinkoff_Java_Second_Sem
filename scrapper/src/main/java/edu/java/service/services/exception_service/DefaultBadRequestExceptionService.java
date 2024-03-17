@@ -2,6 +2,7 @@ package edu.java.service.services.exception_service;
 
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.responses.ApiErrorResponse;
+import edu.java.service.services.BadRequestExceptionService;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

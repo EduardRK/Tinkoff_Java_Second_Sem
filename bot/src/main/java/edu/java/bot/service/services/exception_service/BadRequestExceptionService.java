@@ -37,7 +37,7 @@ public final class BadRequestExceptionService implements ExceptionService {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("These chats were not found:").append(' ');
 
-        for (Integer id : exception.ids()) {
+        for (Long id : exception.ids()) {
             stringBuilder.append(id).append(' ');
         }
 
@@ -48,7 +48,7 @@ public final class BadRequestExceptionService implements ExceptionService {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("These chats do not track the link:").append('\n');
 
-        for (Integer id : exception.ids()) {
+        for (Long id : exception.ids()) {
             stringBuilder.append(id).append(": ").append(exception.uri());
         }
 

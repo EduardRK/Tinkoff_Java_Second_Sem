@@ -3,9 +3,9 @@
 --changeset EduardRK:1
 CREATE TABLE IF NOT EXISTS Links
 (
-    id SERIAL NOT NULL,
+    id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY,
     uri VARCHAR(255) NOT NULL,
-    description VARCHAR(255),
+    last_check TIMESTAMP WITH TIME ZONE,
     last_update TIMESTAMP WITH TIME ZONE,
 
     PRIMARY KEY(id),

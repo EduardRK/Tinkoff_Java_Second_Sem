@@ -22,7 +22,7 @@ public final class SendMessageFromLinkUpdateGenerator implements Generator<List<
 
     private String message(LinkUpdateRequest linkUpdateRequest) {
         return "New update: " + '\n'
-            + "Link: " + linkUpdateRequest.url() + '\n'
+            + "Link: " + linkUpdateRequest.uri() + '\n'
             + '\n'
             + linkUpdateRequest.description();
     }
