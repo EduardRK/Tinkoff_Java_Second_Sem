@@ -5,11 +5,11 @@ import java.time.OffsetDateTime;
 
 public record Link(
     long id,
-    URI uri,
+    String uri,
     OffsetDateTime lastCheck,
     OffsetDateTime lastUpdate
 ) {
-    public Link(URI uri) {
-        this(0, uri, OffsetDateTime.now(), OffsetDateTime.now());
+    public static Link link(URI uri) {
+        return new Link(0, uri.toString(), OffsetDateTime.now(), OffsetDateTime.now());
     }
 }

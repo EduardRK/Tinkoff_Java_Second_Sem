@@ -66,6 +66,6 @@ public final class GitHubCommitUpdateClient extends AbstractClient {
 
     @Override
     protected boolean notValid(URI uri) {
-        return !uri.getHost().equals(HOST);
+        return !Objects.requireNonNull(uri.getHost()).equals(HOST);
     }
 }

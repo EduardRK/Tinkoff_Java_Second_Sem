@@ -69,7 +69,7 @@ public class JdbcScrapperService implements ScrapperService {
             throw new IncorrectDataException(tgChatId);
         }
 
-        long linkId = linkRepository.addLink(new Link(URI.create(uri)));
+        long linkId = linkRepository.addLink(Link.link(URI.create(uri)));
         chatLinkRepository.addChatLink(tgChatId, linkId);
 
         return new LinkResponse(linkId, uri);
@@ -80,11 +80,11 @@ public class JdbcScrapperService implements ScrapperService {
     public LinkResponse remove(long tgChatId, String uri) throws BadRequestException, NotFoundException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
-        } else if (chatLinkRepository.chatTrackedLink(tgChatId, uri)) {
+        } else if (!chatLinkRepository.chatTrackedLink(tgChatId, uri)) {
             throw new ChatNotTrackedUriException(tgChatId, uri);
         }
 
-        long linkId = linkRepository.removeLink(new Link(URI.create(uri)));
+        long linkId = linkRepository.removeLink(Link.link(URI.create(uri)));
         chatLinkRepository.removeChatLink(tgChatId, linkId);
 
         return new LinkResponse(linkId, uri);

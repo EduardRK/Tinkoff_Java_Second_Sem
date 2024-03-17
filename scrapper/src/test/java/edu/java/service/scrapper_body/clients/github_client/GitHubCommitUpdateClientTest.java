@@ -18,7 +18,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class GitHubCommitUpdateClientTest {
-    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer();
+    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer(80);
     private static final String REPOSITORY_LINK = "https://github.com/EduardRK/Fractal-Flame";
 
     @BeforeAll

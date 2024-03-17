@@ -14,8 +14,9 @@ public class JdbcLinkRepository implements LinkRepository {
     private static final String ALL_LINK_SQL_STATEMENT = "SELECT * FROM Links";
     private static final String ALL_LINK_WITH_FILTER_SQL_STATEMENT = "SELECT * FROM Links WHERE last_check < ?";
     private static final String ADD_LINK_SQL_STATEMENT = "INSERT INTO Links(uri, last_check, last_update) "
-        + "VALUES(:uri, :last_check, :last_update) ON CONFLICT (uri) "
-        + "DO UPDATE Links SET last_check = :last_check, last_update = :last_update RETURNING id";
+        + "VALUES (?, ?, ?) RETURNING id";
+    private static final String UPDATE_LINK_SQL_STATEMENT = "UPDATE Links SET last_check = ?, last_update = ? "
+        + "WHERE uri = ? RETURNING id";
     private static final String REMOVE_LINK_SQL_STATEMENT = "DELETE FROM Links WHERE uri = ? RETURNING id";
     private final JdbcClient jdbcClient;
 
@@ -41,12 +42,17 @@ public class JdbcLinkRepository implements LinkRepository {
 
     @Override
     public long addLink(Link link) {
-        return jdbcClient.sql(ADD_LINK_SQL_STATEMENT)
-            .param("uri", link.uri().toString())
-            .param("last_check", link.lastCheck().toString())
-            .param("last_update", link.lastUpdate().toString())
-            .query(Long.class)
-            .single();
+        try {
+            return jdbcClient.sql("INSERT INTO Links(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
+                .params(link.uri(), link.lastCheck(), link.lastUpdate())
+                .query(Long.class)
+                .single();
+        } catch (Exception e) {
+            return jdbcClient.sql("UPDATE Links SET last_check = ?, last_update = ? WHERE uri = ? RETURNING id")
+                .params(link.lastCheck(), link.lastUpdate(), link.uri())
+                .query(Long.class)
+                .single();
+        }
     }
 
     @Override

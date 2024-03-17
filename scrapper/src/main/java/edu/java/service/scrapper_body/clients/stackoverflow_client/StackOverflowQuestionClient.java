@@ -67,6 +67,6 @@ public final class StackOverflowQuestionClient extends AbstractClient {
 
     @Override
     protected boolean notValid(@NotNull URI uri) {
-        return !uri.getHost().equals(HOST);
+        return !Objects.requireNonNull(uri.getHost()).equals(HOST);
     }
 }

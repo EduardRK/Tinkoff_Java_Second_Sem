@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 public final class TelegramBotClient implements BotClient {
-    private static final String BASE_URI = "http://localhost:8090";
+    private static final String BASE_URI = "http://localhost:90";
     private final WebClient webClient;
 
     public TelegramBotClient(String baseUri) {

@@ -9,6 +9,7 @@ import edu.java.requests.LinkUpdateRequest;
 import edu.java.service.bot_client.BotClient;
 import edu.java.service.scrapper_body.clients.ClientChain;
 import edu.java.service.scrapper_body.clients_body.Response;
+import java.net.URI;
 import java.time.Duration;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -48,12 +49,12 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
             .forEach(link -> {
                     try {
 
-                        clientChain.newUpdates(link.uri())
+                        clientChain.newUpdates(URI.create(link.uri()))
                             .parallelStream()
                             .filter(response -> response.date().isAfter(link.lastUpdate()))
                             .map(response -> new LinkUpdateRequest(
                                 link.id(),
-                                link.uri().toString(),
+                                link.uri(),
                                 creteDescription(response),
                                 chatLinkRepository.allChats(link.id()).stream().map(Chat::tgChatId).toList()
                             ))
