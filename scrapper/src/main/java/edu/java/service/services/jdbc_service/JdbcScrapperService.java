@@ -10,6 +10,7 @@ import edu.java.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.BadRequestException.ChatAlreadyRegisteredException;
 import edu.java.exceptions.BadRequestException.IncorrectDataException;
+import edu.java.exceptions.BadRequestException.UriAlreadyTrackedException;
 import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
 import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
@@ -67,6 +68,8 @@ public class JdbcScrapperService implements ScrapperService {
     public LinkResponse add(long tgChatId, String uri) throws BadRequestException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
+        } else if (chatLinkRepository.chatTrackedLink(tgChatId, uri)) {
+            throw new UriAlreadyTrackedException(List.of(tgChatId), uri);
         }
 
         long linkId = linkRepository.addLink(Link.link(URI.create(uri)));

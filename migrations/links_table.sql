@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS Links
     last_update TIMESTAMP WITH TIME ZONE,
 
     PRIMARY KEY(id),
-    UNIQUE (id, uri)
+    UNIQUE (uri)
 );
 --rollback DROP TABLE Links

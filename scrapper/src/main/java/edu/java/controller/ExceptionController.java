@@ -2,6 +2,7 @@ package edu.java.controller;
 
 import edu.java.exceptions.BadRequestException.ChatAlreadyRegisteredException;
 import edu.java.exceptions.BadRequestException.IncorrectDataException;
+import edu.java.exceptions.BadRequestException.UriAlreadyTrackedException;
 import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
 import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
 import edu.java.responses.ApiErrorResponse;
@@ -38,6 +39,13 @@ public final class ExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = ChatAlreadyRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatAlreadyRegistered(ChatAlreadyRegisteredException exception) {
         ApiErrorResponse response = badRequestExceptionService.chatAlreadyRegistered(exception);
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = UriAlreadyTrackedException.class)
+    public ResponseEntity<ApiErrorResponse> uriAlreadyTracked(UriAlreadyTrackedException exception) {
+        ApiErrorResponse response = badRequestExceptionService.uriAlreadyTracked(exception);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

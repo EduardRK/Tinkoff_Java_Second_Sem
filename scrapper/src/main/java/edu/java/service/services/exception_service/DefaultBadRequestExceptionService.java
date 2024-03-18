@@ -36,4 +36,15 @@ public final class DefaultBadRequestExceptionService implements BadRequestExcept
             Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
         );
     }
+
+    @Override
+    public ApiErrorResponse uriAlreadyTracked(BadRequestException exception) {
+        return new ApiErrorResponse(
+            exception.uri() + " already tracked",
+            String.valueOf(HttpStatus.BAD_REQUEST),
+            "UriAlreadyTracked",
+            exception.getMessage(),
+            Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
+        );
+    }
 }

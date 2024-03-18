@@ -11,6 +11,7 @@ import edu.java.service.scrapper_body.clients.ClientChain;
 import edu.java.service.scrapper_body.clients_body.Response;
 import java.net.URI;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,13 +45,14 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     @Scheduled(fixedDelayString = "#{@scheduler.interval}")
     public void update() {
         LOGGER.info("Link update");
-        List<Link> linkList = linkRepository.findAllWithFilter(UPDATE_CHECK_TIME);
-        linkList.parallelStream()
+        linkRepository.findAllWithFilter(UPDATE_CHECK_TIME)
+            .parallelStream()
             .forEach(link -> {
                     try {
 
-                        clientChain.newUpdates(URI.create(link.uri()))
-                            .parallelStream()
+                        List<Response> responseList = clientChain.newUpdates(URI.create(link.uri()));
+
+                        responseList.parallelStream()
                             .filter(response -> response.date().isAfter(link.lastUpdate()))
                             .map(response -> new LinkUpdateRequest(
                                 link.id(),
@@ -59,6 +61,18 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
                                 chatLinkRepository.allChats(link.id()).stream().map(Chat::tgChatId).toList()
                             ))
                             .forEach(botClient::sendUpdate);
+
+                        linkRepository.updateLastUpdateTime(
+                            new Link(
+                                link.id(),
+                                link.uri(),
+                                link.lastCheck(),
+                                responseList.parallelStream()
+                                    .map(Response::date)
+                                    .max(OffsetDateTime::compareTo)
+                                    .orElse(OffsetDateTime.now())
+                            )
+                        );
 
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);

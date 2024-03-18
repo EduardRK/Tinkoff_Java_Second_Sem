@@ -12,4 +12,6 @@ public interface LinkRepository {
     long addLink(Link link);
 
     long removeLink(Link link);
+
+    void updateLastUpdateTime(Link link);
 }

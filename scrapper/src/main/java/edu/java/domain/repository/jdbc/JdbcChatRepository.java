@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcChatRepository implements ChatRepository {
-    private static final String REGISTER_CHAT_SQL_STATEMENT = "INSERT INTO Chats(id) VALUES(?)";
-    private static final String DELETE_CHAT_SQL_STATEMENT = "DELETE FROM Chats WHERE id = (?)";
-    private static final String EXIST_CHAT_SQL_STATEMENT = "SELECT COUNT(*) FROM Chats WHERE id = (?)";
+    private static final String REGISTER_CHAT_SQL_QUERY = "INSERT INTO Chats(id) VALUES(?)";
+    private static final String DELETE_CHAT_SQL_QUERY = "DELETE FROM Chats WHERE id = (?)";
+    private static final String EXIST_CHAT_SQL_QUERY = "SELECT COUNT(*) FROM Chats WHERE id = (?)";
     private final JdbcClient jdbcClient;
 
     @Autowired
@@ -19,21 +19,21 @@ public class JdbcChatRepository implements ChatRepository {
 
     @Override
     public void registerChat(long tgChatId) {
-        jdbcClient.sql(REGISTER_CHAT_SQL_STATEMENT)
+        jdbcClient.sql(REGISTER_CHAT_SQL_QUERY)
             .param(tgChatId)
             .update();
     }
 
     @Override
     public void deleteChat(long tgChatId) {
-        jdbcClient.sql(DELETE_CHAT_SQL_STATEMENT)
+        jdbcClient.sql(DELETE_CHAT_SQL_QUERY)
             .param(tgChatId)
             .update();
     }
 
     @Override
     public boolean chatRegistered(long tgChatId) {
-        return jdbcClient.sql(EXIST_CHAT_SQL_STATEMENT)
+        return jdbcClient.sql(EXIST_CHAT_SQL_QUERY)
             .param(tgChatId)
             .query(Long.class)
             .single() >= 1;

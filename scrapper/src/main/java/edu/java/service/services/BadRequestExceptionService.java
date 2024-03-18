@@ -7,4 +7,6 @@ public interface BadRequestExceptionService {
     ApiErrorResponse incorrectData(BadRequestException exception);
 
     ApiErrorResponse chatAlreadyRegistered(BadRequestException exception);
+
+    ApiErrorResponse uriAlreadyTracked(BadRequestException exception);
 }
