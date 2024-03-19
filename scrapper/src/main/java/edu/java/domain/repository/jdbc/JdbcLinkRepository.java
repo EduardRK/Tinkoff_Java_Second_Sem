@@ -69,7 +69,7 @@ public class JdbcLinkRepository implements LinkRepository {
     @Override
     public void updateLastUpdateTime(Link link) {
         jdbcClient.sql(UPDATE_LAST_UPDATE_TIME_SQL_QUERY)
-            .params(link.uri(), link.lastUpdate())
+            .params(link.lastUpdate(), link.uri())
             .update();
     }
 }

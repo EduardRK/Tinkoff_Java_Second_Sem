@@ -14,4 +14,6 @@ public interface ChatLinkRepository {
     List<Link> allLinks(long tgChatId);
 
     boolean chatTrackedLink(long tgChatId, String uri);
+
+    void deleteAllTrackLink(long tgChatId);
 }

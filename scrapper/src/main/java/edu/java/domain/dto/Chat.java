@@ -1,6 +1,6 @@
 package edu.java.domain.dto;
 
 public record Chat(
-    long tgChatId
+    long chatId
 ) {
 }

@@ -17,6 +17,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
         + "ON ChatLink.link_id = Links.id WHERE chat_id = ?";
     private static final String CHAT_TRACKED_LINK_SQL_QUERY = "SELECT COUNT(*) FROM ChatLink INNER JOIN Links "
         + "ON ChatLink.link_id = Links.id WHERE chat_id = ? AND uri = ?";
+    private static final String DELETE_ALL_LINK_TRACKED_BY_CHAT_SQL_QUERY = "DELETE FROM ChatLink WHERE chat_id = ?";
     private final JdbcClient jdbcClient;
 
     @Autowired
@@ -66,6 +67,13 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
             .params(tgChatId, uri)
             .query(Integer.class)
             .single() >= 1;
+    }
+
+    @Override
+    public void deleteAllTrackLink(long tgChatId) {
+        jdbcClient.sql(DELETE_ALL_LINK_TRACKED_BY_CHAT_SQL_QUERY)
+            .param(tgChatId)
+            .update();
     }
 
 }

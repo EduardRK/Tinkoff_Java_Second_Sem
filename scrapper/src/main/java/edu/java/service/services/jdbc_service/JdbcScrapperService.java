@@ -60,6 +60,7 @@ public class JdbcScrapperService implements ScrapperService {
             throw new ChatNotRegisteredException(tgChatId);
         }
 
+        chatLinkRepository.deleteAllTrackLink(tgChatId);
         chatRepository.deleteChat(tgChatId);
     }
 
@@ -103,7 +104,7 @@ public class JdbcScrapperService implements ScrapperService {
 
         return new ListLinksResponse(
             linkList.stream()
-                .map(link -> new LinkResponse(link.id(), link.uri().toString()))
+                .map(link -> new LinkResponse(link.id(), link.uri()))
                 .toList(),
             linkList.size()
         );

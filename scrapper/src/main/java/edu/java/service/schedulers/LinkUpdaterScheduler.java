@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class LinkUpdaterScheduler implements UpdateScheduler {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Duration UPDATE_CHECK_TIME = Duration.ofHours(2);
+    private static final Duration UPDATE_CHECK_TIME = Duration.ofSeconds(30);
     private final BotClient botClient;
     private final ClientChain clientChain;
     private final LinkRepository linkRepository;
@@ -58,10 +58,12 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
                                 link.id(),
                                 link.uri(),
                                 creteDescription(response),
-                                chatLinkRepository.allChats(link.id()).stream().map(Chat::tgChatId).toList()
+                                chatLinkRepository.allChats(link.id())
+                                    .parallelStream()
+                                    .map(Chat::chatId)
+                                    .toList()
                             ))
                             .forEach(botClient::sendUpdate);
-
                         linkRepository.updateLastUpdateTime(
                             new Link(
                                 link.id(),
