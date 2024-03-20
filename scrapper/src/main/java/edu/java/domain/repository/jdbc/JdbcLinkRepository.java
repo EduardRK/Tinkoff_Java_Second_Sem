@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class JdbcLinkRepository implements LinkRepository {
@@ -28,6 +29,7 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Link> findAll() {
         List<Link> linkList = jdbcClient.sql(ALL_LINK_SQL_QUERY)
             .query(Link.class)
@@ -39,6 +41,7 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Link> findAllWithFilter(Duration earlyThen) {
         List<Link> linkList = jdbcClient.sql(ALL_LINK_WITH_FILTER_SQL_QUERY)
             .param(OffsetDateTime.now().minus(earlyThen))
@@ -51,6 +54,7 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
+    @Transactional
     public long addLink(Link link) {
         return jdbcClient.sql(ADD_LINK_SQL_QUERY)
             .params(link.uri(), link.lastCheck(), link.lastUpdate())
@@ -59,6 +63,7 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
+    @Transactional
     public long removeLink(Link link) {
         return jdbcClient.sql(REMOVE_LINK_SQL_QUERY)
             .param(link.uri())
@@ -67,6 +72,7 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
+    @Transactional
     public void updateLastUpdateTime(Link link) {
         jdbcClient.sql(UPDATE_LAST_UPDATE_TIME_SQL_QUERY)
             .params(link.lastUpdate(), link.uri())

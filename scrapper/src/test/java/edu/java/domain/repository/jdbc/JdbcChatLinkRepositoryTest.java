@@ -5,15 +5,24 @@ import edu.java.domain.dto.Link;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
+import javax.sql.DataSource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class JdbcChatLinkRepositoryTest extends IntegrationTest {
+    DataSource dataSource = new DriverManagerDataSource(
+        POSTGRES.getJdbcUrl(),
+        POSTGRES.getUsername(),
+        POSTGRES.getPassword()
+    );
+    JdbcClient jdbcClient = JdbcClient.create(dataSource);
     @Autowired
     JdbcChatLinkRepository jdbcChatLinkRepository;
     @Autowired

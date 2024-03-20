@@ -4,6 +4,7 @@ import edu.java.domain.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class JdbcChatRepository implements ChatRepository {
@@ -18,6 +19,7 @@ public class JdbcChatRepository implements ChatRepository {
     }
 
     @Override
+    @Transactional
     public void registerChat(long tgChatId) {
         jdbcClient.sql(REGISTER_CHAT_SQL_QUERY)
             .param(tgChatId)
@@ -25,6 +27,7 @@ public class JdbcChatRepository implements ChatRepository {
     }
 
     @Override
+    @Transactional
     public void deleteChat(long tgChatId) {
         jdbcClient.sql(DELETE_CHAT_SQL_QUERY)
             .param(tgChatId)
@@ -32,6 +35,7 @@ public class JdbcChatRepository implements ChatRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean chatRegistered(long tgChatId) {
         return jdbcClient.sql(EXIST_CHAT_SQL_QUERY)
             .param(tgChatId)

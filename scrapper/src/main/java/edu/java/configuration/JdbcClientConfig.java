@@ -3,7 +3,6 @@ package edu.java.configuration;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
@@ -11,15 +10,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 public class JdbcClientConfig {
     @Bean
     public DataSource dataSource() {
-        return new DriverManagerDataSource(
-            "jdbc:postgresql://localhost:5432/scrapper",
-            "postgres",
-            "postgres"
-        );
-    }
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/scrapper");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("postgres");
 
-    @Bean
-    public JdbcClient jdbcClient(DataSource dataSource) {
-        return JdbcClient.create(dataSource);
+        return dataSource;
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class JdbcChatLinkRepository implements ChatLinkRepository {
@@ -26,6 +27,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
+    @Transactional
     public void addChatLink(long tgChatId, long linkId) {
         jdbcClient.sql(ADD_SQL_QUERY)
             .params(
@@ -36,6 +38,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
+    @Transactional
     public void removeChatLink(long tgChatId, long linkId) {
         jdbcClient.sql(REMOVE_SQL_QUERY)
             .params(
@@ -46,6 +49,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Chat> allChats(long linkId) {
         return jdbcClient.sql(GET_CHATS_SQL_QUERY)
             .param(linkId)
@@ -54,6 +58,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Link> allLinks(long tgChatId) {
         return jdbcClient.sql(GET_LINKS_SQL_QUERY)
             .param(tgChatId)
@@ -62,6 +67,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean chatTrackedLink(long tgChatId, String uri) {
         return jdbcClient.sql(CHAT_TRACKED_LINK_SQL_QUERY)
             .params(tgChatId, uri)
@@ -70,6 +76,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
+    @Transactional
     public void deleteAllTrackLink(long tgChatId) {
         jdbcClient.sql(DELETE_ALL_LINK_TRACKED_BY_CHAT_SQL_QUERY)
             .param(tgChatId)
