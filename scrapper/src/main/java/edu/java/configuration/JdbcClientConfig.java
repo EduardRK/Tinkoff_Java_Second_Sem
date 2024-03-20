@@ -8,7 +8,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
 @SuppressWarnings("MultipleStringLiterals")
-public class JdbsClientConfig {
+public class JdbcClientConfig {
     @Bean
     public DataSource dataSource() {
         return new DriverManagerDataSource(
