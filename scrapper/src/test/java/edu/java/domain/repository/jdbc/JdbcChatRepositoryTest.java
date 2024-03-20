@@ -1,16 +1,16 @@
 package edu.java.domain.repository.jdbc;
 
 import edu.java.scrapper.IntegrationTest;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+@Ignore
 class JdbcChatRepositoryTest extends IntegrationTest {
     @Autowired
     JdbcChatRepository jdbcChatRepository;

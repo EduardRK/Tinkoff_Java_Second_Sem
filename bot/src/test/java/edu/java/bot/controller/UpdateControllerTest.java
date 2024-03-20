@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import edu.java.bot.service.services.exception_service.BadRequestExceptionService;
 import edu.java.bot.service.services.update_service.UpdateHandlerService;
 import edu.java.requests.LinkUpdateRequest;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 
 @WebMvcTest(UpdateController.class)
 class UpdateControllerTest {
