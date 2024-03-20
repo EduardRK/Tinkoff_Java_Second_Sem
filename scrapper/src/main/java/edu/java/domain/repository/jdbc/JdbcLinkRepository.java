@@ -29,7 +29,7 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Link> findAll() {
         List<Link> linkList = jdbcClient.sql(ALL_LINK_SQL_QUERY)
             .query(Link.class)
@@ -41,7 +41,7 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Link> findAllWithFilter(Duration earlyThen) {
         List<Link> linkList = jdbcClient.sql(ALL_LINK_WITH_FILTER_SQL_QUERY)
             .param(OffsetDateTime.now().minus(earlyThen))
