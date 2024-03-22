@@ -1,9 +1,9 @@
 package edu.java.bot.service.bot_body.commands.command_chain;
 
 import com.pengrad.telegrambot.model.Message;
+import edu.java.bot.domain.InMemoryDataBase;
 import edu.java.bot.service.bot_body.commands.Command;
 import edu.java.bot.service.bot_body.data_classes.Link;
-import edu.java.bot.service.data_base.InMemoryDataBase;
 
 public abstract class AbstractCommand implements Command {
     protected final InMemoryDataBase<Long, Link> inMemoryDataBase;

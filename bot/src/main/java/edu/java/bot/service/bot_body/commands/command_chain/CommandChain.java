@@ -2,10 +2,10 @@ package edu.java.bot.service.bot_body.commands.command_chain;
 
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
+import edu.java.bot.domain.InMemoryDataBase;
 import edu.java.bot.service.bot_body.commands.Command;
 import edu.java.bot.service.bot_body.commands.CommandComplete;
 import edu.java.bot.service.bot_body.data_classes.Link;
-import edu.java.bot.service.data_base.InMemoryDataBase;
 import org.jetbrains.annotations.NotNull;
 
 public final class CommandChain implements Command {
