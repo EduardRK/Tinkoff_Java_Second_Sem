@@ -7,14 +7,15 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-@Ignore
+@SpringBootTest
 class JdbcLinkRepositoryTest extends IntegrationTest {
     @Autowired
     JdbcLinkRepository jdbcLinkRepository;
@@ -130,5 +131,10 @@ class JdbcLinkRepositoryTest extends IntegrationTest {
                 .toList()
                 .contains(OffsetDateTime.MAX)
         );
+    }
+
+    @BeforeEach
+    void postgresRun() {
+        Assertions.assertTrue(POSTGRES.isRunning());
     }
 }

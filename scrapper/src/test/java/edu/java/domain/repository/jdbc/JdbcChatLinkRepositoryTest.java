@@ -5,14 +5,15 @@ import edu.java.domain.dto.Link;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-@Ignore
+@SpringBootTest
 class JdbcChatLinkRepositoryTest extends IntegrationTest {
     @Autowired
     JdbcChatLinkRepository jdbcChatLinkRepository;
@@ -134,5 +135,10 @@ class JdbcChatLinkRepositoryTest extends IntegrationTest {
         Assertions.assertFalse(
             jdbcChatLinkRepository.chatTrackedLink(1, "SomeTestLink2.com")
         );
+    }
+
+    @BeforeEach
+    void postgresRun() {
+        Assertions.assertTrue(POSTGRES.isRunning());
     }
 }

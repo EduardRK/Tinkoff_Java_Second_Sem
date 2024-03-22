@@ -4,22 +4,11 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@SuppressWarnings("MultipleStringLiterals")
+@EnableTransactionManagement
 public class JdbcClientConfig {
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/scrapper");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
-
-        return dataSource;
-    }
-
     @Bean
     public JdbcClient jdbcClient(DataSource dataSource) {
         return JdbcClient.create(dataSource);

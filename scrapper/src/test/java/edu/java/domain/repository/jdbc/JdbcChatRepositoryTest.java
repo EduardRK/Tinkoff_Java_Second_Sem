@@ -1,19 +1,20 @@
 package edu.java.domain.repository.jdbc;
 
 import edu.java.scrapper.IntegrationTest;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-@Ignore
+@SpringBootTest
 class JdbcChatRepositoryTest extends IntegrationTest {
     @Autowired
-    JdbcChatRepository jdbcChatRepository;
+    private JdbcChatRepository jdbcChatRepository;
 
     @Test
     @Transactional
@@ -69,5 +70,10 @@ class JdbcChatRepositoryTest extends IntegrationTest {
             jdbcChatRepository.correctChatId(chatId),
             expected
         );
+    }
+
+    @BeforeEach
+    void postgresRun() {
+        Assertions.assertTrue(POSTGRES.isRunning());
     }
 }
