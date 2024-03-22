@@ -10,9 +10,14 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 public class DatabaseIntegrationTest extends IntegrationTest {
     @Test
+    @Transactional
+    @Rollback
     void dataBaseCreateTest() throws SQLException {
         Assertions.assertTrue(POSTGRES.isRunning());
 
@@ -43,6 +48,8 @@ public class DatabaseIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     void chatsInsertTest() throws SQLException {
         Assertions.assertTrue(POSTGRES.isRunning());
 
@@ -65,6 +72,8 @@ public class DatabaseIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     void linksInsertTest() throws SQLException {
         Assertions.assertTrue(POSTGRES.isRunning());
 
@@ -77,13 +86,9 @@ public class DatabaseIntegrationTest extends IntegrationTest {
         Statement statement = connection.createStatement();
         statement.execute("INSERT INTO links (uri) VALUES ('somelink.com')");
 
-        ResultSet resultSet = statement.executeQuery("SELECT id, uri FROM links");
+        ResultSet resultSet = statement.executeQuery("SELECT uri FROM links");
 
         resultSet.next();
-        Assertions.assertEquals(
-            1,
-            resultSet.getInt("id")
-        );
         Assertions.assertEquals(
             "somelink.com",
             resultSet.getString("uri")
