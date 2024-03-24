@@ -1,8 +1,13 @@
 package edu.java.domain.jpa.entity;
 
 import edu.java.domain.dto.Link;
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,31 +15,27 @@ import java.util.Set;
 @Entity
 @Table(name = "Links")
 public class LinksEntity {
+    @ManyToMany(mappedBy = "links")
+    Set<ChatsEntity> chats = new HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
-
     @Column(name = "uri", unique = true)
     private String uri;
-
     @Column(name = "last_check")
     private OffsetDateTime lastCheck;
-
     @Column(name = "last_update")
     private OffsetDateTime lastUpdate;
-
-    @ManyToMany(mappedBy = "links")
-    Set<ChatsEntity> chats = new HashSet<>();
 
     public LinksEntity() {
     }
 
     public LinksEntity(
-            long id,
-            String uri,
-            OffsetDateTime lastCheck,
-            OffsetDateTime lastUpdate
+        long id,
+        String uri,
+        OffsetDateTime lastCheck,
+        OffsetDateTime lastUpdate
     ) {
         this.id = id;
         this.uri = uri;
@@ -43,9 +44,9 @@ public class LinksEntity {
     }
 
     public LinksEntity(
-            String uri,
-            OffsetDateTime lastCheck,
-            OffsetDateTime lastUpdate
+        String uri,
+        OffsetDateTime lastCheck,
+        OffsetDateTime lastUpdate
     ) {
         this.uri = uri;
         this.lastCheck = lastCheck;
@@ -90,10 +91,10 @@ public class LinksEntity {
 
     public Link link() {
         return new Link(
-                id,
-                uri,
-                lastCheck,
-                lastUpdate
+            id,
+            uri,
+            lastCheck,
+            lastUpdate
         );
     }
 }

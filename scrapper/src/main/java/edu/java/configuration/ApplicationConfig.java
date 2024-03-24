@@ -2,9 +2,7 @@ package edu.java.configuration;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
@@ -14,6 +12,11 @@ public record ApplicationConfig(
     Scheduler scheduler,
     AccessType databaseAccessType
 ) {
+    public enum AccessType {
+        JPA,
+        JDBC
+    }
+
     public record Scheduler(
         boolean enable,
         @NotNull
@@ -21,10 +24,5 @@ public record ApplicationConfig(
         @NotNull
         Duration forceCheckDelay
     ) {
-    }
-
-    public enum AccessType {
-        JPA,
-        JDBC
     }
 }

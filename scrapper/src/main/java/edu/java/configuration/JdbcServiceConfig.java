@@ -31,7 +31,7 @@ public class JdbcServiceConfig {
     }
 
     @Bean
-    public JdbcScrapperService ScrapperService(
+    public JdbcScrapperService scrapperService(
         JdbcLinkRepository linkRepository,
         JdbcChatRepository chatRepository,
         JdbcChatLinkRepository chatLinkRepository

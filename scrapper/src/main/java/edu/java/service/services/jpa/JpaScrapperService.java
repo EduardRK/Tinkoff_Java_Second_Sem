@@ -5,14 +5,17 @@ import edu.java.domain.jpa.JpaChatRepository;
 import edu.java.domain.jpa.JpaLinkRepository;
 import edu.java.domain.jpa.entity.ChatsEntity;
 import edu.java.domain.jpa.entity.LinksEntity;
-import edu.java.exceptions.BadRequestException.*;
+import edu.java.exceptions.BadRequestException.BadRequestException;
+import edu.java.exceptions.BadRequestException.ChatAlreadyRegisteredException;
+import edu.java.exceptions.BadRequestException.ChatsNotRegisteredException;
+import edu.java.exceptions.BadRequestException.IncorrectDataException;
+import edu.java.exceptions.BadRequestException.UriAlreadyTrackedException;
 import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
 import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import edu.java.service.services.ScrapperService;
-
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -56,7 +59,7 @@ public class JpaScrapperService implements ScrapperService {
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
         } else if (linkRepository.findByUri(uri).isPresent()
-                || linkRepository.findByUri(uri).get().chats().contains(new ChatsEntity(tgChatId))
+            || linkRepository.findByUri(uri).get().chats().contains(new ChatsEntity(tgChatId))
         ) {
             throw new UriAlreadyTrackedException(List.of(tgChatId), uri);
         }
@@ -76,7 +79,7 @@ public class JpaScrapperService implements ScrapperService {
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
         } else if (linkRepository.findByUri(uri).isEmpty()
-                || chatRepository.findById(tgChatId).get().links().contains(linkRepository.findByUri(uri).get())) {
+            || chatRepository.findById(tgChatId).get().links().contains(linkRepository.findByUri(uri).get())) {
             throw new ChatNotTrackedUriException(tgChatId, uri);
         }
 
@@ -93,17 +96,17 @@ public class JpaScrapperService implements ScrapperService {
         }
 
         ChatsEntity chatsEntity = chatRepository.findById(tgChatId)
-                .orElseThrow(
-                        () -> new ChatsNotRegisteredException(List.of(tgChatId), "")
-                );
+            .orElseThrow(
+                () -> new ChatsNotRegisteredException(List.of(tgChatId), "")
+            );
 
         List<Link> linkList = chatsEntity.links().stream().map(LinksEntity::link).toList();
 
         return new ListLinksResponse(
-                linkList.stream()
-                        .map(link -> new LinkResponse(link.id(), link.uri()))
-                        .toList(),
-                linkList.size()
+            linkList.stream()
+                .map(link -> new LinkResponse(link.id(), link.uri()))
+                .toList(),
+            linkList.size()
         );
     }
 

@@ -1,10 +1,7 @@
 package edu.java.domain.jdbc;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 
 public class JdbcChatRepository implements ChatRepository {
     private static final String REGISTER_CHAT_SQL_QUERY = "INSERT INTO Chats(id) VALUES(?)";

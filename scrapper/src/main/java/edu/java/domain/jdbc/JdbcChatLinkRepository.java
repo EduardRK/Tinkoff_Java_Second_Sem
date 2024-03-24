@@ -3,11 +3,8 @@ package edu.java.domain.jdbc;
 import edu.java.domain.dto.Chat;
 import edu.java.domain.dto.Link;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 
 public class JdbcChatLinkRepository implements ChatLinkRepository {
     private static final String ADD_SQL_QUERY = "INSERT INTO ChatLink(chat_id, link_id) VALUES(?, ?)";

@@ -5,7 +5,6 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 public class JdbcLinkRepository implements LinkRepository {
