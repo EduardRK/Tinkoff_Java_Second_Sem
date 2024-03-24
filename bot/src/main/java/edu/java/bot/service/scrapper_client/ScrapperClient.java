@@ -6,13 +6,13 @@ import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 
 public interface ScrapperClient {
-    void registerChat(int id);
+    void registerChat(long id);
 
-    void deleteChat(int id);
+    void deleteChat(long id);
 
-    ListLinksResponse allTrackedLinks(int id);
+    ListLinksResponse allTrackedLinks(long id);
 
-    LinkResponse startTrackLink(int id, AddLinkRequest addLinkRequest);
+    LinkResponse startTrackLink(long id, AddLinkRequest addLinkRequest);
 
-    LinkResponse stopTrackLink(int id, RemoveLinkRequest removeLinkRequest);
+    LinkResponse stopTrackLink(long id, RemoveLinkRequest removeLinkRequest);
 }

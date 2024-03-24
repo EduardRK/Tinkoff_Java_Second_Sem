@@ -32,7 +32,7 @@ public final class LinkScrapperClient implements ScrapperClient {
     }
 
     @Override
-    public void registerChat(int id) {
+    public void registerChat(long id) {
         webClient.post()
             .uri(TG_CHAT_ID, id)
             .accept(MediaType.APPLICATION_JSON)
@@ -46,7 +46,7 @@ public final class LinkScrapperClient implements ScrapperClient {
     }
 
     @Override
-    public void deleteChat(int id) {
+    public void deleteChat(long id) {
         webClient.delete()
             .uri(TG_CHAT_ID, id)
             .retrieve()
@@ -63,7 +63,7 @@ public final class LinkScrapperClient implements ScrapperClient {
     }
 
     @Override
-    public ListLinksResponse allTrackedLinks(int id) {
+    public ListLinksResponse allTrackedLinks(long id) {
         return webClient.get()
             .uri(LINKS)
             .header(ID, String.valueOf(id))
@@ -78,7 +78,7 @@ public final class LinkScrapperClient implements ScrapperClient {
     }
 
     @Override
-    public LinkResponse startTrackLink(int id, AddLinkRequest addLinkRequest) {
+    public LinkResponse startTrackLink(long id, AddLinkRequest addLinkRequest) {
         return webClient.post()
             .uri(LINKS)
             .header(ID, String.valueOf(id))
@@ -94,7 +94,7 @@ public final class LinkScrapperClient implements ScrapperClient {
     }
 
     @Override
-    public LinkResponse stopTrackLink(int id, RemoveLinkRequest removeLinkRequest) {
+    public LinkResponse stopTrackLink(long id, RemoveLinkRequest removeLinkRequest) {
         return webClient.method(HttpMethod.DELETE)
             .uri(LINKS)
             .header(ID, String.valueOf(id))
