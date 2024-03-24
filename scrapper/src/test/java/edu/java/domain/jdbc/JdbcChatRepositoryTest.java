@@ -1,4 +1,4 @@
-package edu.java.domain.repository.jdbc;
+package edu.java.domain.jdbc;
 
 import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Assertions;

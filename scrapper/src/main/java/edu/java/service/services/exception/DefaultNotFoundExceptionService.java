@@ -1,4 +1,4 @@
-package edu.java.service.services.exception_service;
+package edu.java.service.services.exception;
 
 import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.responses.ApiErrorResponse;

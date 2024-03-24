@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public final class ExceptionController extends ResponseEntityExceptionHandler {
+public final class RestExceptionController extends ResponseEntityExceptionHandler {
     private final NotFoundExceptionService notFoundExceptionService;
     private final BadRequestExceptionService badRequestExceptionService;
 
     @Autowired
-    public ExceptionController(
+    public RestExceptionController(
         NotFoundExceptionService notFoundExceptionService,
         BadRequestExceptionService badRequestExceptionService
     ) {

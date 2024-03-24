@@ -1,15 +1,14 @@
-package edu.java.domain.repository.jdbc;
+package edu.java.domain.jdbc;
 
 import edu.java.domain.dto.Chat;
 import edu.java.domain.dto.Link;
-import edu.java.domain.repository.ChatLinkRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+
 public class JdbcChatLinkRepository implements ChatLinkRepository {
     private static final String ADD_SQL_QUERY = "INSERT INTO ChatLink(chat_id, link_id) VALUES(?, ?)";
     private static final String REMOVE_SQL_QUERY = "DELETE FROM ChatLink WHERE chat_id = ? AND link_id = ?";
@@ -21,7 +20,6 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     private static final String DELETE_ALL_LINK_TRACKED_BY_CHAT_SQL_QUERY = "DELETE FROM ChatLink WHERE chat_id = ?";
     private final JdbcClient jdbcClient;
 
-    @Autowired
     public JdbcChatLinkRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }

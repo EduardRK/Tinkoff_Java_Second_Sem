@@ -1,4 +1,4 @@
-package edu.java.domain.repository;
+package edu.java.domain.jdbc;
 
 public interface ChatRepository {
     void registerChat(long tgChatId);

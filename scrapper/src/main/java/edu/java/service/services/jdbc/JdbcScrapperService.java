@@ -1,12 +1,9 @@
-package edu.java.service.services.jdbc_service;
+package edu.java.service.services.jdbc;
 
 import edu.java.domain.dto.Link;
-import edu.java.domain.repository.ChatLinkRepository;
-import edu.java.domain.repository.ChatRepository;
-import edu.java.domain.repository.LinkRepository;
-import edu.java.domain.repository.jdbc.JdbcChatLinkRepository;
-import edu.java.domain.repository.jdbc.JdbcChatRepository;
-import edu.java.domain.repository.jdbc.JdbcLinkRepository;
+import edu.java.domain.jdbc.JdbcChatLinkRepository;
+import edu.java.domain.jdbc.JdbcChatRepository;
+import edu.java.domain.jdbc.JdbcLinkRepository;
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.BadRequestException.ChatAlreadyRegisteredException;
 import edu.java.exceptions.BadRequestException.IncorrectDataException;
@@ -20,14 +17,12 @@ import edu.java.service.services.ScrapperService;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 public class JdbcScrapperService implements ScrapperService {
-    private final ChatRepository chatRepository;
-    private final LinkRepository linkRepository;
-    private final ChatLinkRepository chatLinkRepository;
+    private final JdbcChatRepository chatRepository;
+    private final JdbcLinkRepository linkRepository;
+    private final JdbcChatLinkRepository chatLinkRepository;
 
     @Autowired
     public JdbcScrapperService(

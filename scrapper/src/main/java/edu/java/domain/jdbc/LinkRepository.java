@@ -1,4 +1,4 @@
-package edu.java.domain.repository;
+package edu.java.domain.jdbc;
 
 import edu.java.domain.dto.Link;
 import java.time.Duration;

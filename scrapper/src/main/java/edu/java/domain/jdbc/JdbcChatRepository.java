@@ -1,19 +1,17 @@
-package edu.java.domain.repository.jdbc;
+package edu.java.domain.jdbc;
 
-import edu.java.domain.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+
 public class JdbcChatRepository implements ChatRepository {
     private static final String REGISTER_CHAT_SQL_QUERY = "INSERT INTO Chats(id) VALUES(?)";
     private static final String DELETE_CHAT_SQL_QUERY = "DELETE FROM Chats WHERE id = (?)";
     private static final String EXIST_CHAT_SQL_QUERY = "SELECT COUNT(*) FROM Chats WHERE id = (?)";
     private final JdbcClient jdbcClient;
 
-    @Autowired
     public JdbcChatRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }

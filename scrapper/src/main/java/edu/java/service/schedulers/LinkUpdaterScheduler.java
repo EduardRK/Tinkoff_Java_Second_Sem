@@ -3,8 +3,8 @@ package edu.java.service.schedulers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.java.domain.dto.Chat;
 import edu.java.domain.dto.Link;
-import edu.java.domain.repository.ChatLinkRepository;
-import edu.java.domain.repository.LinkRepository;
+import edu.java.domain.jdbc.ChatLinkRepository;
+import edu.java.domain.jdbc.LinkRepository;
 import edu.java.requests.LinkUpdateRequest;
 import edu.java.service.bot_client.BotClient;
 import edu.java.service.scrapper_body.clients.ClientChain;
@@ -44,7 +44,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     @Override
     @Scheduled(fixedDelayString = "#{@scheduler.interval}")
     public void update() {
-        LOGGER.info("Link update");
+        LOGGER.info("Start update");
         linkRepository.findAllWithFilter(UPDATE_CHECK_TIME)
             .parallelStream()
             .forEach(link -> {
@@ -81,6 +81,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
                     }
                 }
             );
+        LOGGER.info("End update");
     }
 
     private String creteDescription(Response response) {

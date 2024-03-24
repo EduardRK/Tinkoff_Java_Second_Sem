@@ -1,16 +1,13 @@
-package edu.java.domain.repository.jdbc;
+package edu.java.domain.jdbc;
 
 import edu.java.domain.dto.Link;
-import edu.java.domain.repository.LinkRepository;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
 public class JdbcLinkRepository implements LinkRepository {
     private static final String ALL_LINK_SQL_QUERY = "SELECT * FROM Links";
     private static final String ALL_LINK_WITH_FILTER_SQL_QUERY = "SELECT * FROM Links WHERE last_check < ?";
@@ -23,7 +20,6 @@ public class JdbcLinkRepository implements LinkRepository {
     private static final String UPDATE_LAST_UPDATE_TIME_SQL_QUERY = "UPDATE Links SET last_update = ? WHERE uri = ?";
     private final JdbcClient jdbcClient;
 
-    @Autowired
     public JdbcLinkRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
