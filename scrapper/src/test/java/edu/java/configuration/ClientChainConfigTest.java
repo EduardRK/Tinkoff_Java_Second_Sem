@@ -8,7 +8,7 @@ class ClientChainConfigTest {
     @Test
     void clientChain() {
         Assertions.assertDoesNotThrow(() -> {
-            new ClientChainConfig().clientChain();
+            new ClientConfig().clientChain();
         });
     }
 }

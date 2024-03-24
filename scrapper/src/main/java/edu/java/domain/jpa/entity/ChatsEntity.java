@@ -1,13 +1,8 @@
 package edu.java.domain.jpa.entity;
 
 import edu.java.domain.dto.Chat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,9 +15,9 @@ public class ChatsEntity {
 
     @ManyToMany
     @JoinTable(
-        name = "ChatLink",
-        joinColumns = @JoinColumn(name = "chat_id"),
-        inverseJoinColumns = @JoinColumn(name = "link_id")
+            name = "ChatLink",
+            joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "link_id")
     )
     private Set<LinksEntity> links = new HashSet<>();
 
@@ -50,4 +45,8 @@ public class ChatsEntity {
         return new Chat(id);
     }
 
+    public void addLink(LinksEntity linksEntity) {
+        links.add(linksEntity);
+        linksEntity.chats().add(this);
+    }
 }

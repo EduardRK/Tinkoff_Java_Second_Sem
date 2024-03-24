@@ -1,13 +1,8 @@
 package edu.java.domain.jpa.entity;
 
 import edu.java.domain.dto.Link;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,12 +31,22 @@ public class LinksEntity {
     }
 
     public LinksEntity(
-        long id,
-        String uri,
-        OffsetDateTime lastCheck,
-        OffsetDateTime lastUpdate
+            long id,
+            String uri,
+            OffsetDateTime lastCheck,
+            OffsetDateTime lastUpdate
     ) {
         this.id = id;
+        this.uri = uri;
+        this.lastCheck = lastCheck;
+        this.lastUpdate = lastUpdate;
+    }
+
+    public LinksEntity(
+            String uri,
+            OffsetDateTime lastCheck,
+            OffsetDateTime lastUpdate
+    ) {
         this.uri = uri;
         this.lastCheck = lastCheck;
         this.lastUpdate = lastUpdate;
@@ -63,6 +68,10 @@ public class LinksEntity {
         return lastUpdate;
     }
 
+    public Set<ChatsEntity> chats() {
+        return chats;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -81,10 +90,10 @@ public class LinksEntity {
 
     public Link link() {
         return new Link(
-            id,
-            uri,
-            lastCheck,
-            lastUpdate
+                id,
+                uri,
+                lastCheck,
+                lastUpdate
         );
     }
 }

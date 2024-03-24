@@ -42,7 +42,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     }
 
     @Override
-    @Scheduled(fixedDelayString = "#{@scheduler.interval}")
+    @Scheduled(fixedDelayString = "#{@'app-edu.java.configuration.ApplicationConfig'.scheduler.interval}")
     public void update() {
         LOGGER.info("Start update");
         linkRepository.findAllWithFilter(UPDATE_CHECK_TIME)
