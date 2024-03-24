@@ -1,5 +1,6 @@
 package edu.java.service.services.jdbc;
 
+import edu.java.domain.dto.Chat;
 import edu.java.domain.dto.Link;
 import edu.java.domain.jdbc.JdbcChatLinkRepository;
 import edu.java.domain.jdbc.JdbcChatRepository;
@@ -15,6 +16,7 @@ import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import edu.java.service.services.ScrapperService;
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,5 +105,20 @@ public class JdbcScrapperService implements ScrapperService {
                 .toList(),
             linkList.size()
         );
+    }
+
+    @Override
+    public List<Link> findAllWithFilter(Duration updateCheckTime) {
+        return linkRepository.findAllWithFilter(updateCheckTime);
+    }
+
+    @Override
+    public void updateLastUpdateTime(Link link) {
+        linkRepository.updateLastUpdateTime(link);
+    }
+
+    @Override
+    public List<Chat> allChats(long linkId) {
+        return chatLinkRepository.allChats(linkId);
     }
 }
