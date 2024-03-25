@@ -100,7 +100,7 @@ public class JdbcScrapperService implements ScrapperService {
             throw new IncorrectDataException(tgChatId);
         }
 
-        List<Link> linkList = chatLinkRepository.allLinks(tgChatId);
+        List<Link> linkList = chatLinkRepository.getAllLinks(tgChatId);
 
         return new ListLinksResponse(
             linkList.stream()

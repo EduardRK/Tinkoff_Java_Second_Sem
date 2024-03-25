@@ -9,9 +9,9 @@ public interface ChatLinkRepository {
 
     void removeChatLink(long tgChatId, long linkId);
 
-    List<Chat> allChats(long linkId);
+    List<Chat> getAllChats(long linkId);
 
-    List<Link> allLinks(long tgChatId);
+    List<Link> getAllLinks(long tgChatId);
 
     boolean chatTrackedLink(long tgChatId, String uri);
 

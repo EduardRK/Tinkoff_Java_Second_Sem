@@ -1,6 +1,5 @@
 package edu.java.service.scrapper_body.clients.github_client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.java.service.scrapper_body.clients.unsupported_client.UnsupportedClient;
 import edu.java.service.scrapper_body.clients_body.AbstractClient;
 import edu.java.service.scrapper_body.clients_body.Client;
@@ -34,7 +33,7 @@ public final class GitHubCommitUpdateClient extends AbstractClient {
     }
 
     @Override
-    public List<Response> newUpdates(URI uri) throws JsonProcessingException {
+    public List<Response> newUpdates(URI uri) {
         if (notValid(uri)) {
             return nextClient.newUpdates(uri);
         }

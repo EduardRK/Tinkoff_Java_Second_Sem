@@ -1,8 +1,6 @@
 package edu.java.service.schedulers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.java.domain.dto.Chat;
-import edu.java.domain.dto.Link;
 import edu.java.domain.repository.ChatLinkRepository;
 import edu.java.domain.repository.LinkRepository;
 import edu.java.requests.LinkUpdateRequest;
@@ -45,42 +43,33 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     @Scheduled(fixedDelayString = "#{@scheduler.interval}")
     public void update() {
         LOGGER.info("Link update");
-        linkRepository.findAllWithFilter(UPDATE_CHECK_TIME)
+
+        linkRepository.getAllLinksUpdateLastCheckWithFilter(UPDATE_CHECK_TIME)
             .parallelStream()
             .forEach(link -> {
-                    try {
+                    List<Response> responseList;
 
-                        List<Response> responseList = clientChain.newUpdates(URI.create(link.uri()));
+                    responseList = clientChain.newUpdates(URI.create(link.uri()));
 
+                    botClient.sendUpdates(
                         responseList.parallelStream()
                             .filter(response -> response.date().isAfter(link.lastUpdate()))
-                            .map(response -> new LinkUpdateRequest(
-                                link.id(),
-                                link.uri(),
-                                creteDescription(response),
-                                chatLinkRepository.allChats(link.id())
-                                    .parallelStream()
-                                    .map(Chat::chatId)
-                                    .toList()
-                            ))
-                            .forEach(botClient::sendUpdate);
-                        linkRepository.updateLastUpdateTime(
-                            new Link(
-                                link.id(),
-                                link.uri(),
-                                link.lastCheck(),
-                                responseList.parallelStream()
-                                    .map(Response::date)
-                                    .max(OffsetDateTime::compareTo)
-                                    .orElse(OffsetDateTime.now())
-                            )
-                        );
-
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
+                            .map(
+                                response -> new LinkUpdateRequest(
+                                    link.id(),
+                                    link.uri(),
+                                    creteDescription(response),
+                                    chatLinkRepository.getAllChats(link.id())
+                                        .parallelStream()
+                                        .map(Chat::chatId)
+                                        .toList()
+                                )
+                            ).toList()
+                    );
                 }
             );
+
+        linkRepository.updateAllLastUpdateTime(OffsetDateTime.now());
     }
 
     private String creteDescription(Response response) {
