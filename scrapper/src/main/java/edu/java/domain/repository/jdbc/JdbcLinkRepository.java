@@ -48,8 +48,7 @@ public class JdbcLinkRepository implements LinkRepository {
 
     @Override
     public long addLink(Link link) {
-        return jdbcClient.sql("INSERT INTO Links(uri, last_check, last_update) "
-                + "VALUES (?, ?, ?) RETURNING id")
+        return jdbcClient.sql("INSERT INTO Links(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
             .params(link.uri(), link.lastCheck(), link.lastUpdate())
             .query(Long.class)
             .single();
@@ -65,8 +64,8 @@ public class JdbcLinkRepository implements LinkRepository {
 
     @Override
     public void updateLastUpdateTime(Link link) {
-        jdbcClient.sql("UPDATE Links SET last_update = ? WHERE id = ?")
-            .params(link.lastUpdate(), link.id())
+        jdbcClient.sql("UPDATE Links SET last_update = ? WHERE uri = ?")
+            .params(link.lastUpdate(), link.uri())
             .update();
     }
 
