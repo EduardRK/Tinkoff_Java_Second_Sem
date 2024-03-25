@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public final class ExceptionController extends ResponseEntityExceptionHandler {
+public final class RestExceptionController extends ResponseEntityExceptionHandler {
     private final ExceptionService exceptionService;
 
     @Autowired
-    public ExceptionController(
+    public RestExceptionController(
         ExceptionService exceptionService
     ) {
         this.exceptionService = exceptionService;

@@ -25,9 +25,9 @@ public class JdbcLinkRepository implements LinkRepository {
         List<Link> linkList = jdbcClient.sql("SELECT * FROM Links")
             .query(Link.class)
             .list();
-        jdbcClient.sql("UPDATE Links SET last_check = ? "
-                + "WHERE last_check < ?")
-            .param(OffsetDateTime.now())
+
+        jdbcClient.sql("UPDATE Links SET last_check = ?")
+            .params(OffsetDateTime.now())
             .update();
         return linkList;
     }
@@ -39,8 +39,8 @@ public class JdbcLinkRepository implements LinkRepository {
             .param(OffsetDateTime.now().minus(earlyThen))
             .query(Link.class)
             .list();
-        jdbcClient.sql("UPDATE Links SET last_check = ? "
-                + "WHERE last_check < ?")
+
+        jdbcClient.sql("UPDATE Links SET last_check = ? WHERE last_check < ?")
             .params(OffsetDateTime.now(), OffsetDateTime.now().minus(earlyThen))
             .update();
         return linkList;
