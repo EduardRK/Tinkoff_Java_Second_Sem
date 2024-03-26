@@ -28,8 +28,6 @@ public abstract class IntegrationTest {
         .withPassword("postgres");
 
     static {
-        POSTGRES = new PostgreSQLContainer<>("postgres:15").withDatabaseName("scrapper").withUsername("postgres")
-            .withPassword("postgres");
         POSTGRES.start();
 
         try {
@@ -46,7 +44,6 @@ public abstract class IntegrationTest {
             c.getUsername(),
             c.getPassword()
         );
-
         Database database = DatabaseFactory.getInstance()
             .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
@@ -65,7 +62,8 @@ public abstract class IntegrationTest {
         liquibase.update(new Contexts(), new LabelExpression());
     }
 
-    @DynamicPropertySource static void jdbcProperties(DynamicPropertyRegistry registry) {
+    @DynamicPropertySource
+    static void jdbcProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);

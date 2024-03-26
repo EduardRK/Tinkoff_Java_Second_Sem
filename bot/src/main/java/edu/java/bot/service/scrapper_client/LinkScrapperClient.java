@@ -19,7 +19,7 @@ public final class LinkScrapperClient implements ScrapperClient {
     private static final String TG_CHAT_ID = "tg_chat/{id}";
     private static final String LINKS = "/links";
     private static final String ID = "id";
-    private static final String BASE_URI = "http://localhost:8080";
+    private static final String BASE_URI = "http://localhost:80";
     private final WebClient webClient;
 
     public LinkScrapperClient(String baseUri) {

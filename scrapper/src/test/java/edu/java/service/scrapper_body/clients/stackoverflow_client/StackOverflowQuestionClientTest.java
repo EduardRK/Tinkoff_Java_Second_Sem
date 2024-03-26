@@ -33,8 +33,7 @@ class StackOverflowQuestionClientTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(
-                            new FileContent("src/main/resources/stackoverflow-test-data.json")
-                                .content()
+                            new FileContent("src/main/resources/stackoverflow-test-data.json").content()
                         )
                     )
             );

@@ -37,7 +37,7 @@ class UpdateControllerTest {
             1,
             "SomeLink.com",
             "Some description",
-            List.of(1, 2, 3)
+            List.of(1L, 2L, 3L)
         );
 
         mockMvc.perform(
