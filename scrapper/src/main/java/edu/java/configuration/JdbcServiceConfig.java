@@ -3,7 +3,7 @@ package edu.java.configuration;
 import edu.java.domain.jdbc.JdbcChatLinkRepository;
 import edu.java.domain.jdbc.JdbcChatRepository;
 import edu.java.domain.jdbc.JdbcLinkRepository;
-import edu.java.service.services.jdbc.JdbcScrapperService;
+import edu.java.service.jdbc.JdbcScrapperService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
