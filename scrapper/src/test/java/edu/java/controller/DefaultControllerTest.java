@@ -6,9 +6,8 @@ import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
-import edu.java.service.services.BadRequestExceptionService;
-import edu.java.service.services.NotFoundExceptionService;
 import edu.java.service.services.ScrapperService;
+import edu.java.service.services.exception_service.ExceptionService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -32,9 +31,7 @@ class DefaultControllerTest {
     private ScrapperService scrapperService;
 
     @MockBean
-    private BadRequestExceptionService badRequestExceptionService;
-    @MockBean
-    private NotFoundExceptionService notFoundExceptionService;
+    private ExceptionService exceptionService;
 
     @Test
     public void allTrackedLinksTest() throws Exception {

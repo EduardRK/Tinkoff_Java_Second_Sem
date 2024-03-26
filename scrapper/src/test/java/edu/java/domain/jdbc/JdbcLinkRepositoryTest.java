@@ -31,7 +31,7 @@ class JdbcLinkRepositoryTest extends IntegrationTest {
         }
 
         Assertions.assertTrue(
-            jdbcLinkRepository.findAll().stream().map(Link::id).toList().containsAll(list)
+            jdbcLinkRepository.getAllLinksUpdateLastCheck().stream().map(Link::id).toList().containsAll(list)
         );
     }
 
@@ -58,7 +58,7 @@ class JdbcLinkRepositoryTest extends IntegrationTest {
         );
 
         Assertions.assertTrue(
-            jdbcLinkRepository.findAllWithFilter(Duration.ofHours(1))
+            jdbcLinkRepository.getAllLinksUpdateLastCheckWithFilter(Duration.ofHours(1))
                 .stream()
                 .map(Link::uri)
                 .toList()
@@ -66,7 +66,7 @@ class JdbcLinkRepositoryTest extends IntegrationTest {
         );
 
         Assertions.assertFalse(
-            jdbcLinkRepository.findAllWithFilter(Duration.ofHours(1))
+            jdbcLinkRepository.getAllLinksUpdateLastCheckWithFilter(Duration.ofHours(1))
                 .stream()
                 .map(Link::uri)
                 .toList()
@@ -81,7 +81,8 @@ class JdbcLinkRepositoryTest extends IntegrationTest {
         jdbcLinkRepository.addLink(Link.link(URI.create("SomeTestLink.com")));
 
         Assertions.assertTrue(
-            jdbcLinkRepository.findAll().stream().map(Link::uri).toList().contains("SomeTestLink.com")
+            jdbcLinkRepository.getAllLinksUpdateLastCheck().stream().map(Link::uri).toList()
+                .contains("SomeTestLink.com")
         );
     }
 
@@ -92,13 +93,15 @@ class JdbcLinkRepositoryTest extends IntegrationTest {
         jdbcLinkRepository.addLink(Link.link(URI.create("SomeTestLink.com")));
 
         Assertions.assertTrue(
-            jdbcLinkRepository.findAll().stream().map(Link::uri).toList().contains("SomeTestLink.com")
+            jdbcLinkRepository.getAllLinksUpdateLastCheck().stream().map(Link::uri).toList()
+                .contains("SomeTestLink.com")
         );
 
         jdbcLinkRepository.removeLink(Link.link(URI.create("SomeTestLink.com")));
 
         Assertions.assertFalse(
-            jdbcLinkRepository.findAll().stream().map(Link::uri).toList().contains("SomeTestLink.com")
+            jdbcLinkRepository.getAllLinksUpdateLastCheck().stream().map(Link::uri).toList()
+                .contains("SomeTestLink.com")
         );
     }
 
@@ -125,7 +128,7 @@ class JdbcLinkRepositoryTest extends IntegrationTest {
         );
 
         Assertions.assertTrue(
-            jdbcLinkRepository.findAll()
+            jdbcLinkRepository.getAllLinksUpdateLastCheck()
                 .stream()
                 .map(Link::lastUpdate)
                 .toList()

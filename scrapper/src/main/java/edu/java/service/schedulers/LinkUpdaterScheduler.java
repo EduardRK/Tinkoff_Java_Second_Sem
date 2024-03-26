@@ -1,13 +1,12 @@
 package edu.java.service.schedulers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.java.domain.dto.Chat;
-import edu.java.domain.dto.Link;
+import edu.java.domain.repository.ChatLinkRepository;
+import edu.java.domain.repository.LinkRepository;
 import edu.java.requests.LinkUpdateRequest;
 import edu.java.service.bot_client.BotClient;
 import edu.java.service.scrapper_body.clients.ClientChain;
 import edu.java.service.scrapper_body.clients_body.Response;
-import edu.java.service.services.ScrapperService;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -24,60 +23,53 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     private static final Duration UPDATE_CHECK_TIME = Duration.ofSeconds(30);
     private final BotClient botClient;
     private final ClientChain clientChain;
-    private final ScrapperService scrapperService;
+    private final LinkRepository linkRepository;
+    private final ChatLinkRepository chatLinkRepository;
 
     @Autowired
     public LinkUpdaterScheduler(
         BotClient botClient,
         ClientChain clientChain,
-        ScrapperService scrapperService
+        LinkRepository linkRepository,
+        ChatLinkRepository chatLinkRepository
     ) {
         this.botClient = botClient;
         this.clientChain = clientChain;
-        this.scrapperService = scrapperService;
+        this.linkRepository = linkRepository;
+        this.chatLinkRepository = chatLinkRepository;
     }
 
     @Override
-    @Scheduled(fixedDelayString = "#{@'app-edu.java.configuration.ApplicationConfig'.scheduler.interval}")
+    @Scheduled(fixedDelayString = "#{@scheduler.interval}")
     public void update() {
-        LOGGER.info("Start update");
-        scrapperService.findAllWithFilter(UPDATE_CHECK_TIME)
+        LOGGER.info("Link update");
+
+        linkRepository.getAllLinksUpdateLastCheckWithFilter(UPDATE_CHECK_TIME)
             .parallelStream()
             .forEach(link -> {
-                    try {
+                    List<Response> responseList;
 
-                        List<Response> responseList = clientChain.newUpdates(URI.create(link.uri()));
+                    responseList = clientChain.newUpdates(URI.create(link.uri()));
 
+                    botClient.sendUpdates(
                         responseList.parallelStream()
                             .filter(response -> response.date().isAfter(link.lastUpdate()))
-                            .map(response -> new LinkUpdateRequest(
-                                link.id(),
-                                link.uri(),
-                                creteDescription(response),
-                                scrapperService.allChats(link.id())
-                                    .parallelStream()
-                                    .map(Chat::chatId)
-                                    .toList()
-                            ))
-                            .forEach(botClient::sendUpdate);
-                        scrapperService.updateLastUpdateTime(
-                            new Link(
-                                link.id(),
-                                link.uri(),
-                                link.lastCheck(),
-                                responseList.parallelStream()
-                                    .map(Response::date)
-                                    .max(OffsetDateTime::compareTo)
-                                    .orElse(OffsetDateTime.now())
-                            )
-                        );
-
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
+                            .map(
+                                response -> new LinkUpdateRequest(
+                                    link.id(),
+                                    link.uri(),
+                                    creteDescription(response),
+                                    chatLinkRepository.getAllChats(link.id())
+                                        .parallelStream()
+                                        .map(Chat::chatId)
+                                        .toList()
+                                )
+                            ).toList()
+                    );
                 }
             );
-        LOGGER.info("End update");
+
+        linkRepository.updateAllLastUpdateTime(OffsetDateTime.now());
     }
 
     private String creteDescription(Response response) {

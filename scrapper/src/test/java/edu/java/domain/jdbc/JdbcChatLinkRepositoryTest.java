@@ -31,7 +31,7 @@ class JdbcChatLinkRepositoryTest extends IntegrationTest {
         jdbcChatLinkRepository.addChatLink(1, id);
 
         Assertions.assertTrue(
-            jdbcChatLinkRepository.allLinks(1).stream().map(Link::id).toList().contains(id)
+            jdbcChatLinkRepository.getAllLinks(1).stream().map(Link::id).toList().contains(id)
         );
     }
 
@@ -46,7 +46,7 @@ class JdbcChatLinkRepositoryTest extends IntegrationTest {
         jdbcChatLinkRepository.removeChatLink(1, id);
 
         Assertions.assertFalse(
-            jdbcChatLinkRepository.allLinks(1).stream().map(Link::id).toList().contains(id)
+            jdbcChatLinkRepository.getAllLinks(1).stream().map(Link::id).toList().contains(id)
         );
     }
 
@@ -58,7 +58,7 @@ class JdbcChatLinkRepositoryTest extends IntegrationTest {
         long id = jdbcLinkRepository.addLink(Link.link(URI.create("SomeTestLink1.com")));
         jdbcChatLinkRepository.addChatLink(1, id);
 
-        List<Chat> chats = jdbcChatLinkRepository.allChats(id);
+        List<Chat> chats = jdbcChatLinkRepository.getAllChats(id);
 
         Assertions.assertTrue(
             chats.stream().map(Chat::chatId).toList().contains(1L)
@@ -76,7 +76,7 @@ class JdbcChatLinkRepositoryTest extends IntegrationTest {
         long id2 = jdbcLinkRepository.addLink(Link.link(URI.create("SomeTestLink2.com")));
         jdbcChatLinkRepository.addChatLink(1, id2);
 
-        List<Link> links = jdbcChatLinkRepository.allLinks(1);
+        List<Link> links = jdbcChatLinkRepository.getAllLinks(1);
 
         Assertions.assertTrue(
             links.stream().map(Link::uri).toList().containsAll(List.of("SomeTestLink1.com", "SomeTestLink2.com"))
