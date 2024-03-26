@@ -6,7 +6,7 @@ import edu.java.exceptions.BadRequestException.UriAlreadyTrackedException;
 import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
 import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
 import edu.java.responses.ApiErrorResponse;
-import edu.java.service.services.exception_service.ExceptionService;
+import edu.java.service.services.exception.ExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

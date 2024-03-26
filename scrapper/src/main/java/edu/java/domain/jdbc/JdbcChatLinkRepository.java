@@ -1,8 +1,7 @@
-package edu.java.domain.repository.jdbc;
+package edu.java.domain.jdbc;
 
 import edu.java.domain.dto.Chat;
 import edu.java.domain.dto.Link;
-import edu.java.domain.repository.ChatLinkRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;

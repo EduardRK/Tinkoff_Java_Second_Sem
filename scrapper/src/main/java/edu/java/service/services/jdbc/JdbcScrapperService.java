@@ -17,6 +17,7 @@ import edu.java.responses.ListLinksResponse;
 import edu.java.service.services.ScrapperService;
 import java.net.URI;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,7 +110,7 @@ public class JdbcScrapperService implements ScrapperService {
 
     @Override
     public List<Link> findAllWithFilter(Duration updateCheckTime) {
-        return linkRepository.findAllWithFilter(updateCheckTime);
+        return linkRepository.getAllLinksUpdateLastCheckWithFilter(updateCheckTime);
     }
 
     @Override
@@ -118,7 +119,17 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
-    public List<Chat> allChats(long linkId) {
-        return chatLinkRepository.allChats(linkId);
+    public List<Chat> getAllChats(long linkId) {
+        return chatLinkRepository.getAllChats(linkId);
+    }
+
+    @Override
+    public void updateAllLastUpdateTime() {
+        linkRepository.updateAllLastUpdateTime(OffsetDateTime.now());
+    }
+
+    @Override
+    public List<Link> getAllLinks(long chatId) {
+        return chatLinkRepository.getAllLinks(chatId);
     }
 }

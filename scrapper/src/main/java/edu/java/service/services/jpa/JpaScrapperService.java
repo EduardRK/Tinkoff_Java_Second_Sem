@@ -123,7 +123,17 @@ public class JpaScrapperService implements ScrapperService {
     }
 
     @Override
-    public List<Chat> allChats(long linkId) {
+    public List<Chat> getAllChats(long linkId) {
+        return null;
+    }
+
+    @Override
+    public void updateAllLastUpdateTime() {
+
+    }
+
+    @Override
+    public List<Link> getAllLinks(long chatId) {
         return null;
     }
 

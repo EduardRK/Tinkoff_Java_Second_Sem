@@ -1,12 +1,11 @@
 package edu.java.service.schedulers;
 
 import edu.java.domain.dto.Chat;
-import edu.java.domain.repository.ChatLinkRepository;
-import edu.java.domain.repository.LinkRepository;
 import edu.java.requests.LinkUpdateRequest;
 import edu.java.service.bot_client.BotClient;
 import edu.java.service.scrapper_body.clients.ClientChain;
 import edu.java.service.scrapper_body.clients_body.Response;
+import edu.java.service.services.ScrapperService;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -23,20 +22,17 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     private static final Duration UPDATE_CHECK_TIME = Duration.ofSeconds(30);
     private final BotClient botClient;
     private final ClientChain clientChain;
-    private final LinkRepository linkRepository;
-    private final ChatLinkRepository chatLinkRepository;
+    private final ScrapperService scrapperService;
 
     @Autowired
     public LinkUpdaterScheduler(
         BotClient botClient,
         ClientChain clientChain,
-        LinkRepository linkRepository,
-        ChatLinkRepository chatLinkRepository
+        ScrapperService scrapperService
     ) {
         this.botClient = botClient;
         this.clientChain = clientChain;
-        this.linkRepository = linkRepository;
-        this.chatLinkRepository = chatLinkRepository;
+        this.scrapperService = scrapperService;
     }
 
     @Override
@@ -44,7 +40,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     public void update() {
         LOGGER.info("Link update");
 
-        linkRepository.getAllLinksUpdateLastCheckWithFilter(UPDATE_CHECK_TIME)
+        scrapperService.findAllWithFilter(UPDATE_CHECK_TIME)
             .parallelStream()
             .forEach(link -> {
                     List<Response> responseList;
@@ -59,7 +55,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
                                     link.id(),
                                     link.uri(),
                                     creteDescription(response),
-                                    chatLinkRepository.getAllChats(link.id())
+                                    scrapperService.getAllChats(link.id())
                                         .parallelStream()
                                         .map(Chat::chatId)
                                         .toList()
@@ -69,7 +65,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
                 }
             );
 
-        linkRepository.updateAllLastUpdateTime(OffsetDateTime.now());
+        scrapperService.updateAllLastUpdateTime();
     }
 
     private String creteDescription(Response response) {

@@ -18,4 +18,6 @@ public interface LinkService {
     List<Link> findAllWithFilter(Duration updateCheckTime);
 
     void updateLastUpdateTime(Link link);
+
+    void updateAllLastUpdateTime();
 }

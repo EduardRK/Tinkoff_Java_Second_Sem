@@ -7,7 +7,7 @@ import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import edu.java.service.services.ScrapperService;
-import edu.java.service.services.exception_service.ExceptionService;
+import edu.java.service.services.exception.ExceptionService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
