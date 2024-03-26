@@ -35,9 +35,9 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     }
 
     @Override
-    @Scheduled(fixedDelayString = "#{@scheduler.interval}")
+    @Scheduled(fixedDelayString = "#{@'app-edu.java.configuration.ApplicationConfig'.scheduler.interval}")
     public void update() {
-        LOGGER.info("Link update");
+        LOGGER.info("Start update");
 
         scrapperService.findAllWithFilter(UPDATE_CHECK_TIME)
             .parallelStream()
@@ -65,6 +65,8 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
             );
 
         scrapperService.updateAllLastUpdateTime();
+
+        LOGGER.info("Finish update");
     }
 
     private String creteDescription(Response response) {

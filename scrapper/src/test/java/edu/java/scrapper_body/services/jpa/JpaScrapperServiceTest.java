@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class JpaScrapperServiceTest extends IntegrationTest {
@@ -24,6 +26,8 @@ class JpaScrapperServiceTest extends IntegrationTest {
     private JdbcClient jdbcClient;
 
     @Test
+    @Transactional
+    @Rollback
     void registerChat() throws BadRequestException {
         scrapperService.registerChat(12);
 
@@ -34,6 +38,8 @@ class JpaScrapperServiceTest extends IntegrationTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     void deleteChat() throws BadRequestException, NotFoundException {
         jdbcClient.sql("INSERT INTO Chats(id) VALUES(12)").update();
 
