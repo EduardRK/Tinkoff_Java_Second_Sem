@@ -15,21 +15,21 @@ public class JdbcChatRepository implements ChatRepository {
 
     @Override
     public void registerChat(long tgChatId) {
-        jdbcClient.sql("INSERT INTO Chats(id) VALUES(?)")
+        jdbcClient.sql("INSERT INTO chat(id) VALUES(?)")
             .param(tgChatId)
             .update();
     }
 
     @Override
     public void deleteChat(long tgChatId) {
-        jdbcClient.sql("DELETE FROM Chats WHERE id = (?)")
+        jdbcClient.sql("DELETE FROM chat WHERE id = (?)")
             .param(tgChatId)
             .update();
     }
 
     @Override
     public boolean chatRegistered(long tgChatId) {
-        return jdbcClient.sql("SELECT COUNT(*) FROM Chats WHERE id = (?)")
+        return jdbcClient.sql("SELECT COUNT(*) FROM chat WHERE id = (?)")
             .param(tgChatId)
             .query(Long.class)
             .single() >= 1;

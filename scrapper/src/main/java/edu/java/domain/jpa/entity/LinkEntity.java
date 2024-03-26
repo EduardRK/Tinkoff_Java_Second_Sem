@@ -13,10 +13,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Links")
-public class LinksEntity {
+@Table(name = "link")
+public class LinkEntity {
     @ManyToMany(mappedBy = "links")
-    Set<ChatsEntity> chats = new HashSet<>();
+    Set<ChatEntity> chats = new HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -28,10 +28,10 @@ public class LinksEntity {
     @Column(name = "last_update")
     private OffsetDateTime lastUpdate;
 
-    public LinksEntity() {
+    public LinkEntity() {
     }
 
-    public LinksEntity(
+    public LinkEntity(
         long id,
         String uri,
         OffsetDateTime lastCheck,
@@ -43,7 +43,7 @@ public class LinksEntity {
         this.lastUpdate = lastUpdate;
     }
 
-    public LinksEntity(
+    public LinkEntity(
         String uri,
         OffsetDateTime lastCheck,
         OffsetDateTime lastUpdate
@@ -69,7 +69,7 @@ public class LinksEntity {
         return lastUpdate;
     }
 
-    public Set<ChatsEntity> chats() {
+    public Set<ChatEntity> chats() {
         return chats;
     }
 

@@ -4,8 +4,8 @@ import edu.java.domain.dto.Chat;
 import edu.java.domain.dto.Link;
 import edu.java.domain.jpa.JpaChatRepository;
 import edu.java.domain.jpa.JpaLinkRepository;
-import edu.java.domain.jpa.entity.ChatsEntity;
-import edu.java.domain.jpa.entity.LinksEntity;
+import edu.java.domain.jpa.entity.ChatEntity;
+import edu.java.domain.jpa.entity.LinkEntity;
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.BadRequestException.ChatAlreadyRegisteredException;
 import edu.java.exceptions.BadRequestException.ChatsNotRegisteredException;
@@ -38,7 +38,7 @@ public class JpaScrapperService implements ScrapperService {
             throw new ChatAlreadyRegisteredException(tgChatId);
         }
 
-        chatRepository.save(new ChatsEntity(tgChatId));
+        chatRepository.save(new ChatEntity(tgChatId));
     }
 
     @Override
@@ -49,8 +49,8 @@ public class JpaScrapperService implements ScrapperService {
             throw new ChatNotRegisteredException(tgChatId);
         }
 
-        ChatsEntity chatsEntity = chatRepository.findById(tgChatId).get();
-        chatsEntity.links().clear();
+        ChatEntity chatEntity = chatRepository.findById(tgChatId).get();
+        chatEntity.links().clear();
         chatRepository.deleteById(tgChatId);
     }
 
@@ -60,18 +60,18 @@ public class JpaScrapperService implements ScrapperService {
             throw new IncorrectDataException(tgChatId);
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
-        } else if (linkRepository.findByUri(uri).isPresent()
-            || linkRepository.findByUri(uri).get().chats().contains(new ChatsEntity(tgChatId))
+        } else if (linkRepository.findByUri(uri).isEmpty()
+            && !linkRepository.findByUri(uri).get().chats().contains(new ChatEntity(tgChatId))
         ) {
             throw new UriAlreadyTrackedException(List.of(tgChatId), uri);
         }
 
-        LinksEntity linksEntity = new LinksEntity(uri, OffsetDateTime.now(), OffsetDateTime.now());
-        linkRepository.save(linksEntity);
-        ChatsEntity chatsEntity = chatRepository.findById(tgChatId).get();
-        chatsEntity.addLink(linksEntity);
+        LinkEntity linkEntity = new LinkEntity(uri, OffsetDateTime.now(), OffsetDateTime.now());
+        linkRepository.save(linkEntity);
+        ChatEntity chatEntity = chatRepository.findById(tgChatId).get();
+        chatEntity.addLink(linkEntity);
 
-        return new LinkResponse(linksEntity.id(), uri);
+        return new LinkResponse(linkEntity.id(), uri);
     }
 
     @Override
@@ -85,8 +85,8 @@ public class JpaScrapperService implements ScrapperService {
             throw new ChatNotTrackedUriException(tgChatId, uri);
         }
 
-        LinksEntity linksEntity = linkRepository.findByUri(uri).get();
-        chatRepository.findById(tgChatId).get().links().remove(linksEntity);
+        LinkEntity linkEntity = linkRepository.findByUri(uri).get();
+        chatRepository.findById(tgChatId).get().links().remove(linkEntity);
 
         return new LinkResponse(tgChatId, uri);
     }
@@ -97,12 +97,12 @@ public class JpaScrapperService implements ScrapperService {
             throw new IncorrectDataException(tgChatId);
         }
 
-        ChatsEntity chatsEntity = chatRepository.findById(tgChatId)
+        ChatEntity chatEntity = chatRepository.findById(tgChatId)
             .orElseThrow(
                 () -> new ChatsNotRegisteredException(List.of(tgChatId), "")
             );
 
-        List<Link> linkList = chatsEntity.links().stream().map(LinksEntity::link).toList();
+        List<Link> linkList = chatEntity.links().stream().map(LinkEntity::link).toList();
 
         return new ListLinksResponse(
             linkList.stream()
@@ -114,27 +114,46 @@ public class JpaScrapperService implements ScrapperService {
 
     @Override
     public List<Link> findAllWithFilter(Duration updateCheckTime) {
-        return null;
+        OffsetDateTime minuses = OffsetDateTime.now().minus(updateCheckTime);
+
+        List<Link> list = linkRepository.findByLastCheckLessThan(minuses)
+            .stream()
+            .map(LinkEntity::link)
+            .toList();
+
+        linkRepository.updateLastCheckByLastCheckLessThan(OffsetDateTime.now(), minuses);
+
+        return list;
     }
 
     @Override
     public void updateLastUpdateTime(Link link) {
-
+        linkRepository.updateLastUpdateById(link.lastUpdate(), link.id());
     }
 
     @Override
     public List<Chat> getAllChats(long linkId) {
-        return null;
+        return linkRepository.findById(linkId)
+            .orElse(new LinkEntity())
+            .chats()
+            .stream()
+            .map(ChatEntity::chat)
+            .toList();
     }
 
     @Override
     public void updateAllLastUpdateTime() {
-
+        linkRepository.updateLastUpdateBy(OffsetDateTime.now());
     }
 
     @Override
     public List<Link> getAllLinks(long chatId) {
-        return null;
+        return chatRepository.findById(chatId)
+            .orElse(new ChatEntity())
+            .links()
+            .stream()
+            .map(LinkEntity::link)
+            .toList();
     }
 
     private boolean notCorrectChatId(long tgChatId) {

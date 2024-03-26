@@ -1,8 +1,8 @@
 package edu.java.domain.jpa;
 
-import edu.java.domain.jpa.entity.ChatsEntity;
+import edu.java.domain.jpa.entity.ChatEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaChatRepository extends JpaRepository<ChatsEntity, Long> {
+public interface JpaChatRepository extends JpaRepository<ChatEntity, Long> {
 
 }

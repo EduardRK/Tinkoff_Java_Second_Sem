@@ -9,15 +9,14 @@ import edu.java.service.ScrapperService;
 import java.net.URI;
 import java.time.Duration;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public final class LinkUpdaterScheduler implements UpdateScheduler {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static final Duration UPDATE_CHECK_TIME = Duration.ofSeconds(30);
     private final BotClient botClient;
     private final ClientChain clientChain;
@@ -37,7 +36,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     @Override
     @Scheduled(fixedDelayString = "#{@'app-edu.java.configuration.ApplicationConfig'.scheduler.interval}")
     public void update() {
-        LOGGER.info("Start update");
+        log.info("Start update");
 
         scrapperService.findAllWithFilter(UPDATE_CHECK_TIME)
             .parallelStream()
@@ -66,7 +65,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
 
         scrapperService.updateAllLastUpdateTime();
 
-        LOGGER.info("Finish update");
+        log.info("Finish update");
     }
 
     private String creteDescription(Response response) {

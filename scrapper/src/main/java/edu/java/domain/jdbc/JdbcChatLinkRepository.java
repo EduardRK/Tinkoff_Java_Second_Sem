@@ -18,7 +18,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     @Override
     public void addChatLink(long tgChatId, long linkId) {
-        jdbcClient.sql("INSERT INTO ChatLink(chat_id, link_id) VALUES(?, ?)")
+        jdbcClient.sql("INSERT INTO chat_link(chat_id, link_id) VALUES(?, ?)")
             .params(
                 tgChatId,
                 linkId
@@ -28,7 +28,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     @Override
     public void removeChatLink(long tgChatId, long linkId) {
-        jdbcClient.sql("DELETE FROM ChatLink WHERE chat_id = ? AND link_id = ?")
+        jdbcClient.sql("DELETE FROM chat_link WHERE chat_id = ? AND link_id = ?")
             .params(
                 tgChatId,
                 linkId
@@ -38,7 +38,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     @Override
     public List<Chat> getAllChats(long linkId) {
-        return jdbcClient.sql("SELECT chat_id FROM ChatLink WHERE link_id = ?")
+        return jdbcClient.sql("SELECT chat_id FROM chat_link WHERE link_id = ?")
             .param(linkId)
             .query(Chat.class)
             .list();
@@ -46,8 +46,8 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     @Override
     public List<Link> getAllLinks(long tgChatId) {
-        return jdbcClient.sql("SELECT Links.* FROM ChatLink INNER JOIN Links "
-                + "ON ChatLink.link_id = Links.id WHERE chat_id = ?")
+        return jdbcClient.sql("SELECT link.* FROM chat_link INNER JOIN link "
+                + "ON chat_link.link_id = link.id WHERE chat_id = ?")
             .param(tgChatId)
             .query(Link.class)
             .list();
@@ -55,8 +55,8 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     @Override
     public boolean chatTrackedLink(long tgChatId, String uri) {
-        return jdbcClient.sql("SELECT COUNT(*) FROM ChatLink INNER JOIN Links "
-                + "ON ChatLink.link_id = Links.id WHERE chat_id = ? AND uri = ?")
+        return jdbcClient.sql("SELECT COUNT(*) FROM chat_link INNER JOIN link "
+                + "ON chat_link.link_id = link.id WHERE chat_id = ? AND uri = ?")
             .params(tgChatId, uri)
             .query(Integer.class)
             .single() >= 1;
@@ -64,7 +64,7 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     @Override
     public void deleteAllTrackLink(long tgChatId) {
-        jdbcClient.sql("DELETE FROM ChatLink WHERE chat_id = ?")
+        jdbcClient.sql("DELETE FROM chat_link WHERE chat_id = ?")
             .param(tgChatId)
             .update();
     }

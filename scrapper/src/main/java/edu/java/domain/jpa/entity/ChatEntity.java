@@ -12,25 +12,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Chats")
-public class ChatsEntity {
+@Table(name = "chat")
+public class ChatEntity {
     @Id
     @Column(name = "id", unique = true)
     private Long id;
 
     @ManyToMany
     @JoinTable(
-        name = "ChatLink",
+        name = "chat_link",
         joinColumns = @JoinColumn(name = "chat_id"),
         inverseJoinColumns = @JoinColumn(name = "link_id")
     )
-    private Set<LinksEntity> links = new HashSet<>();
+    private Set<LinkEntity> links = new HashSet<>();
 
-    public ChatsEntity() {
+    public ChatEntity() {
 
     }
 
-    public ChatsEntity(Long id) {
+    public ChatEntity(Long id) {
         this.id = id;
     }
 
@@ -38,7 +38,7 @@ public class ChatsEntity {
         return id;
     }
 
-    public Set<LinksEntity> links() {
+    public Set<LinkEntity> links() {
         return links;
     }
 
@@ -50,8 +50,8 @@ public class ChatsEntity {
         return new Chat(id);
     }
 
-    public void addLink(LinksEntity linksEntity) {
-        links.add(linksEntity);
-        linksEntity.chats().add(this);
+    public void addLink(LinkEntity linkEntity) {
+        links.add(linkEntity);
+        linkEntity.chats().add(this);
     }
 }
