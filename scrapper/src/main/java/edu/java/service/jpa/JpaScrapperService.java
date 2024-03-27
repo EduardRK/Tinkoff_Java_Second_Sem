@@ -20,6 +20,7 @@ import edu.java.service.ScrapperService;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class JpaScrapperService implements ScrapperService {
     private final JpaChatRepository chatRepository;
@@ -60,16 +61,34 @@ public class JpaScrapperService implements ScrapperService {
             throw new IncorrectDataException(tgChatId);
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
-        } else if (linkRepository.findByUri(uri).isEmpty()
-            && !linkRepository.findByUri(uri).get().chats().contains(new ChatEntity(tgChatId))
+        } else if (
+            chatRepository.findById(tgChatId)
+                .get()
+                .links()
+                .stream()
+                .map(LinkEntity::uri)
+                .toList()
+                .contains(uri)
         ) {
             throw new UriAlreadyTrackedException(List.of(tgChatId), uri);
         }
 
-        LinkEntity linkEntity = new LinkEntity(uri, OffsetDateTime.now(), OffsetDateTime.now());
-        linkRepository.save(linkEntity);
         ChatEntity chatEntity = chatRepository.findById(tgChatId).get();
+
+        Optional<LinkEntity> existingLink = linkRepository.findByUri(uri);
+        LinkEntity linkEntity;
+
+        if (existingLink.isPresent()) {
+            linkEntity = existingLink.get();
+            linkEntity.setLastCheck(OffsetDateTime.now());
+            linkRepository.save(linkEntity);
+        } else {
+            linkEntity = new LinkEntity(uri, OffsetDateTime.now(), OffsetDateTime.now());
+            linkRepository.save(linkEntity);
+        }
+
         chatEntity.addLink(linkEntity);
+        chatRepository.save(chatEntity);
 
         return new LinkResponse(linkEntity.id(), uri);
     }
@@ -80,12 +99,20 @@ public class JpaScrapperService implements ScrapperService {
             throw new IncorrectDataException(tgChatId);
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
-        } else if (linkRepository.findByUri(uri).isEmpty()
-            || chatRepository.findById(tgChatId).get().links().contains(linkRepository.findByUri(uri).get())) {
+        } else if (
+            !chatRepository.findById(tgChatId)
+                .get()
+                .links()
+                .stream()
+                .map(LinkEntity::uri)
+                .toList()
+                .contains(uri)
+        ) {
             throw new ChatNotTrackedUriException(tgChatId, uri);
         }
 
         LinkEntity linkEntity = linkRepository.findByUri(uri).get();
+        linkRepository.deleteByUri(uri);
         chatRepository.findById(tgChatId).get().links().remove(linkEntity);
 
         return new LinkResponse(tgChatId, uri);

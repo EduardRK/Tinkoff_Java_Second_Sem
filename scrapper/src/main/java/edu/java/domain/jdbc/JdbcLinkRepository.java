@@ -45,10 +45,22 @@ public class JdbcLinkRepository implements LinkRepository {
 
     @Override
     public long addLink(Link link) {
-        return jdbcClient.sql("INSERT INTO link(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
-            .params(link.uri(), link.lastCheck(), link.lastUpdate())
+        Long linkExist = jdbcClient.sql("SELECT COUNT(*) FROM link WHERE uri = ?")
+            .param(link.uri())
             .query(Long.class)
             .single();
+
+        if (linkExist == 0) {
+            return jdbcClient.sql("INSERT INTO link(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
+                .params(link.uri(), link.lastCheck(), link.lastUpdate())
+                .query(Long.class)
+                .single();
+        } else {
+            return jdbcClient.sql("SELECT id FROM link WHERE uri = ?")
+                .param(link.uri())
+                .query(Long.class)
+                .single();
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package edu.java.domain.jpa.entity;
 
 import edu.java.domain.dto.Chat;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,7 +19,7 @@ public class ChatEntity {
     @Column(name = "id", unique = true)
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
         name = "chat_link",
         joinColumns = @JoinColumn(name = "chat_id"),
@@ -53,5 +54,6 @@ public class ChatEntity {
     public void addLink(LinkEntity linkEntity) {
         links.add(linkEntity);
         linkEntity.chats().add(this);
+
     }
 }

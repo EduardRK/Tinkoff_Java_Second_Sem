@@ -19,20 +19,14 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     @Override
     public void addChatLink(long tgChatId, long linkId) {
         jdbcClient.sql("INSERT INTO chat_link(chat_id, link_id) VALUES(?, ?)")
-            .params(
-                tgChatId,
-                linkId
-            )
+            .params(tgChatId, linkId)
             .update();
     }
 
     @Override
     public void removeChatLink(long tgChatId, long linkId) {
         jdbcClient.sql("DELETE FROM chat_link WHERE chat_id = ? AND link_id = ?")
-            .params(
-                tgChatId,
-                linkId
-            )
+            .params(tgChatId, linkId)
             .update();
     }
 

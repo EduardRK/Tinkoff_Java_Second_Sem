@@ -1,6 +1,7 @@
 package edu.java.service.jpa;
 
 import edu.java.domain.dto.Chat;
+import edu.java.domain.dto.Link;
 import edu.java.domain.jpa.JpaChatRepository;
 import edu.java.domain.jpa.JpaLinkRepository;
 import edu.java.exceptions.BadRequestException.BadRequestException;
@@ -70,92 +71,85 @@ class JpaScrapperServiceTest extends IntegrationTest {
             jdbcClient.sql("SELECT COUNT(*) FROM chat WHERE id = 12").query(Long.class).single()
         );
     }
-//
-//    @Test
-//    @Transactional
-//    @Rollback
-//    void add() throws BadRequestException {
-//        scrapperService.registerChat(12);
-//
-//        scrapperService.add(12, "SomeLink.com");
-//
-//        entityManager.flush();
-//
-//        Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 12")
-//            .query(Long.class)
-//            .single();
-//
-//        Assertions.assertEquals(12, single);
-//
-//        String single1 = jdbcClient.sql("SELECT uri FROM link WHERE uri = 'SomeLink.com'")
-//            .query(String.class)
-//            .single();
-//
-//        Assertions.assertEquals("SomeLink.com", single1);
-//    }
-//
-//    @Test
-//    @Transactional
-//    @Rollback
-//    void remove() throws BadRequestException, NotFoundException {
-//        scrapperService.registerChat(12);
-//
-//        entityManager.flush();
-//
-//        scrapperService.add(12, "SomeLink.com");
-//
-//        entityManager.flush();
-//
-//        Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 12")
-//            .query(Long.class)
-//            .single();
-//
-//        Assertions.assertEquals(12, single);
-//
-//        String single1 =
-//            jdbcClient.sql("SELECT uri FROM link WHERE uri = 'SomeLink.com'")
-//                .query(String.class)
-//                .single();
-//
-//        Assertions.assertEquals("SomeLink.com", single1);
-//
-//        scrapperService.remove(12, "SomeLink.com");
-//
-//        entityManager.flush();
-//
-//        Long single2 = jdbcClient.sql("SELECT COUNT(*) FROM link WHERE uri = 'SomeLink.com'")
-//            .query(Long.class)
-//            .single();
-//
-//        Assertions.assertEquals(0, single2);
-//    }
-//
-//    @Test
-//    @Transactional
-//    @Rollback
-//    void listAll() throws BadRequestException {
-//        scrapperService.registerChat(12);
-//        entityManager.flush();
-//        scrapperService.add(12, "SomeLink1.com");
-//        entityManager.flush();
-//        scrapperService.add(12, "SomeLink2.com");
-//        entityManager.flush();
-//        scrapperService.add(12, "SomeLink3.com");
-//        entityManager.flush();
-//
-//        ListLinksResponse listLinksResponse = scrapperService.listAll(12);
-//
-//        Assertions.assertEquals(3, listLinksResponse.size());
-//
-//        Assertions.assertEquals(
-//            List.of(
-//                "SomeLink1.com",
-//                "SomeLink2.com",
-//                "SomeLink3.com"
-//            ),
-//            listLinksResponse.links().stream().map(LinkResponse::url).toList()
-//        );
-//    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void add() throws BadRequestException {
+        scrapperService.registerChat(12);
+
+        scrapperService.add(12, "SomeLink.com");
+
+        entityManager.flush();
+
+        Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 12")
+            .query(Long.class)
+            .single();
+
+        Assertions.assertEquals(12, single);
+
+        String single1 = jdbcClient.sql("SELECT uri FROM link WHERE uri = 'SomeLink.com'")
+            .query(String.class)
+            .single();
+
+        Assertions.assertEquals("SomeLink.com", single1);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void remove() throws BadRequestException, NotFoundException {
+        scrapperService.registerChat(12);
+
+        scrapperService.add(12, "SomeLink.com");
+
+        entityManager.flush();
+
+        Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 12")
+            .query(Long.class)
+            .single();
+
+        Assertions.assertEquals(12, single);
+
+        String single1 = jdbcClient.sql("SELECT uri FROM link WHERE uri = 'SomeLink.com'")
+            .query(String.class)
+            .single();
+
+        Assertions.assertEquals("SomeLink.com", single1);
+
+        scrapperService.remove(12, "SomeLink.com");
+
+        entityManager.flush();
+
+        Long single2 = jdbcClient.sql("SELECT COUNT(*) FROM link WHERE uri = 'SomeLink.com'")
+            .query(Long.class)
+            .single();
+
+        Assertions.assertEquals(0, single2);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void listAll() throws BadRequestException {
+        scrapperService.registerChat(12);
+        scrapperService.add(12, "SomeLink1.com");
+        scrapperService.add(12, "SomeLink2.com");
+        scrapperService.add(12, "SomeLink3.com");
+        entityManager.flush();
+
+        ListLinksResponse listLinksResponse = scrapperService.listAll(12);
+
+        Assertions.assertEquals(3, listLinksResponse.size());
+
+        Assertions.assertTrue(
+            listLinksResponse.links()
+                .stream()
+                .map(LinkResponse::url)
+                .toList()
+                .containsAll(List.of("SomeLink1.com", "SomeLink2.com", "SomeLink3.com"))
+        );
+    }
 
     @Test
     @Transactional
@@ -169,31 +163,33 @@ class JpaScrapperServiceTest extends IntegrationTest {
     void updateLastUpdateTime() {
     }
 
-//    @Test
-//    @Transactional
-//    @Rollback
-//    void getAllChats() throws BadRequestException {
-//        scrapperService.registerChat(12);
-//        scrapperService.registerChat(13);
-//        scrapperService.registerChat(14);
-//
-//        scrapperService.add(12, "SomeLink.com");
-//        scrapperService.add(13, "SomeLink.com");
-//        scrapperService.add(14, "SomeLink.com");
-//
-//        entityManager.flush();
-//
-//        Long single = jdbcClient.sql("SELECT id FROM link WHERE uri = 'SomeLink.com'")
-//            .query(Long.class)
-//            .single();
-//
-//        List<Chat> allChats = scrapperService.getAllChats(single);
-//
-//        Assertions.assertEquals(
-//            List.of(12L, 13L, 14L),
-//            allChats.stream().map(Chat::chatId).toList()
-//        );
-//    }
+    @Test
+    @Transactional
+    @Rollback
+    void getAllChats() throws BadRequestException {
+        scrapperService.registerChat(12);
+        scrapperService.registerChat(13);
+        scrapperService.registerChat(14);
+        entityManager.flush();
+
+        scrapperService.add(12, "SomeLink1.com");
+        scrapperService.add(13, "SomeLink2.com");
+        scrapperService.add(14, "SomeLink3.com");
+        entityManager.flush();
+
+        Long single = jdbcClient.sql("SELECT id FROM link WHERE uri = 'SomeLink.com'")
+            .query(Long.class)
+            .single();
+
+        List<Chat> allChats = scrapperService.getAllChats(single);
+
+        Assertions.assertTrue(
+            allChats.stream()
+                .map(Chat::chatId)
+                .toList()
+                .containsAll(List.of(12L, 13L, 14L))
+        );
+    }
 
     @Test
     @Transactional
@@ -205,6 +201,22 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Transactional
     @Rollback
     void getAllLinks() throws BadRequestException {
+        scrapperService.registerChat(12);
+        entityManager.flush();
 
+        scrapperService.add(12, "SomeLink1.com");
+        scrapperService.add(12, "SomeLink2.com");
+        scrapperService.add(12, "SomeLink3.com");
+        entityManager.flush();
+
+        List<Link> allLinks = scrapperService.getAllLinks(12);
+
+        Assertions.assertTrue(
+            allLinks
+                .stream()
+                .map(Link::uri)
+                .toList()
+                .containsAll(List.of("SomeLink1.com", "SomeLink2.com", "SomeLink3.com"))
+        );
     }
 }
