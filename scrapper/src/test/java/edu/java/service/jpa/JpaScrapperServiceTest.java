@@ -172,9 +172,9 @@ class JpaScrapperServiceTest extends IntegrationTest {
         scrapperService.registerChat(14);
         entityManager.flush();
 
-        scrapperService.add(12, "SomeLink1.com");
-        scrapperService.add(13, "SomeLink2.com");
-        scrapperService.add(14, "SomeLink3.com");
+        scrapperService.add(12, "SomeLink.com");
+        scrapperService.add(13, "SomeLink.com");
+        scrapperService.add(14, "SomeLink.com");
         entityManager.flush();
 
         Long single = jdbcClient.sql("SELECT id FROM link WHERE uri = 'SomeLink.com'")
