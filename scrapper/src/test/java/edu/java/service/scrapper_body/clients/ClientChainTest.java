@@ -69,20 +69,38 @@ class ClientChainTest {
 
         ClientChain clientChain = new ClientChain(stackOverflowClient);
 
-        List<Response> responses = new ArrayList<>(
+        List<? extends Response> responses = new ArrayList<>(
             List.of(
-                new Response(
-                    new URI(REPOSITORY_LINK),
-                    "EduardRK",
-                    "Fractal flame",
-                    OffsetDateTime.parse("2024-01-11T18:51:01Z")
-                )
+                new Response() {
+                    @Override
+                    public String author() {
+                        return "EduardRK";
+                    }
+
+                    @Override
+                    public String message() {
+                        return "Fractal flame";
+                    }
+
+                    @Override
+                    public OffsetDateTime date() {
+                        return OffsetDateTime.parse("2024-01-11T18:51:01Z");
+                    }
+                }
             )
         );
 
         Assertions.assertEquals(
-            responses,
-            clientChain.newUpdates(new URI(REPOSITORY_LINK))
+            responses.getFirst().author(),
+            clientChain.newUpdates(new URI(REPOSITORY_LINK)).getFirst().author()
+        );
+        Assertions.assertEquals(
+            responses.getFirst().message(),
+            clientChain.newUpdates(new URI(REPOSITORY_LINK)).getFirst().message()
+        );
+        Assertions.assertEquals(
+            responses.getFirst().date(),
+            clientChain.newUpdates(new URI(REPOSITORY_LINK)).getFirst().date()
         );
     }
 }

@@ -37,7 +37,7 @@ public final class StackOverflowQuestionClient extends AbstractClient {
     }
 
     @Override
-    public List<Response> newUpdates(URI uri) {
+    public List<? extends Response> newUpdates(URI uri) {
         if (notValid(uri)) {
             return nextClient.newUpdates(uri);
         }
@@ -58,10 +58,7 @@ public final class StackOverflowQuestionClient extends AbstractClient {
             return new ArrayList<>();
         }
 
-        return stackOverflowResponse.answers()
-            .stream()
-            .map(answer -> new Response(uri, answer.author(), answer.message(), answer.date()))
-            .toList();
+        return stackOverflowResponse.answers();
     }
 
     @Override

@@ -33,7 +33,7 @@ public final class GitHubCommitUpdateClient extends AbstractClient {
     }
 
     @Override
-    public List<Response> newUpdates(URI uri) {
+    public List<? extends Response> newUpdates(URI uri) {
         if (notValid(uri)) {
             return nextClient.newUpdates(uri);
         }
@@ -52,15 +52,7 @@ public final class GitHubCommitUpdateClient extends AbstractClient {
             return new ArrayList<>();
         }
 
-        return gitHubResponses
-            .stream()
-            .map(gitHubResponse -> new Response(
-                uri,
-                gitHubResponse.author(),
-                gitHubResponse.message(),
-                gitHubResponse.date()
-            ))
-            .toList();
+        return gitHubResponses;
     }
 
     @Override

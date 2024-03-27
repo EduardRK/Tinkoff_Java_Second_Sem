@@ -47,9 +47,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
         linkRepository.getAllLinksUpdateLastCheckWithFilter(UPDATE_CHECK_TIME)
             .parallelStream()
             .forEach(link -> {
-                    List<Response> responseList;
-
-                    responseList = clientChain.newUpdates(URI.create(link.uri()));
+                    List<? extends Response> responseList = clientChain.newUpdates(URI.create(link.uri()));
 
                     botClient.sendUpdates(
                         responseList.parallelStream()

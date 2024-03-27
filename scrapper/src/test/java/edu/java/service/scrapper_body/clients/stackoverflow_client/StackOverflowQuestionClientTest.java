@@ -50,23 +50,41 @@ class StackOverflowQuestionClientTest {
         StackOverflowQuestionClient client = new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl());
         List<Response> responses = new ArrayList<>(
             List.of(
-                new Response(
-                    new URI(ANSWER_LINK),
-                    "gbuys",
-                    "<p>It seems like you should use jaxb-maven-plugin instead of maven-jaxb2-plugin. See <a href=\"https://github.com/highsource/jaxb-tools?tab=readme-ov-file#jaxb-maven-plugin\" rel=\"nofollow noreferrer\">github</a></p>\n",
-                    OffsetDateTime.ofInstant(
-                        Instant.ofEpochSecond(
-                            1708607611
-                        ),
-                        ZoneOffset.UTC
-                    )
-                )
+                new Response() {
+                    @Override
+                    public String author() {
+                        return "gbuys";
+                    }
+
+                    @Override
+                    public String message() {
+                        return "<p>It seems like you should use jaxb-maven-plugin instead of maven-jaxb2-plugin. See <a href=\"https://github.com/highsource/jaxb-tools?tab=readme-ov-file#jaxb-maven-plugin\" rel=\"nofollow noreferrer\">github</a></p>\n";
+                    }
+
+                    @Override
+                    public OffsetDateTime date() {
+                        return OffsetDateTime.ofInstant(
+                            Instant.ofEpochSecond(
+                                1708607611
+                            ),
+                            ZoneOffset.UTC
+                        );
+                    }
+                }
             )
         );
 
         Assertions.assertEquals(
-            responses,
-            client.newUpdates(new URI(ANSWER_LINK))
+            responses.getFirst().date(),
+            client.newUpdates(new URI(ANSWER_LINK)).getFirst().date()
+        );
+        Assertions.assertEquals(
+            responses.getFirst().author(),
+            client.newUpdates(new URI(ANSWER_LINK)).getFirst().author()
+        );
+        Assertions.assertEquals(
+            responses.getFirst().message(),
+            client.newUpdates(new URI(ANSWER_LINK)).getFirst().message()
         );
     }
 
