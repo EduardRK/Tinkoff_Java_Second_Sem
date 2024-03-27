@@ -1,5 +1,6 @@
 package edu.java.service.scrapper_body.clients;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.java.service.scrapper_body.clients.github_client.GitHubCommitUpdateClient;
 import edu.java.service.scrapper_body.clients.stackoverflow_client.StackOverflowQuestionClient;
 import edu.java.service.scrapper_body.clients_body.Client;
@@ -21,7 +22,7 @@ public final class ClientChain implements Client {
     }
 
     @Override
-    public List<Response> newUpdates(URI uri) {
+    public List<Response> newUpdates(URI uri) throws JsonProcessingException {
         return chain.newUpdates(uri);
     }
 

@@ -2,7 +2,6 @@ package edu.java.service.bot_client;
 
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.requests.LinkUpdateRequest;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,10 +37,5 @@ public final class TelegramBotClient implements BotClient {
             )
             .bodyToMono(Void.class)
             .block();
-    }
-
-    @Override
-    public void sendUpdates(List<LinkUpdateRequest> linkUpdateRequestList) {
-        linkUpdateRequestList.parallelStream().forEach(this::sendUpdate);
     }
 }

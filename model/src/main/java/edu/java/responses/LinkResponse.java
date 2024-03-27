@@ -1,7 +1,7 @@
 package edu.java.responses;
 
 public record LinkResponse(
-    long id,
+    int id,
     String url
 ) {
 }

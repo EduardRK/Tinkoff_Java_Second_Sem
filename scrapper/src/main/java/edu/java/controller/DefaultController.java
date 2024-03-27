@@ -7,7 +7,7 @@ import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.ApiErrorResponse;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
-import edu.java.service.services.ScrapperService;
+import edu.java.service.services.default_service.ScrapperService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -75,9 +75,9 @@ public final class DefaultController {
         @RequestHeader(
             name = "Tg-Chat-Id",
             value = "Tg-Chat-Id"
-        ) long tgChatId
+        ) int tgChatId
     ) throws BadRequestException {
-        ListLinksResponse listLinksResponse = scrapperService.listAll(tgChatId);
+        ListLinksResponse listLinksResponse = scrapperService.allTrackedLinks(tgChatId);
 
         return new ResponseEntity<>(listLinksResponse, HttpStatus.OK);
     }
@@ -122,7 +122,7 @@ public final class DefaultController {
         ) int tgChatId,
         @RequestBody AddLinkRequest addLinkRequest
     ) throws BadRequestException {
-        LinkResponse linkResponse = scrapperService.add(tgChatId, addLinkRequest.link());
+        LinkResponse linkResponse = scrapperService.addNewTrackLink(tgChatId, addLinkRequest);
 
         return new ResponseEntity<>(linkResponse, HttpStatus.OK);
     }
@@ -182,7 +182,7 @@ public final class DefaultController {
         ) int tgChatId,
         @RequestBody RemoveLinkRequest removeLinkRequest
     ) throws BadRequestException, NotFoundException {
-        LinkResponse linkResponse = scrapperService.remove(tgChatId, removeLinkRequest.link());
+        LinkResponse linkResponse = scrapperService.untrackLink(tgChatId, removeLinkRequest);
 
         return new ResponseEntity<>(linkResponse, HttpStatus.OK);
     }
@@ -220,7 +220,7 @@ public final class DefaultController {
     @PostMapping(
         value = "/tg-chat/{id}"
     )
-    public ResponseEntity<?> registerChat(@PathVariable long id) throws BadRequestException {
+    public ResponseEntity<?> registerChat(@PathVariable int id) throws BadRequestException {
         scrapperService.registerChat(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -269,7 +269,7 @@ public final class DefaultController {
     @DeleteMapping(
         value = "/tg-chat/{id}"
     )
-    public ResponseEntity<?> deleteChat(@PathVariable long id) throws BadRequestException, NotFoundException {
+    public ResponseEntity<?> deleteChat(@PathVariable int id) throws BadRequestException, NotFoundException {
         scrapperService.deleteChat(id);
 
         return new ResponseEntity<>(HttpStatus.OK);

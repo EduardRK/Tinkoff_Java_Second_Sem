@@ -6,8 +6,9 @@ import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
-import edu.java.service.services.ScrapperService;
-import edu.java.service.services.exception_service.ExceptionService;
+import edu.java.service.services.default_service.ScrapperService;
+import edu.java.service.services.exception_service.BadRequestExceptionService;
+import edu.java.service.services.exception_service.NotFoundExceptionService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -31,7 +32,9 @@ class DefaultControllerTest {
     private ScrapperService scrapperService;
 
     @MockBean
-    private ExceptionService exceptionService;
+    private BadRequestExceptionService badRequestExceptionService;
+    @MockBean
+    private NotFoundExceptionService notFoundExceptionService;
 
     @Test
     public void allTrackedLinksTest() throws Exception {
@@ -45,7 +48,7 @@ class DefaultControllerTest {
             1
         );
 
-        Mockito.when(scrapperService.listAll(12))
+        Mockito.when(scrapperService.allTrackedLinks(12))
             .thenReturn(listLinksResponse);
 
         MvcResult mvcResult = mockMvc.perform(
@@ -70,7 +73,7 @@ class DefaultControllerTest {
         AddLinkRequest addLinkRequest = new AddLinkRequest("somelink.com");
         LinkResponse linkResponse = new LinkResponse(12, "somelink.com");
 
-        Mockito.when(scrapperService.add(12, addLinkRequest.link()))
+        Mockito.when(scrapperService.addNewTrackLink(12, addLinkRequest))
             .thenReturn(linkResponse);
 
         MvcResult mvcResult = mockMvc.perform(
@@ -96,7 +99,7 @@ class DefaultControllerTest {
         RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest("somelink.com");
         LinkResponse linkResponse = new LinkResponse(12, "somelink.com");
 
-        Mockito.when(scrapperService.remove(12, removeLinkRequest.link()))
+        Mockito.when(scrapperService.untrackLink(12, removeLinkRequest))
             .thenReturn(linkResponse);
 
         MvcResult mvcResult = mockMvc.perform(

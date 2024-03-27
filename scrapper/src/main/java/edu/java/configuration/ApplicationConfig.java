@@ -13,10 +13,6 @@ public record ApplicationConfig(
     @Bean
     Scheduler scheduler
 ) {
-    public record Scheduler(
-        boolean enable,
-        @NotNull Duration interval,
-        @NotNull Duration forceCheckDelay
-    ) {
+    public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 }

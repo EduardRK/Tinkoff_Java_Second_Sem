@@ -3,9 +3,9 @@ package edu.java.requests;
 import java.util.List;
 
 public record LinkUpdateRequest(
-    long id,
-    String uri,
+    int id,
+    String url,
     String description,
-    List<Long> tgChatIds
+    List<Integer> tgChatIds
 ) {
 }

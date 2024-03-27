@@ -3,23 +3,23 @@ package edu.java.exceptions.BadRequestException;
 import java.util.List;
 
 public class IncorrectDataException extends BadRequestException {
-    public IncorrectDataException(List<Long> ids, String uri, String message) {
+    public IncorrectDataException(List<Integer> ids, String uri, String message) {
         super(ids, uri, message);
     }
 
-    public IncorrectDataException(List<Long> ids, String uri) {
+    public IncorrectDataException(List<Integer> ids, String uri) {
         this(ids, uri, DEFAULT_MESSAGE);
     }
 
-    public IncorrectDataException(long id, String uri) {
+    public IncorrectDataException(Integer id, String uri) {
         this(List.of(id), uri);
     }
 
-    public IncorrectDataException(long id) {
+    public IncorrectDataException(Integer id) {
         this(id, "");
     }
 
-    public long id() {
+    public Integer id() {
         return this.ids().getFirst();
     }
 }

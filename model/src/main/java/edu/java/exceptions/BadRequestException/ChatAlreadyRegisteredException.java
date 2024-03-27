@@ -3,23 +3,23 @@ package edu.java.exceptions.BadRequestException;
 import java.util.List;
 
 public class ChatAlreadyRegisteredException extends BadRequestException {
-    public ChatAlreadyRegisteredException(List<Long> ids, String uri, String message) {
+    public ChatAlreadyRegisteredException(List<Integer> ids, String uri, String message) {
         super(ids, uri, message);
     }
 
-    public ChatAlreadyRegisteredException(List<Long> ids, String uri) {
+    public ChatAlreadyRegisteredException(List<Integer> ids, String uri) {
         this(ids, uri, DEFAULT_MESSAGE);
     }
 
-    public ChatAlreadyRegisteredException(long id, String uri) {
+    public ChatAlreadyRegisteredException(Integer id, String uri) {
         this(List.of(id), uri);
     }
 
-    public ChatAlreadyRegisteredException(long id) {
+    public ChatAlreadyRegisteredException(Integer id) {
         this(id, "");
     }
 
-    public long id() {
+    public Integer id() {
         return this.ids().getFirst();
     }
 }

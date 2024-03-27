@@ -9,4 +9,5 @@ public record Response(
     String message,
     OffsetDateTime date
 ) {
+
 }

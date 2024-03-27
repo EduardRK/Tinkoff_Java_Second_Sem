@@ -2,11 +2,11 @@ package edu.java.controller;
 
 import edu.java.exceptions.BadRequestException.ChatAlreadyRegisteredException;
 import edu.java.exceptions.BadRequestException.IncorrectDataException;
-import edu.java.exceptions.BadRequestException.UriAlreadyTrackedException;
 import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
 import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
 import edu.java.responses.ApiErrorResponse;
-import edu.java.service.services.exception_service.ExceptionService;
+import edu.java.service.services.exception_service.BadRequestExceptionService;
+import edu.java.service.services.exception_service.NotFoundExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,47 +15,43 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public final class RestExceptionController extends ResponseEntityExceptionHandler {
-    private final ExceptionService exceptionService;
+public final class ExceptionController extends ResponseEntityExceptionHandler {
+    private final NotFoundExceptionService notFoundExceptionService;
+    private final BadRequestExceptionService badRequestExceptionService;
 
     @Autowired
-    public RestExceptionController(
-        ExceptionService exceptionService
+    public ExceptionController(
+        NotFoundExceptionService notFoundExceptionService,
+        BadRequestExceptionService badRequestExceptionService
     ) {
-        this.exceptionService = exceptionService;
+        this.notFoundExceptionService = notFoundExceptionService;
+        this.badRequestExceptionService = badRequestExceptionService;
     }
 
     @ExceptionHandler(value = IncorrectDataException.class)
     public ResponseEntity<ApiErrorResponse> incorrectData(IncorrectDataException exception) {
-        ApiErrorResponse response = exceptionService.incorrectData(exception);
+        ApiErrorResponse response = badRequestExceptionService.incorrectData(exception);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = ChatAlreadyRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatAlreadyRegistered(ChatAlreadyRegisteredException exception) {
-        ApiErrorResponse response = exceptionService.chatAlreadyRegistered(exception);
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(value = UriAlreadyTrackedException.class)
-    public ResponseEntity<ApiErrorResponse> uriAlreadyTracked(UriAlreadyTrackedException exception) {
-        ApiErrorResponse response = exceptionService.uriAlreadyTracked(exception);
+        ApiErrorResponse response = badRequestExceptionService.chatAlreadyRegistered(exception);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = ChatNotRegisteredException.class)
     public ResponseEntity<ApiErrorResponse> chatNotRegistered(ChatNotRegisteredException exception) {
-        ApiErrorResponse response = exceptionService.chatNotRegistered(exception);
+        ApiErrorResponse response = notFoundExceptionService.chatNotRegistered(exception);
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = ChatNotTrackedUriException.class)
     public ResponseEntity<ApiErrorResponse> chatNotTrackedUri(ChatNotTrackedUriException exception) {
-        ApiErrorResponse response = exceptionService.chatNotTrackedUri(exception);
+        ApiErrorResponse response = notFoundExceptionService.chatNotTrackedUri(exception);
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
