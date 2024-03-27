@@ -1,7 +1,7 @@
 package edu.java.scrapper_body.scrapper_body.clients.github_client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.java.service.scrapper_body.clients_body.Response;
+import edu.java.scrapper_body.scrapper_body.clients_body.Response;
 import java.time.OffsetDateTime;
 
 public record GitHubResponse(
