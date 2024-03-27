@@ -4,5 +4,5 @@ import java.net.URI;
 import java.util.List;
 
 public interface Client {
-    List<Response> newUpdates(URI uri);
+    List<? extends Response> newUpdates(URI uri);
 }
