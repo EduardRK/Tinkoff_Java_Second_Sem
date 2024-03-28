@@ -1,23 +1,27 @@
 package edu.java.bot.service.bot_body.commands.command_chain;
 
 import com.pengrad.telegrambot.model.Message;
-import edu.java.bot.domain.InMemoryDataBase;
 import edu.java.bot.service.bot_body.commands.Command;
 import edu.java.bot.service.bot_body.commands.CommandComplete;
 import edu.java.bot.service.bot_body.commands.EmptyCommand;
-import edu.java.bot.service.bot_body.data_classes.Link;
+import edu.java.bot.service.scrapper_client.ScrapperClient;
+import edu.java.exceptions.BadRequestException.BadRequestException;
+import edu.java.responses.ListLinksResponse;
+import java.util.ArrayList;
+import java.util.Optional;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import reactor.core.publisher.Mono;
 
 public final class ListCommand extends AbstractCommand {
     private static final String NOTHING_TRACK = "No links are tracked.";
 
-    public ListCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command next) {
-        super(inMemoryDataBase, message, next);
+    public ListCommand(ScrapperClient scrapperClient, Command next) {
+        super(scrapperClient, next);
     }
 
-    public ListCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
-        super(inMemoryDataBase, message, new EmptyCommand(message));
+    public ListCommand(ScrapperClient scrapperClient) {
+        super(scrapperClient, new EmptyCommand());
     }
 
     public ListCommand() {
@@ -25,28 +29,35 @@ public final class ListCommand extends AbstractCommand {
     }
 
     @Override
-    public CommandComplete applyCommand() {
-        if (notValid()) {
-            return nextCommand.applyCommand();
+    public CommandComplete applyCommand(Message message) {
+        if (notValid(message)) {
+            return nextCommand.applyCommand(message);
         }
 
         long id = message.chat().id();
 
-        if (nothingTrack()) {
+        Optional<ListLinksResponse> linksResponse = scrapperClient.allTrackedLinks(id)
+            .onErrorResume(BadRequestException.class, e -> Mono.empty())
+            .then(Mono.just(new ListLinksResponse(new ArrayList<>(), 0)))
+            .blockOptional();
+
+        if (linksResponse.isEmpty() || linksResponse.get().size() == 0) {
             return new CommandComplete(NOTHING_TRACK, id);
         }
 
+        ListLinksResponse listLinksResponse = linksResponse.get();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Link link : inMemoryDataBase.dataBase().get(id)) {
-            stringBuilder.append(link.toString()).append(System.lineSeparator());
-        }
+
+        listLinksResponse.links().forEach(
+            linkResponse -> stringBuilder.append(linkResponse.url()).append(System.lineSeparator())
+        );
 
         return new CommandComplete(stringBuilder.toString(), id);
     }
 
     @Override
-    protected boolean notValid() {
-        return messageTextNull() || !message.text().equals("/list");
+    protected boolean notValid(Message message) {
+        return messageTextNull(message) || !message.text().equals("/list");
     }
 
     @Contract(pure = true)
@@ -55,10 +66,4 @@ public final class ListCommand extends AbstractCommand {
         return "/list - list of tracked links";
     }
 
-    private boolean nothingTrack() {
-        long id = message.chat().id();
-
-        return !(inMemoryDataBase.dataBase().containsKey(id)
-            && !inMemoryDataBase.dataBase().get(id).isEmpty());
-    }
 }

@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 --changeset EduardRK:2
-CREATE TABLE IF NOT EXISTS Chats
+CREATE TABLE IF NOT EXISTS chat
 (
     id BIGINT NOT NULL,
 

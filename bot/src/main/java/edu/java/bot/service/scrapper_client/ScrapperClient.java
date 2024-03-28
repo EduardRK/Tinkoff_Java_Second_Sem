@@ -4,15 +4,16 @@ import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
+import reactor.core.publisher.Mono;
 
 public interface ScrapperClient {
-    void registerChat(int id);
+    Mono<Void> registerChat(long id);
 
-    void deleteChat(int id);
+    Mono<Void> deleteChat(long id);
 
-    ListLinksResponse allTrackedLinks(int id);
+    Mono<ListLinksResponse> allTrackedLinks(long id);
 
-    LinkResponse startTrackLink(int id, AddLinkRequest addLinkRequest);
+    Mono<LinkResponse> startTrackLink(long id, AddLinkRequest addLinkRequest);
 
-    LinkResponse stopTrackLink(int id, RemoveLinkRequest removeLinkRequest);
+    Mono<LinkResponse> stopTrackLink(long id, RemoveLinkRequest removeLinkRequest);
 }

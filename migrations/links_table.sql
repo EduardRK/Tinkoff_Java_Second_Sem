@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 --changeset EduardRK:1
-CREATE TABLE IF NOT EXISTS Links
+CREATE TABLE IF NOT EXISTS link
 (
     id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY,
     uri VARCHAR(255) NOT NULL,

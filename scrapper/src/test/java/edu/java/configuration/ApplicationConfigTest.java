@@ -9,7 +9,8 @@ class ApplicationConfigTest {
     @Test
     void scheduler() {
         ApplicationConfig applicationConfig = new ApplicationConfig(
-            new ApplicationConfig.Scheduler(false, Duration.ZERO, Duration.ZERO)
+            new ApplicationConfig.Scheduler(false, Duration.ZERO, Duration.ZERO),
+            ApplicationConfig.AccessType.JDBC
         );
 
         Assertions.assertFalse(applicationConfig.scheduler().enable());
