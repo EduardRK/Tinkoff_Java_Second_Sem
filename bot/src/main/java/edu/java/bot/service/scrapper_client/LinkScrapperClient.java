@@ -32,8 +32,8 @@ public final class LinkScrapperClient implements ScrapperClient {
     }
 
     @Override
-    public void registerChat(long id) {
-        webClient.post()
+    public Mono<Void> registerChat(long id) {
+        return webClient.post()
             .uri(TG_CHAT_ID, id)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
@@ -41,13 +41,12 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.BAD_REQUEST::equals,
                 clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
-            .bodyToMono(Void.class)
-            .block();
+            .bodyToMono(Void.class);
     }
 
     @Override
-    public void deleteChat(long id) {
-        webClient.delete()
+    public Mono<Void> deleteChat(long id) {
+        return webClient.delete()
             .uri(TG_CHAT_ID, id)
             .retrieve()
             .onStatus(
@@ -58,12 +57,11 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.NOT_FOUND::equals,
                 clientResponse -> clientResponse.bodyToMono(NotFoundException.class).flatMap(Mono::error)
             )
-            .bodyToMono(Void.class)
-            .block();
+            .bodyToMono(Void.class);
     }
 
     @Override
-    public ListLinksResponse allTrackedLinks(long id) {
+    public Mono<ListLinksResponse> allTrackedLinks(long id) {
         return webClient.get()
             .uri(LINKS)
             .header(ID, String.valueOf(id))
@@ -73,12 +71,11 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.BAD_REQUEST::equals,
                 clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
-            .bodyToMono(ListLinksResponse.class)
-            .block();
+            .bodyToMono(ListLinksResponse.class);
     }
 
     @Override
-    public LinkResponse startTrackLink(long id, AddLinkRequest addLinkRequest) {
+    public Mono<LinkResponse> startTrackLink(long id, AddLinkRequest addLinkRequest) {
         return webClient.post()
             .uri(LINKS)
             .header(ID, String.valueOf(id))
@@ -89,12 +86,11 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.BAD_REQUEST::equals,
                 clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
-            .bodyToMono(LinkResponse.class)
-            .block();
+            .bodyToMono(LinkResponse.class);
     }
 
     @Override
-    public LinkResponse stopTrackLink(long id, RemoveLinkRequest removeLinkRequest) {
+    public Mono<LinkResponse> stopTrackLink(long id, RemoveLinkRequest removeLinkRequest) {
         return webClient.method(HttpMethod.DELETE)
             .uri(LINKS)
             .header(ID, String.valueOf(id))
@@ -109,7 +105,6 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.NOT_FOUND::equals,
                 clientResponse -> clientResponse.bodyToMono(NotFoundException.class).flatMap(Mono::error)
             )
-            .bodyToMono(LinkResponse.class)
-            .block();
+            .bodyToMono(LinkResponse.class);
     }
 }

@@ -10,6 +10,10 @@ import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import edu.java.scrapper.IntegrationTest;
 import jakarta.persistence.EntityManager;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -155,12 +159,44 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Transactional
     @Rollback
     void findAllWithFilter() {
+        jdbcClient.sql("INSERT INTO link(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
+            .params("SomeLink1.com", OffsetDateTime.MIN, OffsetDateTime.MIN)
+            .query(Long.class)
+            .single();
+
+        jdbcClient.sql("INSERT INTO link(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
+            .params("SomeLink2.com", OffsetDateTime.now(), OffsetDateTime.now())
+            .query(Long.class)
+            .single();
+
+        List<Link> allWithFilter = scrapperService.findAllWithFilter(Duration.ofHours(12));
+
+        Assertions.assertEquals(1, allWithFilter.size());
+        Assertions.assertEquals("SomeLink1.com", allWithFilter.getFirst().uri());
     }
 
     @Test
     @Transactional
     @Rollback
     void updateLastUpdateTime() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+
+        Long single = jdbcClient.sql("INSERT INTO link(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
+            .params("SomeLink1.com", OffsetDateTime.MIN, OffsetDateTime.parse("2021-10-20T12:30:45+03:00"))
+            .query(Long.class)
+            .single();
+
+        scrapperService.updateLastUpdateTime(new Link(single, null, null, now));
+
+        OffsetDateTime offsetDateTime = jdbcClient.sql("SELECT last_update FROM link WHERE id = ?")
+            .param(single)
+            .query(OffsetDateTime.class)
+            .single();
+
+        Assertions.assertEquals(
+            now.truncatedTo(ChronoUnit.SECONDS),
+            offsetDateTime.truncatedTo(ChronoUnit.SECONDS)
+        );
     }
 
     @Test
@@ -195,6 +231,39 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Transactional
     @Rollback
     void updateAllLastUpdateTime() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+
+        Long single1 = jdbcClient.sql("INSERT INTO link(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
+            .params("SomeLink1.com", OffsetDateTime.MIN, OffsetDateTime.parse("2021-10-20T12:30:45+03:00"))
+            .query(Long.class)
+            .single();
+
+        Long single2 = jdbcClient.sql("INSERT INTO link(uri, last_check, last_update) VALUES (?, ?, ?) RETURNING id")
+            .params("SomeLink2.com", OffsetDateTime.MIN, OffsetDateTime.parse("2021-11-20T12:30:45+03:00"))
+            .query(Long.class)
+            .single();
+
+        scrapperService.updateAllLastUpdateTime();
+
+        OffsetDateTime offsetDateTime1 = jdbcClient.sql("SELECT last_update FROM link WHERE id = ?")
+            .param(single1)
+            .query(OffsetDateTime.class)
+            .single();
+
+        OffsetDateTime offsetDateTime2 = jdbcClient.sql("SELECT last_update FROM link WHERE id = ?")
+            .param(single2)
+            .query(OffsetDateTime.class)
+            .single();
+
+        Assertions.assertEquals(
+            now.truncatedTo(ChronoUnit.SECONDS),
+            offsetDateTime1.truncatedTo(ChronoUnit.SECONDS)
+        );
+
+        Assertions.assertEquals(
+            now.truncatedTo(ChronoUnit.SECONDS),
+            offsetDateTime2.truncatedTo(ChronoUnit.SECONDS)
+        );
     }
 
     @Test
