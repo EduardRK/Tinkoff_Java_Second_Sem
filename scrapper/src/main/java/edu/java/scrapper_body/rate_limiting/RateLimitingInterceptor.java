@@ -30,7 +30,7 @@ public final class RateLimitingInterceptor implements HandlerInterceptor {
     ) throws TooManyRequestsException {
         String ip = request.getRemoteAddr();
 
-        Bucket token = cache.computeIfAbsent(ip, this::bucket);
+        Bucket token = cache.computeIfAbsent(ip, string -> bucket());
 
         if (token.tryConsume(rateLimitingConfig.tokens())) {
             return true;
@@ -40,7 +40,7 @@ public final class RateLimitingInterceptor implements HandlerInterceptor {
 
     }
 
-    private Bucket bucket(String ip) {
+    private Bucket bucket() {
         return Bucket.builder()
             .addLimit(
                 Bandwidth.classic(
