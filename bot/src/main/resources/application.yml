@@ -1,6 +1,12 @@
 app:
   telegram-token: ${TELEGRAM_TOKEN}
 
+retry:
+  type: constant
+  base-delay: 100
+  max-attempts: 5
+  status-codes: [ 429, 500, 501, 502, 503 ]
+
 spring:
   application:
     name: bot

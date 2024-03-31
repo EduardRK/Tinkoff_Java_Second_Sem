@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 @Component
 public final class LinkScrapperClient implements ScrapperClient {
@@ -21,14 +22,18 @@ public final class LinkScrapperClient implements ScrapperClient {
     private static final String ID = "id";
     private static final String BASE_URI = "http://localhost:80";
     private final WebClient webClient;
+    private final Retry retry;
 
-    public LinkScrapperClient(String baseUri) {
-        this.webClient = WebClient.create(baseUri);
+    public LinkScrapperClient(String baseUri, Retry retry) {
+        this.webClient = WebClient.builder()
+            .baseUrl(baseUri)
+            .build();
+        this.retry = retry;
     }
 
     @Autowired
-    public LinkScrapperClient() {
-        this(BASE_URI);
+    public LinkScrapperClient(Retry retry) {
+        this(BASE_URI, retry);
     }
 
     @Override
@@ -41,7 +46,8 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.BAD_REQUEST::equals,
                 clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
-            .bodyToMono(Void.class);
+            .bodyToMono(Void.class)
+            .retryWhen(retry);
     }
 
     @Override
@@ -57,7 +63,8 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.NOT_FOUND::equals,
                 clientResponse -> clientResponse.bodyToMono(NotFoundException.class).flatMap(Mono::error)
             )
-            .bodyToMono(Void.class);
+            .bodyToMono(Void.class)
+            .retryWhen(retry);
     }
 
     @Override
@@ -71,7 +78,8 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.BAD_REQUEST::equals,
                 clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
-            .bodyToMono(ListLinksResponse.class);
+            .bodyToMono(ListLinksResponse.class)
+            .retryWhen(retry);
     }
 
     @Override
@@ -86,7 +94,8 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.BAD_REQUEST::equals,
                 clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
             )
-            .bodyToMono(LinkResponse.class);
+            .bodyToMono(LinkResponse.class)
+            .retryWhen(retry);
     }
 
     @Override
@@ -105,6 +114,7 @@ public final class LinkScrapperClient implements ScrapperClient {
                 HttpStatus.NOT_FOUND::equals,
                 clientResponse -> clientResponse.bodyToMono(NotFoundException.class).flatMap(Mono::error)
             )
-            .bodyToMono(LinkResponse.class);
+            .bodyToMono(LinkResponse.class)
+            .retryWhen(retry);
     }
 }
