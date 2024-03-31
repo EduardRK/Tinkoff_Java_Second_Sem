@@ -22,7 +22,7 @@ public class CaffeineManagerConfig {
 
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {
-        Caffeine<Object, Object> caffeine = Caffeine
+        return Caffeine
             .newBuilder()
             .maximumSize(cacheConfig.maximumSize())
             .expireAfterWrite(cacheConfig.expireAfterWrite())
@@ -31,8 +31,6 @@ public class CaffeineManagerConfig {
                 (key, value, removalCause) -> log.info(
                     "Eviction of key " + key + " with value " + value + " due to " + removalCause)
             );
-
-        return caffeine;
     }
 
     @Bean

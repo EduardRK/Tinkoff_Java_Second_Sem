@@ -41,7 +41,8 @@ public final class RateLimitingInterceptor implements HandlerInterceptor {
     }
 
     Bucket bucket() {
-        return Bucket.builder()
+        return Bucket
+            .builder()
             .addLimit(
                 Bandwidth.classic(
                     rateLimitingConfig.capacity(),

@@ -16,7 +16,8 @@ public final class RetryFactory {
     }
 
     public Retry constantRetry() {
-        return Retry.fixedDelay(
+        return Retry
+            .fixedDelay(
                 retryConfig.maxAttempts(),
                 retryConfig.baseDelay()
             )
@@ -28,6 +29,8 @@ public final class RetryFactory {
         return Retry.from(
             retrySignalFlux -> retrySignalFlux.flatMap(
                 retrySignal -> {
+                    log.error("Linear retry error");
+
                     if (isStatusCodeSupportsRetry(retryConfig, retrySignal.failure())) {
                         return Mono.error(retrySignal.failure());
                     }
@@ -46,7 +49,8 @@ public final class RetryFactory {
     }
 
     public Retry exponentialRetry() {
-        return Retry.backoff(
+        return Retry
+            .backoff(
                 retryConfig.maxAttempts(),
                 retryConfig.baseDelay()
             ).doAfterRetry(retrySignal -> log.error("Exponential retry error"))
