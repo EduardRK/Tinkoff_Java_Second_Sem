@@ -1,4 +1,4 @@
-package edu.java.scrapper_body.scrapper_body.retry;
+package edu.java.scrapper_body.retry;
 
 import edu.java.configuration.RetryConfig;
 import java.time.Duration;

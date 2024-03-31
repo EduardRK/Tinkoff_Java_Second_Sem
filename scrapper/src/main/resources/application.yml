@@ -7,9 +7,15 @@ app:
 
 retry:
   type: exponential
-  base-delay: 100
-  max-attempts: 5
+  base-delay: 5
+  max-attempts: 3
   status-codes: [ 429, 500, 501, 502, 503 ]
+
+rate-limiting:
+  bucket-size: 100
+  tokens: 50
+  refill-interval: 5m
+  cache-duration: 15m
 
 
 spring:
