@@ -5,6 +5,12 @@ app:
     force-check-delay: 10s
   database-access-type: jdbc
 
+retry:
+  type: exponential
+  base-delay: 100
+  max-attempts: 5
+  status-codes: [ 429, 500,501, 502,503 ]
+
 
 spring:
   application:

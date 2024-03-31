@@ -6,6 +6,7 @@ import edu.java.scrapper_body.scrapper_body.clients_body.Client;
 import edu.java.scrapper_body.scrapper_body.clients_body.Response;
 import java.net.URI;
 import java.util.List;
+import reactor.util.retry.Retry;
 
 public final class ClientChain implements Client {
     private final Client chain;
@@ -14,9 +15,9 @@ public final class ClientChain implements Client {
         this.chain = chain;
     }
 
-    public static ClientChain defaultChain() {
-        GitHubCommitUpdateClient gitHubClient = new GitHubCommitUpdateClient();
-        StackOverflowQuestionClient stackOverflowClient = new StackOverflowQuestionClient(gitHubClient);
+    public static ClientChain defaultChain(Retry retry) {
+        GitHubCommitUpdateClient gitHubClient = new GitHubCommitUpdateClient(retry);
+        StackOverflowQuestionClient stackOverflowClient = new StackOverflowQuestionClient(gitHubClient, retry);
         return new ClientChain(stackOverflowClient);
     }
 

@@ -9,6 +9,7 @@ import edu.java.scrapper_body.scrapper_body.clients_body.Response;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import reactor.util.retry.Retry;
 
 class GitHubCommitUpdateClientTest {
+    Retry retry = Retry.fixedDelay(1, Duration.ofSeconds(10));
     private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer();
     private static final String REPOSITORY_LINK = "https://github.com/EduardRK/Fractal-Flame";
 
@@ -44,7 +47,7 @@ class GitHubCommitUpdateClientTest {
 
     @Test
     void newUpdates() throws URISyntaxException, JsonProcessingException {
-        GitHubCommitUpdateClient client = new GitHubCommitUpdateClient(WIRE_MOCK_SERVER.baseUrl());
+        GitHubCommitUpdateClient client = new GitHubCommitUpdateClient(WIRE_MOCK_SERVER.baseUrl(), retry);
 
         List<Response> responses = new ArrayList<>(
             List.of(
@@ -65,7 +68,7 @@ class GitHubCommitUpdateClientTest {
 
     @Test
     void notValid() throws URISyntaxException {
-        GitHubCommitUpdateClient gitHubCommitUpdateClient = new GitHubCommitUpdateClient();
+        GitHubCommitUpdateClient gitHubCommitUpdateClient = new GitHubCommitUpdateClient(retry);
 
         Assertions.assertTrue(
             gitHubCommitUpdateClient.notValid(new URI(
@@ -77,9 +80,10 @@ class GitHubCommitUpdateClientTest {
     void constructorsTest() {
         Assertions.assertDoesNotThrow(
             () -> {
-                new GitHubCommitUpdateClient("other.api.github.com");
+                new GitHubCommitUpdateClient("other.api.github.com", retry);
                 new GitHubCommitUpdateClient(
-                    new StackOverflowQuestionClient()
+                    new StackOverflowQuestionClient(retry),
+                    retry
                 );
             }
         );
