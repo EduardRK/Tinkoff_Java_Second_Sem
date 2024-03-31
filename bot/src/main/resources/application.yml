@@ -3,7 +3,7 @@ app:
 
 retry:
   type: constant
-  base-delay: 100
+  base-delay: 5
   max-attempts: 5
   status-codes: [ 429, 500, 501, 502, 503 ]
 

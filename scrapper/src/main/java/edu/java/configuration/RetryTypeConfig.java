@@ -1,6 +1,6 @@
 package edu.java.configuration;
 
-import edu.java.scrapper_body.scrapper_body.retry.RetryFactory;
+import edu.java.scrapper_body.retry.RetryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

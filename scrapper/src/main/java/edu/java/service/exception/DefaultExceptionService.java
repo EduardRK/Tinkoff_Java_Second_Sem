@@ -2,6 +2,7 @@ package edu.java.service.exception;
 
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
+import edu.java.exceptions.TooManyRequestsException;
 import edu.java.responses.ApiErrorResponse;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,17 @@ public class DefaultExceptionService implements ExceptionService {
             CHAT_WITH_ID + exception.id() + " not registered",
             String.valueOf(HttpStatus.NOT_FOUND),
             "ChatNotRegistered",
+            exception.getMessage(),
+            Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
+        );
+    }
+
+    @Override
+    public ApiErrorResponse tooManyRequests(TooManyRequestsException exception) {
+        return new ApiErrorResponse(
+            "The number of requests has been exceeded",
+            String.valueOf(HttpStatus.TOO_MANY_REQUESTS),
+            "TooManyRequests",
             exception.getMessage(),
             Arrays.stream(exception.getStackTrace()).map(StackTraceElement::toString).toList()
         );
