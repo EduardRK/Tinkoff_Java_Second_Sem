@@ -62,7 +62,8 @@ public class JpaScrapperService implements ScrapperService {
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
         } else if (
-            chatRepository.findById(tgChatId)
+            chatRepository
+                .findById(tgChatId)
                 .get()
                 .links()
                 .stream()
@@ -100,7 +101,8 @@ public class JpaScrapperService implements ScrapperService {
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
         } else if (
-            !chatRepository.findById(tgChatId)
+            !chatRepository
+                .findById(tgChatId)
                 .get()
                 .links()
                 .stream()
@@ -160,7 +162,8 @@ public class JpaScrapperService implements ScrapperService {
 
     @Override
     public List<Chat> getAllChats(long linkId) {
-        return linkRepository.findById(linkId)
+        return linkRepository
+            .findById(linkId)
             .orElse(new LinkEntity())
             .chats()
             .stream()
@@ -175,7 +178,8 @@ public class JpaScrapperService implements ScrapperService {
 
     @Override
     public List<Link> getAllLinks(long chatId) {
-        return chatRepository.findById(chatId)
+        return chatRepository
+            .findById(chatId)
             .orElse(new ChatEntity())
             .links()
             .stream()

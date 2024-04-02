@@ -19,7 +19,6 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 public class JdbcScrapperService implements ScrapperService {
@@ -27,7 +26,6 @@ public class JdbcScrapperService implements ScrapperService {
     private final JdbcLinkRepository linkRepository;
     private final JdbcChatLinkRepository chatLinkRepository;
 
-    @Autowired
     public JdbcScrapperService(
         JdbcLinkRepository linkRepository,
         JdbcChatRepository chatRepository,

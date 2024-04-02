@@ -1,5 +1,5 @@
 app:
-  telegram-token: ${TELEGRAM_TOKEN}
+  telegram-token: 6466351131:AAGiqz0NpquSObip4t3NXN8FGC_grxrYI0s
 
 retry:
   type: constant

@@ -5,16 +5,17 @@ import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.exceptions.TooManyRequestsException;
 import edu.java.responses.ApiErrorResponse;
 import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultExceptionService implements ExceptionService {
+public final class DefaultExceptionService implements ExceptionService {
 
     private static final String CHAT_WITH_ID = "Chat with id ";
 
+    @Autowired
     public DefaultExceptionService() {
-
     }
 
     @Override

@@ -4,6 +4,7 @@ app:
     interval: 10s
     force-check-delay: 10s
   database-access-type: jdbc
+  use-queue: true
 
 retry:
   type: exponential
@@ -16,6 +17,13 @@ rate-limiting:
   tokens: 50
   refill-interval: 5m
   cache-duration: 15m
+
+kafka:
+  bootstrap-server: localhost:9092
+  group-id: group
+  auto-offset-reset: earliest
+  linger-ms: 10
+  topic-name: update_topic
 
 
 spring:

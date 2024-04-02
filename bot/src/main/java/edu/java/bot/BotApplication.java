@@ -7,7 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(value = {ApplicationConfig.class, RetryConfig.class})
+@EnableConfigurationProperties(
+    value = {
+        ApplicationConfig.class,
+        RetryConfig.class
+    }
+)
 public class BotApplication {
     public static void main(String[] args) {
         SpringApplication.run(BotApplication.class, args);

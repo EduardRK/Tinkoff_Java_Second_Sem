@@ -1,4 +1,4 @@
-package edu.java.scrapper_body.bot_client;
+package edu.java.service.send_update;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,35 +10,35 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
-@Component
 @Slf4j
-public final class TelegramBotClient implements BotClient {
+public class TelegramBotClientService implements SendUpdateService {
     private static final String BASE_URI = "http://localhost:8090";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final WebClient webClient;
     private final Retry retry;
 
-    public TelegramBotClient(String baseUri, Retry retry) {
+    public TelegramBotClientService(String baseUri, Retry retry) {
         this.retry = retry;
-        this.webClient = WebClient.builder()
+        this.webClient = WebClient
+            .builder()
             .baseUrl(baseUri)
             .build();
     }
 
     @Autowired
-    public TelegramBotClient(Retry retry) {
+    public TelegramBotClientService(Retry retry) {
         this(BASE_URI, retry);
     }
 
     @Override
-    public void sendUpdate(LinkUpdateRequest linkUpdateRequest) {
-        webClient.post()
+    public void send(LinkUpdateRequest linkUpdateRequest) {
+        webClient
+            .post()
             .uri("/update")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +75,9 @@ public final class TelegramBotClient implements BotClient {
     }
 
     @Override
-    public void sendUpdates(List<LinkUpdateRequest> linkUpdateRequestList) {
-        linkUpdateRequestList.parallelStream().forEach(this::sendUpdate);
+    public void send(List<LinkUpdateRequest> linkUpdateRequestList) {
+        linkUpdateRequestList
+            .parallelStream()
+            .forEach(this::send);
     }
 }
