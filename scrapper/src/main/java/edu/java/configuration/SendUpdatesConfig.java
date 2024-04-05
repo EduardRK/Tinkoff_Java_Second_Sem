@@ -26,7 +26,7 @@ public class SendUpdatesConfig {
     @ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "true")
     public SendUpdateService scrapperQueueProducerService(
         KafkaConfig kafkaConfig,
-        KafkaTemplate<Integer, LinkUpdateRequest> kafkaTemplate
+        KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate
     ) {
         return new ScrapperQueueProducerService(kafkaConfig, kafkaTemplate);
     }

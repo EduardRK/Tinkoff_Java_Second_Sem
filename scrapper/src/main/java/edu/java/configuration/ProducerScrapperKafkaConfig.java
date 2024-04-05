@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,25 +21,25 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 @Configuration
 @EnableKafka
-public class ConsumerProducerScrapperKafkaConfig {
+public class ProducerScrapperKafkaConfig {
     private final KafkaConfig kafkaConfig;
 
     @Autowired
-    public ConsumerProducerScrapperKafkaConfig(KafkaConfig kafkaConfig) {
+    public ProducerScrapperKafkaConfig(KafkaConfig kafkaConfig) {
         this.kafkaConfig = kafkaConfig;
     }
 
     @Bean
-    ConcurrentKafkaListenerContainerFactory<Integer, LinkUpdateRequest>
-    kafkaListenerContainerFactory(ConsumerFactory<Integer, LinkUpdateRequest> consumerFactory) {
-        ConcurrentKafkaListenerContainerFactory<Integer, LinkUpdateRequest> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, LinkUpdateRequest>
+    kafkaListenerContainerFactory(ConsumerFactory<String, LinkUpdateRequest> consumerFactory) {
+        ConcurrentKafkaListenerContainerFactory<String, LinkUpdateRequest> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
         return factory;
     }
 
     @Bean
-    public ConsumerFactory<Integer, LinkUpdateRequest> consumerFactory() {
+    public ConsumerFactory<String, LinkUpdateRequest> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerProps());
     }
 
@@ -49,7 +48,7 @@ public class ConsumerProducerScrapperKafkaConfig {
 
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfig.bootstrapServer());
         props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConfig.groupId());
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, kafkaConfig.autoOffsetReset());
 
@@ -57,7 +56,7 @@ public class ConsumerProducerScrapperKafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<Integer, LinkUpdateRequest> producerFactory() {
+    public ProducerFactory<String, LinkUpdateRequest> producerFactory() {
         return new DefaultKafkaProducerFactory<>(senderProps());
     }
 
@@ -73,8 +72,8 @@ public class ConsumerProducerScrapperKafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<Integer, LinkUpdateRequest> kafkaTemplate(
-        ProducerFactory<Integer, LinkUpdateRequest> producerFactory
+    public KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate(
+        ProducerFactory<String, LinkUpdateRequest> producerFactory
     ) {
         return new KafkaTemplate<>(producerFactory);
     }

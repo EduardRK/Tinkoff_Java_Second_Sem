@@ -1,6 +1,7 @@
 package edu.java.bot;
 
 import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.bot.configuration.KafkaConfig;
 import edu.java.bot.configuration.RetryConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,7 +11,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(
     value = {
         ApplicationConfig.class,
-        RetryConfig.class
+        RetryConfig.class,
+        KafkaConfig.class
     }
 )
 public class BotApplication {

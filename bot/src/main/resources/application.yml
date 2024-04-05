@@ -1,11 +1,19 @@
 app:
-  telegram-token: 6466351131:AAGiqz0NpquSObip4t3NXN8FGC_grxrYI0s
+  telegram-token: ${TELEGRAM_TOKEN}
+  use-queue: true
 
 retry:
   type: constant
   base-delay: 5
   max-attempts: 5
   status-codes: [ 429, 500, 501, 502, 503 ]
+
+kafka:
+  bootstrap-server: localhost:9092
+  group-id: group
+  topic-name: update_topic
+  concurrency: 3
+  poll-timeout: 3000
 
 spring:
   application:
@@ -14,7 +22,7 @@ spring:
     time-zone: UTC
 
 server:
-  port: 8090
+  port: 90
 
 logging:
   config: classpath:log4j2-plain.xml

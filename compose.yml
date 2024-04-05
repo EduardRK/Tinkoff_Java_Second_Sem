@@ -69,7 +69,7 @@ services:
 
 volumes:
   postgresql: { }
-  zoo-1: { }
+  zoo1: { }
 
 networks:
   backend: { }
