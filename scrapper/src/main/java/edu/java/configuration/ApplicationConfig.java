@@ -12,7 +12,8 @@ public record ApplicationConfig(
     Scheduler scheduler,
     @NotNull
     AccessType databaseAccessType,
-    boolean useQueue
+    @NotNull
+    Boolean useQueue
 ) {
     public enum AccessType {
         JPA,
