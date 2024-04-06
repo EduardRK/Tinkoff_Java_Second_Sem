@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import reactor.util.retry.Retry;
 
 class StackOverflowQuestionClientTest {
-    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer(82);
+    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer(8070);
     private static final String ANSWER_LINK =
         "https://stackoverflow.com/questions/78040876/maven-generate-sources-generates-classes-with-javax-instead-of-jakarta-namespace";
     Retry retry = Retry.fixedDelay(1, Duration.ofSeconds(10));
