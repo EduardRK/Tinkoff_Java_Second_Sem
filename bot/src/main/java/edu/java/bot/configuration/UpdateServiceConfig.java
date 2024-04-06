@@ -8,6 +8,7 @@ import edu.java.requests.LinkUpdateRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.KafkaTemplate;
 
 @Configuration
 public class UpdateServiceConfig {
@@ -24,7 +25,11 @@ public class UpdateServiceConfig {
 
     @Bean
     @ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "true")
-    public UpdateService updateListenerService(Handler<LinkUpdateRequest> handler) {
-        return new UpdateListenerService(handler);
+    public UpdateService updateListenerService(
+        Handler<LinkUpdateRequest> handler,
+        KafkaTemplate<String, LinkUpdateRequest> dlqKafkaTemplate,
+        DlqKafkaConfig dlqKafkaConfig
+    ) {
+        return new UpdateListenerService(handler, dlqKafkaTemplate, dlqKafkaConfig);
     }
 }

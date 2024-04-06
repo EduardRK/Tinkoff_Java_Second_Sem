@@ -5,8 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties(prefix = "kafka", ignoreUnknownFields = false)
-public record KafkaConfig(
+@ConfigurationProperties(prefix = "kafka.update-queue", ignoreUnknownFields = false)
+public record UpdateKafkaConfig(
     @NotBlank
     String bootstrapServer,
     @NotBlank
