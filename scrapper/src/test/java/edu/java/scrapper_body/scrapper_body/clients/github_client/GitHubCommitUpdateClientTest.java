@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import reactor.util.retry.Retry;
 
 class GitHubCommitUpdateClientTest {
-    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer(88);
+    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer(81);
     private static final String REPOSITORY_LINK = "https://github.com/EduardRK/Fractal-Flame";
     Retry retry = Retry.fixedDelay(1, Duration.ofSeconds(10));
 
