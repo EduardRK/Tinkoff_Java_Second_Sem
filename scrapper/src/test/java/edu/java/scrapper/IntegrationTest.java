@@ -22,7 +22,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-@DirtiesContext
 public abstract class IntegrationTest {
     public static PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16")
         .withDatabaseName("scrapper")
