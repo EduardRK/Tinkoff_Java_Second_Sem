@@ -51,7 +51,7 @@ class UpdateListenerServiceIntegrationTest extends KafkaIntegrationTest {
         );
 
         Mockito.doAnswer((Answer<Void>) invocationOnMock -> {
-            log.debug("Message received");
+            log.debug("Message complete");
             return null;
         }).when(handler).put(linkUpdateRequest);
 
