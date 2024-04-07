@@ -20,7 +20,7 @@ rate-limiting:
 
 kafka:
   bootstrap-server: localhost:9092
-  group-id: group
+  group-id: scrapper
   auto-offset-reset: earliest
   linger-ms: 10
   topic-name: update_topic
@@ -36,6 +36,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/scrapper
     username: postgres
     password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 80
