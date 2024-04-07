@@ -18,9 +18,7 @@ public abstract class KafkaIntegrationTest {
     @DynamicPropertySource
     static void jdbcProperties(DynamicPropertyRegistry registry) {
         registry.add("kafka.update-queue.bootstrap-server", KAFKA::getBootstrapServers);
-        registry.add("kafka.dlq-queue.bootstrap-server", KAFKA::getBootstrapServers);
-        registry.add("kafka.update-queue.topic-name", () -> "update_test_topic");
-        registry.add("kafka.dlq.topic-name", () -> "dlq_test_topic");
-        registry.add("app.use-queue", () -> true);
+        registry.add("kafka.dlq.bootstrap-server", KAFKA::getBootstrapServers);
+        registry.add("app.use-queue", () -> "true");
     }
 }

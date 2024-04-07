@@ -19,6 +19,6 @@ public abstract class KafkaIntegrationTest {
     static void jdbcProperties(DynamicPropertyRegistry registry) {
         registry.add("kafka.bootstrap-server", KAFKA::getBootstrapServers);
         registry.add("kafka.topic-name", () -> "test_topic");
-        registry.add("app.use-queue", () -> true);
+        registry.add("app.use-queue", () -> "true");
     }
 }

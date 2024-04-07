@@ -2,7 +2,6 @@ package edu.java.bot.service.services.update_service;
 
 import edu.java.bot.configuration.DlqKafkaConfig;
 import edu.java.bot.service.handlers.Handler;
-import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.requests.LinkUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +26,16 @@ public class UpdateListenerService implements UpdateService {
     }
 
     @Override
-    @KafkaListener(topics = "${kafka.update-queue.topic-name}")
-    public void handleUpdate(LinkUpdateRequest linkUpdateRequest) throws BadRequestException {
+    @KafkaListener(
+        topics = "${kafka.update-queue.topic-name}",
+        groupId = "${kafka.update-queue.group-id}"
+    )
+    public void handleUpdate(LinkUpdateRequest linkUpdateRequest) {
         log.info("Get message from kafka {}:", linkUpdateRequest);
         try {
             handler.put(linkUpdateRequest);
         } catch (Exception e) {
-            log.error("Message send to dlq {}:", linkUpdateRequest);
+            log.info("Message send to dlq {}:", linkUpdateRequest);
             dlqKafkaTemplate.send(dlqKafkaConfig.topicName(), linkUpdateRequest);
         }
     }

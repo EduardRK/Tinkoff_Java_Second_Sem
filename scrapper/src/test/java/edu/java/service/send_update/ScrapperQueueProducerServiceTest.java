@@ -27,12 +27,12 @@ class ScrapperQueueProducerServiceTest extends KafkaIntegrationTest {
     private KafkaConfig kafkaConfig;
     @Autowired
     private ConsumerFactory<String, LinkUpdateRequest> consumerFactory;
+    @Autowired
     private ScrapperQueueProducerService producerService;
     private KafkaConsumer<String, LinkUpdateRequest> consumer;
 
     @BeforeEach
     void setUp() {
-        producerService = new ScrapperQueueProducerService(kafkaConfig, kafkaTemplate);
         consumer = (KafkaConsumer<String, LinkUpdateRequest>) consumerFactory.createConsumer();
     }
 

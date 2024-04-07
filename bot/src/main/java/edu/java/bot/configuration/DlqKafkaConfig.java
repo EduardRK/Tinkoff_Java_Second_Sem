@@ -1,20 +1,20 @@
 package edu.java.bot.configuration;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties(prefix = "kafka.dlq", ignoreUnknownFields = false)
 public record DlqKafkaConfig(
-    @NotNull
+    @NotBlank
     String bootstrapServer,
-    @NotNull
+    @NotBlank
     String groupId,
-    @NotNull
+    @NotBlank
     String autoOffsetReset,
     int lingerMs,
-    @NotNull
+    @NotBlank
     String topicName
 ) {
 }
