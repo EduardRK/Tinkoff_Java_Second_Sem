@@ -44,7 +44,7 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    void registerChat() throws BadRequestException {
+    void registerChat() throws BadRequestException, NotFoundException {
         scrapperService.registerChat(12);
 
         entityManager.flush();
@@ -53,6 +53,8 @@ class JpaScrapperServiceTest extends IntegrationTest {
             12,
             jdbcClient.sql("SELECT id FROM chat WHERE id = 12").query(Long.class).single()
         );
+
+        scrapperService.deleteChat(12);
     }
 
     @Test

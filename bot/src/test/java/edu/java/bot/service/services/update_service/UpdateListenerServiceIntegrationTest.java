@@ -20,9 +20,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.test.annotation.DirtiesContext;
 
 @Slf4j
 @SpringBootTest
+@DirtiesContext
 class UpdateListenerServiceIntegrationTest extends KafkaIntegrationTest {
     @MockBean
     private TelegramBotComponent telegramBotComponent;

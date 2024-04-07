@@ -2,6 +2,7 @@ package edu.java.service.send_update;
 
 import edu.java.configuration.KafkaConfig;
 import edu.java.requests.LinkUpdateRequest;
+import edu.java.scrapper.IntegrationTest;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.testcontainers.shaded.org.awaitility.Awaitility;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @SpringBootTest
-class ScrapperQueueProducerServiceTest extends KafkaIntegrationTest {
+class ScrapperQueueProducerServiceTest extends IntegrationTest {
     @Autowired
     private KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate;
     @Autowired

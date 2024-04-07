@@ -28,7 +28,8 @@ public class UpdateListenerService implements UpdateService {
     @Override
     @KafkaListener(
         topics = "${kafka.update-queue.topic-name}",
-        groupId = "${kafka.update-queue.group-id}"
+        groupId = "${kafka.update-queue.group-id}",
+        containerFactory = "kafkaListenerContainerFactory"
     )
     public void handleUpdate(LinkUpdateRequest linkUpdateRequest) {
         log.info("Get message from kafka {}:", linkUpdateRequest);
