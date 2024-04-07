@@ -59,7 +59,9 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Transactional
     @Rollback
     void deleteChat() throws BadRequestException, NotFoundException {
-        jdbcClient.sql("INSERT INTO chat(id) VALUES(12)").update();
+        scrapperService.registerChat(12);
+
+        entityManager.flush();
 
         Assertions.assertEquals(
             12,
