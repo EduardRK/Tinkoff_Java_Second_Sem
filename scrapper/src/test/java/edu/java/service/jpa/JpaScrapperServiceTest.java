@@ -2,13 +2,12 @@ package edu.java.service.jpa;
 
 import edu.java.domain.dto.Chat;
 import edu.java.domain.dto.Link;
-import edu.java.domain.jpa.JpaChatRepository;
-import edu.java.domain.jpa.JpaLinkRepository;
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import edu.java.scrapper.IntegrationTest;
+import edu.java.service.ScrapperService;
 import jakarta.persistence.EntityManager;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -22,23 +21,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class JpaScrapperServiceTest extends IntegrationTest {
     @Autowired
-    JpaChatRepository chatRepository;
-    @Autowired
-    JpaLinkRepository linkRepository;
-    @Autowired
     EntityManager entityManager;
-    JpaScrapperService scrapperService;
     @Autowired
-    private JdbcClient jdbcClient;
+    ScrapperService scrapperService;
+    @Autowired
+    JdbcClient jdbcClient;
 
-    @BeforeEach
-    void setScrapperService() {
-        scrapperService = new JpaScrapperService(linkRepository, chatRepository);
+    @DynamicPropertySource
+    static void jpaProperties(DynamicPropertyRegistry registry) {
+        registry.add("app.database-access-type", () -> "JPA");
     }
 
     @Test
@@ -46,8 +44,6 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Rollback
     void registerChat() throws BadRequestException {
         scrapperService.registerChat(12);
-
-        entityManager.flush();
 
         Assertions.assertEquals(
             12,
@@ -68,8 +64,6 @@ class JpaScrapperServiceTest extends IntegrationTest {
 
         scrapperService.deleteChat(12);
 
-        entityManager.flush();
-
         Assertions.assertEquals(
             0,
             jdbcClient.sql("SELECT COUNT(*) FROM chat WHERE id = 12").query(Long.class).single()
@@ -83,8 +77,6 @@ class JpaScrapperServiceTest extends IntegrationTest {
         scrapperService.registerChat(12);
 
         scrapperService.add(12, "SomeLink.com");
-
-        entityManager.flush();
 
         Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 12")
             .query(Long.class)
@@ -107,8 +99,6 @@ class JpaScrapperServiceTest extends IntegrationTest {
 
         scrapperService.add(12, "SomeLink.com");
 
-        entityManager.flush();
-
         Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 12")
             .query(Long.class)
             .single();
@@ -122,8 +112,6 @@ class JpaScrapperServiceTest extends IntegrationTest {
         Assertions.assertEquals("SomeLink.com", single1);
 
         scrapperService.remove(12, "SomeLink.com");
-
-        entityManager.flush();
 
         Long single2 = jdbcClient.sql("SELECT COUNT(*) FROM link WHERE uri = 'SomeLink.com'")
             .query(Long.class)
@@ -140,7 +128,6 @@ class JpaScrapperServiceTest extends IntegrationTest {
         scrapperService.add(12, "SomeLink1.com");
         scrapperService.add(12, "SomeLink2.com");
         scrapperService.add(12, "SomeLink3.com");
-        entityManager.flush();
 
         ListLinksResponse listLinksResponse = scrapperService.listAll(12);
 
@@ -206,12 +193,10 @@ class JpaScrapperServiceTest extends IntegrationTest {
         scrapperService.registerChat(12);
         scrapperService.registerChat(13);
         scrapperService.registerChat(14);
-        entityManager.flush();
 
         scrapperService.add(12, "SomeLink.com");
         scrapperService.add(13, "SomeLink.com");
         scrapperService.add(14, "SomeLink.com");
-        entityManager.flush();
 
         Long single = jdbcClient.sql("SELECT id FROM link WHERE uri = 'SomeLink.com'")
             .query(Long.class)
@@ -271,12 +256,10 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Rollback
     void getAllLinks() throws BadRequestException {
         scrapperService.registerChat(12);
-        entityManager.flush();
 
         scrapperService.add(12, "SomeLink1.com");
         scrapperService.add(12, "SomeLink2.com");
         scrapperService.add(12, "SomeLink3.com");
-        entityManager.flush();
 
         List<Link> allLinks = scrapperService.getAllLinks(12);
 
@@ -287,5 +270,10 @@ class JpaScrapperServiceTest extends IntegrationTest {
                 .toList()
                 .containsAll(List.of("SomeLink1.com", "SomeLink2.com", "SomeLink3.com"))
         );
+    }
+
+    @BeforeEach
+    void postgresRun() {
+        Assertions.assertTrue(POSTGRES.isRunning());
     }
 }

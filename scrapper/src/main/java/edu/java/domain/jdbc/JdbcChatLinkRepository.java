@@ -5,9 +5,7 @@ import edu.java.domain.dto.Link;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class JdbcChatLinkRepository implements ChatLinkRepository {
     private final JdbcClient jdbcClient;
 

@@ -17,6 +17,7 @@ import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import edu.java.service.ScrapperService;
+import jakarta.persistence.EntityManager;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -25,10 +26,16 @@ import java.util.Optional;
 public class JpaScrapperService implements ScrapperService {
     private final JpaChatRepository chatRepository;
     private final JpaLinkRepository linkRepository;
+    private final EntityManager entityManager;
 
-    public JpaScrapperService(JpaLinkRepository linkRepository, JpaChatRepository chatRepository) {
+    public JpaScrapperService(
+        JpaLinkRepository linkRepository,
+        JpaChatRepository chatRepository,
+        EntityManager entityManager
+    ) {
         this.chatRepository = chatRepository;
         this.linkRepository = linkRepository;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -40,6 +47,7 @@ public class JpaScrapperService implements ScrapperService {
         }
 
         chatRepository.save(new ChatEntity(tgChatId));
+        entityManager.flush();
     }
 
     @Override
@@ -53,6 +61,8 @@ public class JpaScrapperService implements ScrapperService {
         ChatEntity chatEntity = chatRepository.findById(tgChatId).get();
         chatEntity.links().clear();
         chatRepository.deleteById(tgChatId);
+
+        entityManager.flush();
     }
 
     @Override
@@ -90,6 +100,8 @@ public class JpaScrapperService implements ScrapperService {
         chatEntity.addLink(linkEntity);
         chatRepository.save(chatEntity);
 
+        entityManager.flush();
+
         return new LinkResponse(linkEntity.id(), uri);
     }
 
@@ -114,6 +126,8 @@ public class JpaScrapperService implements ScrapperService {
         LinkEntity linkEntity = linkRepository.findByUri(uri).get();
         linkRepository.deleteByUri(uri);
         chatRepository.findById(tgChatId).get().links().remove(linkEntity);
+
+        entityManager.flush();
 
         return new LinkResponse(tgChatId, uri);
     }
