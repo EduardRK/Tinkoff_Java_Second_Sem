@@ -43,11 +43,11 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Transactional
     @Rollback
     void registerChat() throws BadRequestException {
-        scrapperService.registerChat(12);
+        scrapperService.registerChat(2);
 
         Assertions.assertEquals(
-            12,
-            jdbcClient.sql("SELECT id FROM chat WHERE id = 12").query(Long.class).single()
+            2,
+            jdbcClient.sql("SELECT id FROM chat WHERE id = 2").query(Long.class).single()
         );
     }
 
@@ -74,15 +74,15 @@ class JpaScrapperServiceTest extends IntegrationTest {
     @Transactional
     @Rollback
     void add() throws BadRequestException {
-        scrapperService.registerChat(12);
+        scrapperService.registerChat(2);
 
-        scrapperService.add(12, "SomeLink.com");
+        scrapperService.add(2, "SomeLink.com");
 
-        Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 12")
+        Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 2")
             .query(Long.class)
             .single();
 
-        Assertions.assertEquals(12, single);
+        Assertions.assertEquals(2, single);
 
         String single1 = jdbcClient.sql("SELECT uri FROM link WHERE uri = 'SomeLink.com'")
             .query(String.class)
