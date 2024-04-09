@@ -20,7 +20,8 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 public class JdbcScrapperService implements ScrapperService {
     private final JdbcChatRepository chatRepository;
@@ -50,7 +51,7 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
-    @Transactional
+    @CacheEvict(cacheNames = "chats", key = "#tgChatId")
     public void deleteChat(long tgChatId) throws BadRequestException, NotFoundException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -63,7 +64,7 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
-    @Transactional
+    @CacheEvict(cacheNames = "chats", key = "#tgChatId")
     public LinkResponse add(long tgChatId, String uri) throws BadRequestException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -78,7 +79,7 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
-    @Transactional
+    @CacheEvict(cacheNames = "chats", key = "#tgChatId")
     public LinkResponse remove(long tgChatId, String uri) throws BadRequestException, NotFoundException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -93,6 +94,7 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
+    @Cacheable(cacheNames = "chats", key = "#tgChatId")
     public ListLinksResponse listAll(long tgChatId) throws BadRequestException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -129,6 +131,7 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
+    @Cacheable(cacheNames = "chats", key = "#chatId")
     public List<Link> getAllLinks(long chatId) {
         return chatLinkRepository.getAllLinks(chatId);
     }

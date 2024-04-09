@@ -22,6 +22,8 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 public class JpaScrapperService implements ScrapperService {
     private final JpaChatRepository chatRepository;
@@ -51,6 +53,7 @@ public class JpaScrapperService implements ScrapperService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "chats", key = "#tgChatId")
     public void deleteChat(long tgChatId) throws BadRequestException, NotFoundException {
         if (notCorrectChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -66,6 +69,7 @@ public class JpaScrapperService implements ScrapperService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "chats", key = "#tgChatId")
     public LinkResponse add(long tgChatId, String uri) throws BadRequestException {
         if (notCorrectChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -106,6 +110,7 @@ public class JpaScrapperService implements ScrapperService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "chats", key = "#tgChatId")
     public LinkResponse remove(long tgChatId, String uri) throws BadRequestException, NotFoundException {
         if (notCorrectChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -133,6 +138,7 @@ public class JpaScrapperService implements ScrapperService {
     }
 
     @Override
+    @Cacheable(cacheNames = "chats", key = "#tgChatId")
     public ListLinksResponse listAll(long tgChatId) throws BadRequestException {
         if (notCorrectChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -188,6 +194,7 @@ public class JpaScrapperService implements ScrapperService {
     }
 
     @Override
+    @Cacheable(cacheNames = "chats", key = "#chatId")
     public List<Link> getAllLinks(long chatId) {
         return chatRepository.findById(chatId)
             .orElse(new ChatEntity())

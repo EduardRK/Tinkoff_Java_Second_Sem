@@ -32,7 +32,7 @@ public final class RateLimitingInterceptor implements HandlerInterceptor {
 
         Bucket token = cache.computeIfAbsent(ip, string -> bucket());
 
-        if (token.tryConsume(rateLimitingConfig.tokens())) {
+        if (token.tryConsume(rateLimitingConfig.refillTokens())) {
             return true;
         } else {
             throw new TooManyRequestsException("Too many requests");
@@ -44,9 +44,9 @@ public final class RateLimitingInterceptor implements HandlerInterceptor {
         return Bucket.builder()
             .addLimit(
                 Bandwidth.classic(
-                    rateLimitingConfig.bucketSize(),
+                    rateLimitingConfig.capacity(),
                     Refill.greedy(
-                        rateLimitingConfig.tokens(),
+                        rateLimitingConfig.refillTokens(),
                         rateLimitingConfig.refillInterval()
                     )
                 )

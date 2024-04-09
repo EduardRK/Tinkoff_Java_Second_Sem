@@ -12,11 +12,16 @@ retry:
   status-codes: [ 429, 500, 501, 502, 503 ]
 
 rate-limiting:
-  bucket-size: 100
-  tokens: 50
-  refill-interval: 5m
-  cache-duration: 15m
+  capacity: 200
+  refill-tokens: 20
+  refill-interval: 5s
 
+cache:
+  maximum-size: 100
+  expire-after-write: 15m
+  expire-after-access: 10m
+  refresh-after-write: 30m
+  eviction-strategy: LRU
 
 spring:
   application:
