@@ -43,6 +43,9 @@ spring:
       ddl-auto: validate
     properties:
       dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: always
 
 server:
   port: 80

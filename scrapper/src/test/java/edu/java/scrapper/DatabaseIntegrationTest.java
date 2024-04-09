@@ -59,13 +59,13 @@ public class DatabaseIntegrationTest extends IntegrationTest {
         );
 
         Statement statement = connection.createStatement();
-        statement.execute("INSERT INTO chat (id) VALUES (1)");
+        statement.execute("INSERT INTO chat (id) VALUES (2)");
 
         ResultSet resultSet = statement.executeQuery("SELECT id FROM chat");
 
         resultSet.next();
         Assertions.assertEquals(
-            1,
+            2,
             resultSet.getInt("id")
         );
     }
