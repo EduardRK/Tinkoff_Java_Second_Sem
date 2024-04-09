@@ -20,6 +20,5 @@ public abstract class KafkaIntegrationTest {
         registry.add("kafka.update-queue.bootstrap-server", KAFKA::getBootstrapServers);
         registry.add("kafka.dlq.bootstrap-server", KAFKA::getBootstrapServers);
         registry.add("app.use-queue", () -> "true");
-        registry.add("kafka.update-queue.topic-name", () -> "update_topic");
     }
 }

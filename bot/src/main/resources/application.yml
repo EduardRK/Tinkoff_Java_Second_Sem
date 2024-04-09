@@ -15,12 +15,16 @@ kafka:
     topic-name: update_topic
     concurrency: 3
     poll-timeout: 3000
+    partitions: 1
+    replications-factor: 1
   dlq:
     bootstrap-server: localhost:9092
     group-id: bot
     auto-offset-reset: earliest
     linger-ms: 10
     topic-name: dlq_topic
+    partitions: 1
+    replications-factor: 1
 
 spring:
   application:

@@ -15,6 +15,8 @@ public record DlqKafkaConfig(
     String autoOffsetReset,
     int lingerMs,
     @NotBlank
-    String topicName
+    String topicName,
+    int partitions,
+    int replicationsFactor
 ) {
 }

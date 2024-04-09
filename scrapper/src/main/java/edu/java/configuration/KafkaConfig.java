@@ -1,21 +1,22 @@
 package edu.java.configuration;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties(prefix = "kafka", ignoreUnknownFields = false)
 public record KafkaConfig(
-    @NotNull
+    @NotBlank
     String bootstrapServer,
-    @NotNull
+    @NotBlank
     String groupId,
-    @NotNull
+    @NotBlank
     String autoOffsetReset,
     int lingerMs,
-    @NotNull
-    String topicName
-
+    @NotBlank
+    String topicName,
+    int partitions,
+    short replicationsFactor
 ) {
 }

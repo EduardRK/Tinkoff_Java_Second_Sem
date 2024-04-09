@@ -78,7 +78,6 @@ public abstract class IntegrationTest {
     @DynamicPropertySource
     static void kafkaProperty(DynamicPropertyRegistry registry) {
         registry.add("kafka.bootstrap-server", KAFKA::getBootstrapServers);
-        registry.add("kafka.topic-name", () -> "test_topic");
         registry.add("app.use-queue", () -> "true");
     }
 }

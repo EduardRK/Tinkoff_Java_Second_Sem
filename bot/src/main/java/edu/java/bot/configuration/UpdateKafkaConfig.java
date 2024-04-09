@@ -14,6 +14,8 @@ public record UpdateKafkaConfig(
     @NotBlank
     String topicName,
     int concurrency,
-    int pollTimeout
+    int pollTimeout,
+    int partitions,
+    int replicationsFactor
 ) {
 }

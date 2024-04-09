@@ -53,12 +53,16 @@ class UpdateListenerServiceIntegrationTest extends KafkaIntegrationTest {
         );
 
         Mockito.doAnswer((Answer<Void>) invocationOnMock -> {
-            log.debug("Message complete");
+            log.info("Message complete");
             return null;
         }).when(handler).put(linkUpdateRequest);
 
         SendResult<String, LinkUpdateRequest> result =
             kafkaTemplate.send(kafkaConfig.topicName(), linkUpdateRequest).get();
+
+        log.info(result.getRecordMetadata().topic());
+        log.info(String.valueOf(result.getRecordMetadata().partition()));
+        log.info(result.getProducerRecord().topic());
 
         Assertions.assertEquals(
             linkUpdateRequest,

@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -21,6 +22,7 @@ import org.testcontainers.shaded.org.awaitility.Awaitility;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @SpringBootTest
+@Slf4j
 class ScrapperQueueProducerServiceTest extends IntegrationTest {
     @Autowired
     private KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate;
@@ -47,7 +49,7 @@ class ScrapperQueueProducerServiceTest extends IntegrationTest {
         );
         producerService.send(linkUpdateRequest);
 
-        consumer.subscribe(Collections.singleton("test_topic"));
+        consumer.subscribe(Collections.singleton(kafkaConfig.topicName()));
 
         AtomicReference<ConsumerRecords<String, LinkUpdateRequest>> records = new AtomicReference<>();
 
@@ -63,6 +65,7 @@ class ScrapperQueueProducerServiceTest extends IntegrationTest {
         Assertions.assertFalse(recordsValue.isEmpty());
 
         for (ConsumerRecord<String, LinkUpdateRequest> record : recordsValue) {
+            log.info(record.toString());
             Assertions.assertEquals(linkUpdateRequest, record.value());
         }
     }

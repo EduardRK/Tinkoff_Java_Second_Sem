@@ -24,6 +24,8 @@ kafka:
   auto-offset-reset: earliest
   linger-ms: 10
   topic-name: update_topic
+  partitions: 1
+  replications-factor: 1
 
 
 spring:
