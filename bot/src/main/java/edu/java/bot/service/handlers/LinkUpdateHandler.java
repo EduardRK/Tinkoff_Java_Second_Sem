@@ -17,9 +17,6 @@ public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
 
     @Override
     public void put(LinkUpdateRequest value) throws BadRequestException {
-//        chatsNotRegistered(value);
-//        uriNotTracked(value);
-
         EXECUTOR_SERVICE.execute(
             new LinkUpdateExecutionTask(
                 telegramBotComponent.telegramBot(),
@@ -27,32 +24,4 @@ public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
             )
         );
     }
-
-//    private void chatsNotRegistered(LinkUpdateRequest linkUpdateRequest) throws BadRequestException {
-//        List<Long> ids = linkUpdateRequest.tgChatIds()
-//            .stream()
-//            .filter(id -> !DATA_BASE.dataBase().containsKey(id))
-//            .toList();
-//
-//        if (!ids.isEmpty()) {
-//            throw new ChatsNotRegisteredException(ids, linkUpdateRequest.uri());
-//        }
-//    }
-//
-//    private void uriNotTracked(LinkUpdateRequest linkUpdateRequest) throws BadRequestException {
-//        List<Long> ids = linkUpdateRequest.tgChatIds()
-//            .stream()
-//            .filter(id -> {
-//                try {
-//                    return !DATA_BASE.dataBase().get(id).contains(new Link(linkUpdateRequest.uri()));
-//                } catch (URISyntaxException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            })
-//            .toList();
-//
-//        if (!ids.isEmpty()) {
-//            throw new ChatsNotTrackedUriException(ids, linkUpdateRequest.uri());
-//        }
-//    }
 }

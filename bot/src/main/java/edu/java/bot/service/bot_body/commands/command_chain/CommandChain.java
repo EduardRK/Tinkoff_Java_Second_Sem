@@ -14,7 +14,8 @@ public final class CommandChain implements Command {
     }
 
     public static @NotNull CommandChain defaultChain(ScrapperClient scrapperClient) {
-        UntrackCommand untrackCommand = new UntrackCommand(scrapperClient);
+        DeleteCommand deleteCommand = new DeleteCommand(scrapperClient);
+        UntrackCommand untrackCommand = new UntrackCommand(scrapperClient, deleteCommand);
         TrackCommand trackCommand = new TrackCommand(scrapperClient, untrackCommand);
         ListCommand listCommand = new ListCommand(scrapperClient, trackCommand);
         HelpCommand helpCommand = new HelpCommand(scrapperClient, listCommand);

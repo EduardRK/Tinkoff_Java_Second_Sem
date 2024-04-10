@@ -1,5 +1,5 @@
 app:
-  telegram-token: ${TELEGRAM_TOKEN}
+  telegram-token: 6466351131:AAFWa5nnV2BlBzemkwcPwzJ7Rl2T3xwhcAU
 
 spring:
   application:

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractCommand implements Command {
-    protected static final Map<Long, String> WAITING_NEXT_COMMAND = new ConcurrentHashMap<>();
     protected final ScrapperClient scrapperClient;
     protected final Command nextCommand;
 

@@ -17,7 +17,8 @@ public final class HelpCommand extends AbstractCommand {
             new HelpCommand(),
             new ListCommand(),
             new TrackCommand(),
-            new UntrackCommand()
+            new UntrackCommand(),
+            new DeleteCommand()
         )
     );
 
@@ -26,11 +27,11 @@ public final class HelpCommand extends AbstractCommand {
     }
 
     public HelpCommand(ScrapperClient scrapperClient) {
-        this(scrapperClient, new EmptyCommand());
+        super(scrapperClient, new EmptyCommand());
     }
 
     public HelpCommand() {
-        this(null, null);
+        super(null, null);
     }
 
     @Override

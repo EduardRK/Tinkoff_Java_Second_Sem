@@ -20,19 +20,17 @@ public final class StartCommand extends AbstractCommand {
     }
 
     public StartCommand(ScrapperClient scrapperClient) {
-        this(scrapperClient, new EmptyCommand());
+        super(scrapperClient, new EmptyCommand());
     }
 
     public StartCommand() {
-        this(null, null);
+        super(null, null);
     }
 
     @Override
     public CommandComplete applyCommand(Message message) {
         if (notValid(message)) {
-            tryRegister(message.chat().id());
-
-            return nextCommand.applyCommand(message);
+            nextCommand.applyCommand(message);
         }
 
         long id = message.chat().id();

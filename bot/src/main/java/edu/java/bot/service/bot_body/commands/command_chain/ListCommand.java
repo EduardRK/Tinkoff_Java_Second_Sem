@@ -25,7 +25,7 @@ public final class ListCommand extends AbstractCommand {
     }
 
     public ListCommand() {
-        this(null, null);
+        super(null, null);
     }
 
     @Override
