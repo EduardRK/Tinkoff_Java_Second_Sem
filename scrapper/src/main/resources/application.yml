@@ -20,7 +20,6 @@ cache:
   maximum-size: 100
   expire-after-write: 15m
   expire-after-access: 10m
-  refresh-after-write: 30m
   eviction-strategy: LRU
 
 spring:

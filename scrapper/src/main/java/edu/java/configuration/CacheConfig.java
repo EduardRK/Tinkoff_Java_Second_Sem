@@ -14,8 +14,6 @@ public record CacheConfig(
     Duration expireAfterWrite,
     @NotNull
     Duration expireAfterAccess,
-    @NotNull
-    Duration refreshAfterWrite,
     @NotBlank
     String evictionStrategy
 ) {

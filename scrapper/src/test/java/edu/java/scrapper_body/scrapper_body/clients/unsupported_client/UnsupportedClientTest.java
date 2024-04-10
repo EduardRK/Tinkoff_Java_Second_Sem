@@ -1,10 +1,10 @@
 package edu.java.scrapper_body.scrapper_body.clients.unsupported_client;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 class UnsupportedClientTest {
 

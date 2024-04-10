@@ -27,12 +27,10 @@ public class CaffeineManagerConfig {
             .maximumSize(cacheConfig.maximumSize())
             .expireAfterWrite(cacheConfig.expireAfterWrite())
             .expireAfterAccess(cacheConfig.expireAfterAccess())
-            .refreshAfterWrite(cacheConfig.refreshAfterWrite());
-
-        caffeine.evictionListener(
-            (key, value, removalCause) -> log.info(
-                "Eviction of key " + key + " with value " + value + " due to " + removalCause)
-        );
+            .evictionListener(
+                (key, value, removalCause) -> log.info(
+                    "Eviction of key " + key + " with value " + value + " due to " + removalCause)
+            );
 
         return caffeine;
     }
