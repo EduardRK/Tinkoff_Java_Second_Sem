@@ -6,8 +6,8 @@ import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
-import edu.java.service.services.ScrapperService;
-import edu.java.service.services.exception_service.ExceptionService;
+import edu.java.service.ScrapperService;
+import edu.java.service.exception.ExceptionService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -34,6 +35,7 @@ class DefaultControllerTest {
     private ExceptionService exceptionService;
 
     @Test
+    @Rollback
     public void allTrackedLinksTest() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -63,6 +65,7 @@ class DefaultControllerTest {
     }
 
     @Test
+    @Rollback
     void addNewTrackLink() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -89,6 +92,7 @@ class DefaultControllerTest {
     }
 
     @Test
+    @Rollback
     void untrackLink() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -115,6 +119,7 @@ class DefaultControllerTest {
     }
 
     @Test
+    @Rollback
     void registerChat() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -128,6 +133,7 @@ class DefaultControllerTest {
     }
 
     @Test
+    @Rollback
     void deleteChat() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);

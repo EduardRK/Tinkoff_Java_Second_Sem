@@ -22,6 +22,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 public abstract class IntegrationTest {
+
     public static PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16")
         .withDatabaseName("scrapper")
         .withUsername("postgres")
@@ -67,5 +68,6 @@ public abstract class IntegrationTest {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
+        registry.add("spring.datasource.driver-class-name", POSTGRES::getDriverClassName);
     }
 }

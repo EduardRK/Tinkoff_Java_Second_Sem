@@ -1,12 +1,11 @@
 package edu.java.bot.service.bot_body.data_classes;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 public record Link(URI uri) {
-    public Link(String uri) throws URISyntaxException {
-        this(new URI(uri));
+    public Link(String uri) {
+        this(URI.create(uri));
     }
 
     public Link(@NotNull Link link) {

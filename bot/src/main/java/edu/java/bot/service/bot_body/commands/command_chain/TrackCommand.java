@@ -1,14 +1,12 @@
 package edu.java.bot.service.bot_body.commands.command_chain;
 
 import com.pengrad.telegrambot.model.Message;
-import edu.java.bot.domain.InMemoryDataBase;
 import edu.java.bot.service.bot_body.commands.Command;
 import edu.java.bot.service.bot_body.commands.CommandComplete;
 import edu.java.bot.service.bot_body.commands.EmptyCommand;
 import edu.java.bot.service.bot_body.commands.WrongLinkCommand;
-import edu.java.bot.service.bot_body.data_classes.Link;
-import java.net.URISyntaxException;
-import java.util.Set;
+import edu.java.bot.service.scrapper_client.ScrapperClient;
+import edu.java.requests.AddLinkRequest;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,12 +15,12 @@ public final class TrackCommand extends AbstractCommand {
     private static final String TRACK = "track";
     private static final String LINK_TO_TRACK = "Which link should I track?";
 
-    public TrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command next) {
-        super(inMemoryDataBase, message, next);
+    public TrackCommand(ScrapperClient scrapperClient, Command next) {
+        super(scrapperClient, next);
     }
 
-    public TrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
-        this(inMemoryDataBase, message, new EmptyCommand(message));
+    public TrackCommand(ScrapperClient scrapperClient) {
+        this(scrapperClient, new EmptyCommand());
     }
 
     public TrackCommand() {
@@ -30,25 +28,25 @@ public final class TrackCommand extends AbstractCommand {
     }
 
     @Override
-    public CommandComplete applyCommand() {
+    public CommandComplete applyCommand(Message message) {
         long id = message.chat().id();
 
-        if (inMemoryDataBase.waitingNextCommand().getOrDefault(id, "").equals(TRACK)) {
-            inMemoryDataBase.waitingNextCommand().remove(id);
-            return new LinkTrackCommand(inMemoryDataBase, message).applyCommand();
+        if (WAITING_NEXT_COMMAND.getOrDefault(id, "").equals(TRACK)) {
+            WAITING_NEXT_COMMAND.remove(id);
+            return new LinkTrackCommand(scrapperClient).applyCommand(message);
         }
 
-        if (notValid()) {
-            return nextCommand.applyCommand();
+        if (notValid(message)) {
+            return nextCommand.applyCommand(message);
         }
 
-        inMemoryDataBase.waitingNextCommand().put(id, TRACK);
+        WAITING_NEXT_COMMAND.put(id, TRACK);
         return new CommandComplete(LINK_TO_TRACK, message.chat().id());
     }
 
     @Override
-    protected boolean notValid() {
-        return messageTextNull() || !message.text().equals("/track");
+    protected boolean notValid(Message message) {
+        return messageTextNull(message) || !message.text().equals("/track");
     }
 
     @Contract(pure = true)
@@ -60,34 +58,27 @@ public final class TrackCommand extends AbstractCommand {
     private static final class LinkTrackCommand extends AbstractCommand {
         private static final String LINK_START_TRACKED = "The link is being tracked.";
 
-        LinkTrackCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
-            super(inMemoryDataBase, message, new WrongLinkCommand(message));
+        LinkTrackCommand(ScrapperClient scrapperClient) {
+            super(scrapperClient, new WrongLinkCommand());
         }
 
         @SneakyThrows
         @Override
-        public CommandComplete applyCommand() {
-            if (notValid()) {
-                return nextCommand.applyCommand();
+        public CommandComplete applyCommand(Message message) {
+            if (notValid(message)) {
+                return nextCommand.applyCommand(message);
             }
 
             long id = message.chat().id();
 
-            Link link = new Link(message.text());
-            Set<Link> linkSet = inMemoryDataBase.dataBase().get(id);
-            linkSet.add(link);
-            inMemoryDataBase.dataBase().put(id, linkSet);
+            AddLinkRequest addLinkRequest = new AddLinkRequest(message.text());
+            scrapperClient.startTrackLink(id, addLinkRequest);
 
             return new CommandComplete(LINK_START_TRACKED, id);
         }
 
         @Override
-        protected boolean notValid() {
-            try {
-                new Link(message.text());
-            } catch (URISyntaxException e) {
-                return true;
-            }
+        protected boolean notValid(Message message) {
             return false;
         }
     }
