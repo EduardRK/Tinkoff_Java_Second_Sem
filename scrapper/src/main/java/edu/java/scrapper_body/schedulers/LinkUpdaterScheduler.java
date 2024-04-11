@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public final class LinkUpdaterScheduler implements UpdateScheduler {
-    private static final Duration UPDATE_CHECK_TIME = Duration.ofSeconds(30);
+    private static final Duration UPDATE_CHECK_TIME = Duration.ofMinutes(1);
     private final BotClient botClient;
     private final ClientChain clientChain;
     private final ScrapperService scrapperService;
@@ -38,25 +38,30 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
     public void update() {
         log.info("Start update");
 
-        scrapperService.findAllWithFilter(UPDATE_CHECK_TIME)
+        scrapperService
+            .findAllWithFilter(UPDATE_CHECK_TIME)
             .parallelStream()
             .forEach(link -> {
                     List<? extends Response> responseList = clientChain.newUpdates(URI.create(link.uri()));
 
                     botClient.sendUpdates(
-                        responseList.parallelStream()
+                        responseList
+                            .parallelStream()
                             .filter(response -> response.date().isAfter(link.lastUpdate()))
                             .map(
                                 response -> new LinkUpdateRequest(
                                     link.id(),
                                     link.uri(),
                                     creteDescription(response),
-                                    scrapperService.getAllChats(link.id())
+                                    scrapperService
+                                        .getAllChats(link.id())
                                         .parallelStream()
                                         .map(Chat::chatId)
                                         .toList()
                                 )
-                            ).toList()
+                            )
+                            .peek(linkUpdateRequest -> log.info(linkUpdateRequest.uri()))
+                            .toList()
                     );
                 }
             );

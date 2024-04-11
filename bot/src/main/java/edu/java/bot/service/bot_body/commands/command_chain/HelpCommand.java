@@ -40,12 +40,16 @@ public final class HelpCommand extends AbstractCommand {
             return nextCommand.applyCommand(message);
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        for (AbstractCommand command : COMMAND_LIST) {
-            stringBuilder.append(command.toString()).append(System.lineSeparator());
-        }
+        long id = message.chat().id();
 
-        return new CommandComplete(stringBuilder.toString(), message.chat().id());
+        StringBuilder stringBuilder = new StringBuilder();
+        COMMAND_LIST.forEach(
+            abstractCommand -> stringBuilder
+                .append(abstractCommand.toString())
+                .append(System.lineSeparator())
+        );
+
+        return new CommandComplete(stringBuilder.toString(), id);
     }
 
     @Override

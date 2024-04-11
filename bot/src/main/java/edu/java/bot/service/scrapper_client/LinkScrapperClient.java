@@ -1,12 +1,11 @@
 package edu.java.bot.service.scrapper_client;
 
-import edu.java.exceptions.BadRequestException.BadRequestException;
-import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.requests.AddLinkRequest;
 import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.ApiErrorResponse;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -16,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 public final class LinkScrapperClient implements ScrapperClient {
     private static final String TG_CHAT_ID = "/tg-chat/";
     private static final String LINKS = "/links";
@@ -34,6 +34,7 @@ public final class LinkScrapperClient implements ScrapperClient {
 
     @Override
     public Mono<Void> registerChat(long id) {
+        log.info("Send chat register request");
         return webClient
             .post()
             .uri(TG_CHAT_ID + id)
@@ -49,6 +50,7 @@ public final class LinkScrapperClient implements ScrapperClient {
 
     @Override
     public Mono<Void> deleteChat(long id) {
+        log.info("Send chat delete request");
         return webClient
             .delete()
             .uri(TG_CHAT_ID + id)
@@ -69,6 +71,7 @@ public final class LinkScrapperClient implements ScrapperClient {
 
     @Override
     public Mono<ListLinksResponse> allTrackedLinks(long id) {
+        log.info("Send all tracked links request");
         return webClient
             .get()
             .uri(LINKS)
@@ -85,6 +88,7 @@ public final class LinkScrapperClient implements ScrapperClient {
 
     @Override
     public Mono<LinkResponse> startTrackLink(long id, AddLinkRequest addLinkRequest) {
+        log.info("Send start track link request");
         return webClient
             .post()
             .uri(LINKS)
@@ -94,13 +98,15 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
             .bodyToMono(LinkResponse.class);
     }
 
     @Override
     public Mono<LinkResponse> stopTrackLink(long id, RemoveLinkRequest removeLinkRequest) {
+        log.info("Send stop track link request");
         return webClient
             .method(HttpMethod.DELETE)
             .uri(LINKS)
@@ -110,11 +116,13 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
-                clientResponse -> clientResponse.bodyToMono(BadRequestException.class).flatMap(Mono::error)
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
-                clientResponse -> clientResponse.bodyToMono(NotFoundException.class).flatMap(Mono::error)
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
             .bodyToMono(LinkResponse.class);
     }

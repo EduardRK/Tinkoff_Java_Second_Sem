@@ -48,7 +48,10 @@ public final class ListCommand extends AbstractCommand {
         StringBuilder stringBuilder = new StringBuilder();
 
         listLinksResponse.links().forEach(
-            linkResponse -> stringBuilder.append(linkResponse.url()).append(System.lineSeparator())
+            linkResponse -> stringBuilder
+                .append(linkResponse.url())
+                .append(System.lineSeparator())
+                .append(System.lineSeparator())
         );
 
         return new CommandComplete(stringBuilder.toString(), id);

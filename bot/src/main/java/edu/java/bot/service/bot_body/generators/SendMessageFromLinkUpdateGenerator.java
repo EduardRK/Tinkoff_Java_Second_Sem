@@ -14,16 +14,16 @@ public final class SendMessageFromLinkUpdateGenerator implements Generator<List<
 
     @Override
     public List<SendMessage> nextObject(LinkUpdateRequest object) {
-        return object.tgChatIds()
+        return object
+            .tgChatIds()
             .stream()
             .map(id -> new SendMessage(id, message(object)).parseMode(PARSE_MODE))
             .toList();
     }
 
     private String message(LinkUpdateRequest linkUpdateRequest) {
-        return "New update: " + '\n'
-            + "Link: " + linkUpdateRequest.uri() + '\n'
-            + '\n'
+        return "New update: \n"
+            + "Link: " + linkUpdateRequest.uri() + "\n\n"
             + linkUpdateRequest.description();
     }
 }

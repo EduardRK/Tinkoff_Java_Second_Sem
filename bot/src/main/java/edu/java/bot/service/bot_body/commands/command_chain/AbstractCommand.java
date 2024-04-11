@@ -3,8 +3,6 @@ package edu.java.bot.service.bot_body.commands.command_chain;
 import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.service.bot_body.commands.Command;
 import edu.java.bot.service.scrapper_client.ScrapperClient;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractCommand implements Command {
     protected final ScrapperClient scrapperClient;

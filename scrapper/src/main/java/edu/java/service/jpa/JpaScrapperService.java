@@ -100,8 +100,6 @@ public class JpaScrapperService implements ScrapperService {
         chatEntity.addLink(linkEntity);
         chatRepository.save(chatEntity);
 
-        entityManager.flush();
-
         return new LinkResponse(linkEntity.id(), uri);
     }
 
@@ -126,8 +124,6 @@ public class JpaScrapperService implements ScrapperService {
         LinkEntity linkEntity = linkRepository.findByUri(uri).get();
         linkRepository.deleteByUri(uri);
         chatRepository.findById(tgChatId).get().links().remove(linkEntity);
-
-        entityManager.flush();
 
         return new LinkResponse(tgChatId, uri);
     }

@@ -3,7 +3,6 @@ package edu.java.bot.service.handlers;
 import edu.java.bot.service.handlers.tasks.LinkUpdateExecutionTask;
 import edu.java.bot.service.scrapper_client.ScrapperClient;
 import edu.java.bot.service.telegram_bot.TelegramBotComponent;
-import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.requests.LinkUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
