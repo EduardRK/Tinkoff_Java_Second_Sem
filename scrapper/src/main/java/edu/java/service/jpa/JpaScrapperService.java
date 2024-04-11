@@ -72,7 +72,8 @@ public class JpaScrapperService implements ScrapperService {
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
         } else if (
-            chatRepository.findById(tgChatId)
+            chatRepository
+                .findById(tgChatId)
                 .get()
                 .links()
                 .stream()
@@ -110,7 +111,8 @@ public class JpaScrapperService implements ScrapperService {
         } else if (chatRepository.findById(tgChatId).isEmpty()) {
             throw new ChatsNotRegisteredException(List.of(tgChatId), uri);
         } else if (
-            !chatRepository.findById(tgChatId)
+            !chatRepository
+                .findById(tgChatId)
                 .get()
                 .links()
                 .stream()
@@ -124,6 +126,8 @@ public class JpaScrapperService implements ScrapperService {
         LinkEntity linkEntity = linkRepository.findByUri(uri).get();
         linkRepository.deleteByUri(uri);
         chatRepository.findById(tgChatId).get().links().remove(linkEntity);
+
+        entityManager.flush();
 
         return new LinkResponse(tgChatId, uri);
     }
@@ -142,7 +146,8 @@ public class JpaScrapperService implements ScrapperService {
         List<Link> linkList = chatEntity.links().stream().map(LinkEntity::link).toList();
 
         return new ListLinksResponse(
-            linkList.stream()
+            linkList
+                .stream()
                 .map(link -> new LinkResponse(link.id(), link.uri()))
                 .toList(),
             linkList.size()
@@ -153,7 +158,8 @@ public class JpaScrapperService implements ScrapperService {
     public List<Link> findAllWithFilter(Duration updateCheckTime) {
         OffsetDateTime minuses = OffsetDateTime.now().minus(updateCheckTime);
 
-        List<Link> list = linkRepository.findByLastCheckLessThan(minuses)
+        List<Link> list = linkRepository
+            .findByLastCheckLessThan(minuses)
             .stream()
             .map(LinkEntity::link)
             .toList();
@@ -170,7 +176,8 @@ public class JpaScrapperService implements ScrapperService {
 
     @Override
     public List<Chat> getAllChats(long linkId) {
-        return linkRepository.findById(linkId)
+        return linkRepository
+            .findById(linkId)
             .orElse(new LinkEntity())
             .chats()
             .stream()
@@ -185,7 +192,8 @@ public class JpaScrapperService implements ScrapperService {
 
     @Override
     public List<Link> getAllLinks(long chatId) {
-        return chatRepository.findById(chatId)
+        return chatRepository
+            .findById(chatId)
             .orElse(new ChatEntity())
             .links()
             .stream()
