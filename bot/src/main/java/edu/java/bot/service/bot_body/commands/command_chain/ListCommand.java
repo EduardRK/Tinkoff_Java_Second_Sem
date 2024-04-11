@@ -4,8 +4,8 @@ import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.service.bot_body.commands.Command;
 import edu.java.bot.service.bot_body.commands.CommandComplete;
 import edu.java.bot.service.bot_body.commands.EmptyCommand;
+import edu.java.bot.service.scrapper_client.ApiErrorException;
 import edu.java.bot.service.scrapper_client.ScrapperClient;
-import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.responses.ListLinksResponse;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -37,8 +37,7 @@ public final class ListCommand extends AbstractCommand {
         long id = message.chat().id();
 
         Optional<ListLinksResponse> linksResponse = scrapperClient.allTrackedLinks(id)
-            .onErrorResume(BadRequestException.class, e -> Mono.empty())
-            .then(Mono.just(new ListLinksResponse(new ArrayList<>(), 0)))
+            .onErrorResume(ApiErrorException.class, e -> Mono.just(new ListLinksResponse(new ArrayList<>(), 0)))
             .blockOptional();
 
         if (linksResponse.isEmpty() || linksResponse.get().size() == 0) {

@@ -16,11 +16,11 @@ public final class LinkUpdateHandler extends BaseHandler<LinkUpdateRequest> {
     }
 
     @Override
-    public void put(LinkUpdateRequest value) throws BadRequestException {
+    public void put(LinkUpdateRequest linkUpdateRequest) {
         EXECUTOR_SERVICE.execute(
             new LinkUpdateExecutionTask(
                 telegramBotComponent.telegramBot(),
-                value
+                linkUpdateRequest
             )
         );
     }

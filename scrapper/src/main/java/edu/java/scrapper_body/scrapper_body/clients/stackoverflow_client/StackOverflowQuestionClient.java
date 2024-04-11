@@ -43,11 +43,17 @@ public final class StackOverflowQuestionClient extends AbstractClient {
         }
 
         Matcher matcher = PATTERN.matcher(uri.toString());
-        matcher.matches();
+        String groupId;
+
+        if (matcher.find()) {
+            groupId = matcher.group(2);
+        } else {
+            return new ArrayList<>();
+        }
 
         StackOverflowResponse stackOverflowResponse = webClient
             .get()
-            .uri("/questions/" + matcher.group(2) + "/answers" + FILTERS)
+            .uri("/questions/" + groupId + "/answers" + FILTERS)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToMono(StackOverflowResponse.class)

@@ -17,8 +17,8 @@ public final class UpdateHandler extends BaseHandler<List<Update>> {
     }
 
     @Override
-    public void put(List<Update> value) {
-        value.forEach(update -> EXECUTOR_SERVICE.execute(
+    public void put(List<Update> updates) {
+        updates.forEach(update -> EXECUTOR_SERVICE.execute(
                 new UpdateExecutionTask(
                     telegramBotComponent.telegramBot(),
                     scrapperClient,

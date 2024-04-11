@@ -14,7 +14,6 @@ public final class CommandUpdateListener implements UpdatesListener {
         this.handler = handler;
     }
 
-    @SneakyThrows
     @Override
     public int process(List<Update> updates) {
         handler.put(updates);

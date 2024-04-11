@@ -2,12 +2,12 @@ package edu.java.exceptions.BadRequestException;
 
 import java.util.List;
 
-public abstract class BadRequestException extends Exception {
+public class BadRequestException extends Exception {
     protected static final String DEFAULT_MESSAGE = "Bad request";
     private final List<Long> ids;
     private final String uri;
 
-    protected BadRequestException(List<Long> ids, String uri, String message) {
+    public BadRequestException(List<Long> ids, String uri, String message) {
         super(message);
         this.ids = ids;
         this.uri = uri;
