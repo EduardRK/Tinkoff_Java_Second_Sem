@@ -19,7 +19,7 @@ public class DefaultExceptionService implements ExceptionService {
     @Override
     public ApiErrorResponse incorrectData(BadRequestException exception) {
         return new ApiErrorResponse(
-            "Incorrect id: " + exception.ids().getFirst(),
+            "Incorrect user id",
             String.valueOf(HttpStatus.BAD_REQUEST),
             "IncorrectData",
             exception.getMessage(),
@@ -30,7 +30,7 @@ public class DefaultExceptionService implements ExceptionService {
     @Override
     public ApiErrorResponse chatAlreadyRegistered(BadRequestException exception) {
         return new ApiErrorResponse(
-            CHAT_WITH_ID + exception.ids().getFirst() + " already registered",
+            "User already registered",
             String.valueOf(HttpStatus.BAD_REQUEST),
             "ChatAlreadyRegistered",
             exception.getMessage(),
@@ -41,7 +41,7 @@ public class DefaultExceptionService implements ExceptionService {
     @Override
     public ApiErrorResponse uriAlreadyTracked(BadRequestException exception) {
         return new ApiErrorResponse(
-            exception.uri() + " already tracked",
+            "Link already tracked",
             String.valueOf(HttpStatus.BAD_REQUEST),
             "UriAlreadyTracked",
             exception.getMessage(),
@@ -52,7 +52,7 @@ public class DefaultExceptionService implements ExceptionService {
     @Override
     public ApiErrorResponse chatNotTrackedUri(NotFoundException exception) {
         return new ApiErrorResponse(
-            CHAT_WITH_ID + exception.id() + " doesn't track link " + exception.uri(),
+            "User doesn't track link",
             String.valueOf(HttpStatus.NOT_FOUND),
             "ChatNotTrackedUri",
             exception.getMessage(),
@@ -63,7 +63,7 @@ public class DefaultExceptionService implements ExceptionService {
     @Override
     public ApiErrorResponse chatNotRegistered(NotFoundException exception) {
         return new ApiErrorResponse(
-            CHAT_WITH_ID + exception.id() + " not registered",
+            "User not registered",
             String.valueOf(HttpStatus.NOT_FOUND),
             "ChatNotRegistered",
             exception.getMessage(),
