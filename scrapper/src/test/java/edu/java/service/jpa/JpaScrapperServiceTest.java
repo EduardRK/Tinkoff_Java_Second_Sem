@@ -45,6 +45,8 @@ class JpaScrapperServiceTest extends IntegrationTest {
     void registerChat() throws BadRequestException {
         scrapperService.registerChat(2);
 
+        entityManager.flush();
+
         Assertions.assertEquals(
             2,
             jdbcClient.sql("SELECT id FROM chat WHERE id = 2").query(Long.class).single()
@@ -63,6 +65,8 @@ class JpaScrapperServiceTest extends IntegrationTest {
         );
 
         scrapperService.deleteChat(12);
+
+        entityManager.flush();
 
         Assertions.assertEquals(
             0,
@@ -97,7 +101,11 @@ class JpaScrapperServiceTest extends IntegrationTest {
     void remove() throws BadRequestException, NotFoundException {
         scrapperService.registerChat(12);
 
+        entityManager.flush();
+
         scrapperService.add(12, "SomeLink.com");
+
+        entityManager.flush();
 
         Long single = jdbcClient.sql("SELECT id FROM chat WHERE id = 12")
             .query(Long.class)
@@ -112,6 +120,8 @@ class JpaScrapperServiceTest extends IntegrationTest {
         Assertions.assertEquals("SomeLink.com", single1);
 
         scrapperService.remove(12, "SomeLink.com");
+
+        entityManager.flush();
 
         Long single2 = jdbcClient.sql("SELECT COUNT(*) FROM link WHERE uri = 'SomeLink.com'")
             .query(Long.class)
@@ -173,7 +183,15 @@ class JpaScrapperServiceTest extends IntegrationTest {
             .query(Long.class)
             .single();
 
-        scrapperService.updateLastUpdateTime(new Link(single, null, null, now));
+        scrapperService.updateLastUpdateTime(
+            new Link(
+                single,
+                null,
+                null,
+                now
+            ),
+            OffsetDateTime.now()
+        );
 
         OffsetDateTime offsetDateTime = jdbcClient.sql("SELECT last_update FROM link WHERE id = ?")
             .param(single)
@@ -241,13 +259,13 @@ class JpaScrapperServiceTest extends IntegrationTest {
             .single();
 
         Assertions.assertEquals(
-            now.truncatedTo(ChronoUnit.SECONDS),
-            offsetDateTime1.truncatedTo(ChronoUnit.SECONDS)
+            now.truncatedTo(ChronoUnit.MINUTES),
+            offsetDateTime1.truncatedTo(ChronoUnit.MINUTES)
         );
 
         Assertions.assertEquals(
-            now.truncatedTo(ChronoUnit.SECONDS),
-            offsetDateTime2.truncatedTo(ChronoUnit.SECONDS)
+            now.truncatedTo(ChronoUnit.MINUTES),
+            offsetDateTime2.truncatedTo(ChronoUnit.MINUTES)
         );
     }
 

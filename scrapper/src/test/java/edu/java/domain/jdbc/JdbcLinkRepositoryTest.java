@@ -131,11 +131,13 @@ class JdbcLinkRepositoryTest extends IntegrationTest {
                 "SomeTestLink.com",
                 OffsetDateTime.MIN,
                 OffsetDateTime.MAX
-            )
+            ),
+            OffsetDateTime.MAX
         );
 
         Assertions.assertTrue(
-            jdbcLinkRepository.getAllLinksUpdateLastCheck()
+            jdbcLinkRepository
+                .getAllLinksUpdateLastCheck()
                 .stream()
                 .map(Link::lastUpdate)
                 .toList()

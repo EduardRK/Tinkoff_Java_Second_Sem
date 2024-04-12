@@ -18,6 +18,7 @@ import edu.java.service.ScrapperService;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,7 +102,8 @@ public class JdbcScrapperService implements ScrapperService {
         List<Link> linkList = chatLinkRepository.getAllLinks(tgChatId);
 
         return new ListLinksResponse(
-            linkList.stream()
+            linkList
+                .stream()
                 .map(link -> new LinkResponse(link.id(), link.uri()))
                 .toList(),
             linkList.size()
@@ -114,8 +116,8 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
-    public void updateLastUpdateTime(Link link) {
-        linkRepository.updateLastUpdateTime(link);
+    public void updateLastUpdateTime(Link link, OffsetDateTime now) {
+        linkRepository.updateLastUpdateTime(link, now);
     }
 
     @Override
@@ -125,7 +127,7 @@ public class JdbcScrapperService implements ScrapperService {
 
     @Override
     public void updateAllLastUpdateTime() {
-        linkRepository.updateAllLastUpdateTime(OffsetDateTime.now());
+        linkRepository.updateAllLastUpdateTime(OffsetDateTime.now(ZoneOffset.UTC));
     }
 
     @Override

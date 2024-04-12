@@ -8,6 +8,8 @@ import edu.java.scrapper_body.scrapper_body.clients_body.Response;
 import edu.java.service.ScrapperService;
 import java.net.URI;
 import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,14 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
                     botClient.sendUpdates(
                         responseList
                             .parallelStream()
-                            .filter(response -> response.date().isAfter(link.lastUpdate()))
+                            .filter(response -> response
+                                .date()
+                                .isAfter(link.lastUpdate().withOffsetSameInstant(ZoneOffset.UTC))
+                            )
+                            .peek(response -> scrapperService.updateLastUpdateTime(
+                                link,
+                                OffsetDateTime.now(ZoneOffset.UTC)
+                            ))
                             .map(
                                 response -> new LinkUpdateRequest(
                                     link.id(),
@@ -65,8 +74,6 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
                     );
                 }
             );
-
-        scrapperService.updateAllLastUpdateTime();
 
         log.info("Finish update");
     }

@@ -6,6 +6,7 @@ import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface LinkService {
@@ -17,7 +18,7 @@ public interface LinkService {
 
     List<Link> findAllWithFilter(Duration updateCheckTime);
 
-    void updateLastUpdateTime(Link link);
+    void updateLastUpdateTime(Link link, OffsetDateTime now);
 
     void updateAllLastUpdateTime();
 }
