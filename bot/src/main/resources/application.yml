@@ -27,23 +27,22 @@ kafka:
     replications-factor: 1
 
 management:
-  server:
-    port: 8091
   endpoints:
     web:
-      base-path: /
+      base-path: "/"
       exposure:
-        include: "*"
-  endpoint:
-    info:
-      enabled: true
-    health:
-      enabled: true
-    prometheus:
-      enabled: true
+        include: info, health, prometheus
+      path-mapping:
+        prometheus: "metrics"
   metrics:
     tags:
       application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  server:
+    port: 8091
 
 spring:
   application:
