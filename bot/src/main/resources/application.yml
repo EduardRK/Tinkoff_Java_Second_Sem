@@ -1,5 +1,5 @@
 app:
-  telegram-token: ${TELEGRAM_TOKEN}
+  telegram-token: 6466351131:AAFWa5nnV2BlBzemkwcPwzJ7Rl2T3xwhcAU
   use-queue: true
 
 retry:
@@ -25,6 +25,25 @@ kafka:
     topic-name: dlq_topic
     partitions: 1
     replications-factor: 1
+
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 spring:
   application:
