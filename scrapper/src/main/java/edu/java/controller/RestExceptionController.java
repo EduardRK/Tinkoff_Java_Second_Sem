@@ -5,6 +5,7 @@ import edu.java.exceptions.BadRequestException.IncorrectDataException;
 import edu.java.exceptions.BadRequestException.UriAlreadyTrackedException;
 import edu.java.exceptions.NotFoundException.ChatNotRegisteredException;
 import edu.java.exceptions.NotFoundException.ChatNotTrackedUriException;
+import edu.java.exceptions.TooManyRequestsException;
 import edu.java.responses.ApiErrorResponse;
 import edu.java.service.exception.ExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,12 @@ public final class RestExceptionController extends ResponseEntityExceptionHandle
         ApiErrorResponse response = exceptionService.chatNotTrackedUri(exception);
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = TooManyRequestsException.class)
+    public ResponseEntity<ApiErrorResponse> tooManyRequests(TooManyRequestsException exception) {
+        ApiErrorResponse response = exceptionService.tooManyRequests(exception);
+
+        return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
     }
 }

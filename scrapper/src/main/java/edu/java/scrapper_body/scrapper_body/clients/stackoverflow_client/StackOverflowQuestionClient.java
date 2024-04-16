@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 
 public final class StackOverflowQuestionClient extends AbstractClient {
     private static final String BASE_URI = "https://api.stackexchange.com/2.3";
@@ -20,20 +21,20 @@ public final class StackOverflowQuestionClient extends AbstractClient {
     private static final String FILTERS = "?order=desc&sort=votes&site=stackoverflow&filter=!nNPvSNdWme";
     private static final Pattern PATTERN = Pattern.compile("^(.+questions)/(\\d+)/(.*)$");
 
-    public StackOverflowQuestionClient(String baseURI, Client nextClient) {
-        super(WebClient.create(baseURI), nextClient);
+    public StackOverflowQuestionClient(String baseURI, Retry retry, Client nextClient) {
+        super(WebClient.create(baseURI), retry, nextClient);
     }
 
-    public StackOverflowQuestionClient(Client nextClient) {
-        this(BASE_URI, nextClient);
+    public StackOverflowQuestionClient(Client nextClient, Retry retry) {
+        this(BASE_URI, retry, nextClient);
     }
 
-    public StackOverflowQuestionClient(String baseURI) {
-        this(baseURI, new UnsupportedClient());
+    public StackOverflowQuestionClient(String baseURI, Retry retry) {
+        this(baseURI, retry, new UnsupportedClient());
     }
 
-    public StackOverflowQuestionClient() {
-        this(BASE_URI, new UnsupportedClient());
+    public StackOverflowQuestionClient(Retry retry) {
+        this(BASE_URI, retry, new UnsupportedClient());
     }
 
     @Override
@@ -58,6 +59,7 @@ public final class StackOverflowQuestionClient extends AbstractClient {
             .retrieve()
             .bodyToMono(StackOverflowResponse.class)
             .onErrorReturn(new StackOverflowResponse(new ArrayList<>()))
+            .retryWhen(retry)
             .block();
 
         if (Objects.requireNonNull(stackOverflowResponse).answers().isEmpty()) {

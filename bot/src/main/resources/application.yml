@@ -1,6 +1,12 @@
 app:
   telegram-token: 6466351131:AAFWa5nnV2BlBzemkwcPwzJ7Rl2T3xwhcAU
 
+retry:
+  type: constant
+  base-delay: 5
+  max-attempts: 5
+  status-codes: [ 429, 500, 501, 502, 503 ]
+
 spring:
   application:
     name: bot

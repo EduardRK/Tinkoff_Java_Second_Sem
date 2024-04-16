@@ -1,4 +1,4 @@
 package edu.java.service.exception;
 
-public interface ExceptionService extends NotFoundExceptionService, BadRequestExceptionService {
+public interface ExceptionService extends NotFoundExceptionService, BadRequestExceptionService, TooManyRequestsService {
 }

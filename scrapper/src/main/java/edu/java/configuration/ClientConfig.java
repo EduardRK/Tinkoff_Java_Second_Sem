@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import reactor.util.retry.Retry;
 
 @Configuration
 @EnableScheduling
@@ -14,8 +15,8 @@ public class ClientConfig {
     }
 
     @Bean(name = "clientBean")
-    public ClientChain clientChain() {
-        return ClientChain.defaultChain();
+    public ClientChain clientChain(Retry retry) {
+        return ClientChain.defaultChain(retry);
     }
 
     @Bean
