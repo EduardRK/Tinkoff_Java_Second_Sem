@@ -41,9 +41,9 @@ public class DatabaseIntegrationTest extends IntegrationTest {
             tables.add(resultSet.getString("TABLE_NAME"));
         }
 
-        Assertions.assertTrue(tables.contains("chats"));
-        Assertions.assertTrue(tables.contains("chatlink"));
-        Assertions.assertTrue(tables.contains("links"));
+        Assertions.assertTrue(tables.contains("chat"));
+        Assertions.assertTrue(tables.contains("chat_link"));
+        Assertions.assertTrue(tables.contains("link"));
     }
 
     @Test
@@ -59,15 +59,17 @@ public class DatabaseIntegrationTest extends IntegrationTest {
         );
 
         Statement statement = connection.createStatement();
-        statement.execute("INSERT INTO chats (id) VALUES (12)");
+        statement.execute("INSERT INTO chat (id) VALUES (1)");
 
-        ResultSet resultSet = statement.executeQuery("SELECT id FROM chats");
+        ResultSet resultSet = statement.executeQuery("SELECT id FROM chat");
 
         resultSet.next();
         Assertions.assertEquals(
-            12,
+            1,
             resultSet.getInt("id")
         );
+
+        statement.execute("DELETE FROM chat WHERE id = 1");
     }
 
     @Test
@@ -83,9 +85,9 @@ public class DatabaseIntegrationTest extends IntegrationTest {
         );
 
         Statement statement = connection.createStatement();
-        statement.execute("INSERT INTO links (uri) VALUES ('somelink.com')");
+        statement.execute("INSERT INTO link (uri) VALUES ('somelink.com')");
 
-        ResultSet resultSet = statement.executeQuery("SELECT uri FROM links");
+        ResultSet resultSet = statement.executeQuery("SELECT uri FROM link");
 
         resultSet.next();
         Assertions.assertEquals(

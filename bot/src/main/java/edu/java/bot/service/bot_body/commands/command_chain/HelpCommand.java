@@ -1,11 +1,10 @@
 package edu.java.bot.service.bot_body.commands.command_chain;
 
 import com.pengrad.telegrambot.model.Message;
-import edu.java.bot.domain.InMemoryDataBase;
 import edu.java.bot.service.bot_body.commands.Command;
 import edu.java.bot.service.bot_body.commands.CommandComplete;
 import edu.java.bot.service.bot_body.commands.EmptyCommand;
-import edu.java.bot.service.bot_body.data_classes.Link;
+import edu.java.bot.service.scrapper_client.ScrapperClient;
 import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.Contract;
@@ -18,39 +17,44 @@ public final class HelpCommand extends AbstractCommand {
             new HelpCommand(),
             new ListCommand(),
             new TrackCommand(),
-            new UntrackCommand()
+            new UntrackCommand(),
+            new DeleteCommand()
         )
     );
 
-    public HelpCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message, Command next) {
-        super(inMemoryDataBase, message, next);
+    public HelpCommand(ScrapperClient scrapperClient, Command next) {
+        super(scrapperClient, next);
     }
 
-    public HelpCommand(InMemoryDataBase<Long, Link> inMemoryDataBase, Message message) {
-        this(inMemoryDataBase, message, new EmptyCommand(message));
+    public HelpCommand(ScrapperClient scrapperClient) {
+        super(scrapperClient, new EmptyCommand());
     }
 
     public HelpCommand() {
-        this(null, null);
+        super(null, null);
     }
 
     @Override
-    public CommandComplete applyCommand() {
-        if (notValid()) {
-            return nextCommand.applyCommand();
+    public CommandComplete applyCommand(Message message) {
+        if (notValid(message)) {
+            return nextCommand.applyCommand(message);
         }
+
+        long id = message.chat().id();
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (AbstractCommand command : COMMAND_LIST) {
-            stringBuilder.append(command.toString()).append(System.lineSeparator());
-        }
+        COMMAND_LIST.forEach(
+            abstractCommand -> stringBuilder
+                .append(abstractCommand.toString())
+                .append(System.lineSeparator())
+        );
 
-        return new CommandComplete(stringBuilder.toString(), message.chat().id());
+        return new CommandComplete(stringBuilder.toString(), id);
     }
 
     @Override
-    protected boolean notValid() {
-        return messageTextNull() || !message.text().equals("/help");
+    protected boolean notValid(Message message) {
+        return messageTextNull(message) || !message.text().equals("/help");
     }
 
     @Contract(pure = true)

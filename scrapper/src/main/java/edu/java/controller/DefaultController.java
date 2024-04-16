@@ -7,7 +7,7 @@ import edu.java.requests.RemoveLinkRequest;
 import edu.java.responses.ApiErrorResponse;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
-import edu.java.service.services.ScrapperService;
+import edu.java.service.ScrapperService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;

@@ -1,14 +1,21 @@
 app:
   scheduler:
     enable: true
-    interval: 10s
-    force-check-delay: 10s
+    interval: 30s
+    force-check-delay: 30s
+  database-access-type: JDBC
+
 
 spring:
   application:
     name: scrapper
   liquibase:
     enabled: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/scrapper
