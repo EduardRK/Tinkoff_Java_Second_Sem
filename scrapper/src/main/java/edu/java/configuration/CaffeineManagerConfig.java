@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
-@EnableCaching
 public class CaffeineManagerConfig {
     private final CacheConfig cacheConfig;
 

@@ -20,7 +20,7 @@ public final class RetryFactory {
                 retryConfig.maxAttempts(),
                 retryConfig.baseDelay()
             )
-            .doAfterRetry(retrySignal -> log.error("Constant retry error"))
+            .doAfterRetry(retrySignal -> log.info("Constant retry error"))
             .filter(throwable -> isStatusCodeSupportsRetry(retryConfig, throwable));
     }
 
@@ -28,6 +28,8 @@ public final class RetryFactory {
         return Retry.from(
             retrySignalFlux -> retrySignalFlux.flatMap(
                 retrySignal -> {
+                    log.info("Linear retry error");
+
                     if (isStatusCodeSupportsRetry(retryConfig, retrySignal.failure())) {
                         return Mono.error(retrySignal.failure());
                     }
@@ -49,7 +51,8 @@ public final class RetryFactory {
         return Retry.backoff(
                 retryConfig.maxAttempts(),
                 retryConfig.baseDelay()
-            ).doAfterRetry(retrySignal -> log.error("Exponential retry error"))
+            )
+            .doAfterRetry(retrySignal -> log.info("Exponential retry error"))
             .filter(throwable -> isStatusCodeSupportsRetry(retryConfig, throwable));
     }
 

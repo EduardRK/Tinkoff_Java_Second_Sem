@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import reactor.util.retry.Retry;
 
 @Configuration
-@EnableScheduling
 public class ClientConfig {
     public ClientConfig() {
 
