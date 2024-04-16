@@ -41,8 +41,7 @@ public final class ListCommand extends AbstractCommand {
         AtomicReference<ApiErrorResponse> apiErrorResponse = new AtomicReference<>();
 
         Optional<ListLinksResponse> linksResponse = scrapperClient.allTrackedLinks(id)
-            .onErrorResume(ApiErrorException.class, e ->
-            {
+            .onErrorResume(ApiErrorException.class, e -> {
                 apiErrorResponse.set(e.apiErrorResponse());
                 return Mono.just(new ListLinksResponse(new ArrayList<>(), 0));
             })
