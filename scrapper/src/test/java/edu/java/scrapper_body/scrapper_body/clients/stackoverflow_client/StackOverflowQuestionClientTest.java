@@ -8,6 +8,7 @@ import edu.java.scrapper_body.scrapper_body.clients_body.Response;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -17,11 +18,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import reactor.util.retry.Retry;
 
 class StackOverflowQuestionClientTest {
     private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer();
     private static final String ANSWER_LINK =
         "https://stackoverflow.com/questions/78040876/maven-generate-sources-generates-classes-with-javax-instead-of-jakarta-namespace";
+    Retry retry = Retry.fixedDelay(1, Duration.ofSeconds(10));
 
     @BeforeAll
     public static void serverStart() throws IOException {
@@ -47,7 +50,7 @@ class StackOverflowQuestionClientTest {
 
     @Test
     void newUpdates() throws URISyntaxException, JsonProcessingException {
-        StackOverflowQuestionClient client = new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl());
+        StackOverflowQuestionClient client = new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl(), retry);
         List<Response> responses = new ArrayList<>(
             List.of(
                 new Response() {
@@ -90,7 +93,7 @@ class StackOverflowQuestionClientTest {
 
     @Test
     void notValid() throws URISyntaxException {
-        StackOverflowQuestionClient client = new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl());
+        StackOverflowQuestionClient client = new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl(), retry);
 
         Assertions.assertTrue(
             client.notValid(new URI(
@@ -102,8 +105,8 @@ class StackOverflowQuestionClientTest {
     void constructorsTest() {
         Assertions.assertDoesNotThrow(
             () -> {
-                new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl());
-                new StackOverflowQuestionClient();
+                new StackOverflowQuestionClient(WIRE_MOCK_SERVER.baseUrl(), retry);
+                new StackOverflowQuestionClient(retry);
             }
         );
     }

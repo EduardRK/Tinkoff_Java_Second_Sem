@@ -5,6 +5,22 @@ app:
     force-check-delay: 30s
   database-access-type: JDBC
 
+retry:
+  type: exponential
+  base-delay: 5
+  max-attempts: 3
+  status-codes: [ 429, 500, 501, 502, 503 ]
+
+rate-limiting:
+  capacity: 200
+  refill-tokens: 20
+  refill-interval: 5s
+
+cache:
+  maximum-size: 100
+  expire-after-write: 15m
+  expire-after-access: 10m
+  eviction-strategy: LRU
 
 spring:
   application:

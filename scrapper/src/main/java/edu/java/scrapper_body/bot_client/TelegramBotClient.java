@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 @Component
 @Slf4j
@@ -21,14 +22,18 @@ public final class TelegramBotClient implements BotClient {
     private static final String BASE_URI = "http://localhost:8090";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final WebClient webClient;
+    private final Retry retry;
 
-    public TelegramBotClient(String baseUri) {
-        this.webClient = WebClient.create(baseUri);
+    public TelegramBotClient(String baseUri, Retry retry) {
+        this.retry = retry;
+        this.webClient = WebClient.builder()
+            .baseUrl(baseUri)
+            .build();
     }
 
     @Autowired
-    public TelegramBotClient() {
-        this(BASE_URI);
+    public TelegramBotClient(Retry retry) {
+        this(BASE_URI, retry);
     }
 
     @Override
@@ -54,8 +59,8 @@ public final class TelegramBotClient implements BotClient {
                             ApiErrorResponse.class
                         );
 
-                        log.info(apiErrorResponse.code());
-                        log.info(apiErrorResponse.description());
+                        log.error(apiErrorResponse.code());
+                        log.error(apiErrorResponse.description());
                         apiErrorResponse.stacktrace().forEach(log::info);
 
                     } catch (JsonProcessingException ex) {
@@ -65,6 +70,7 @@ public final class TelegramBotClient implements BotClient {
 
                 return Mono.empty();
             })
+            .retryWhen(retry)
             .block();
     }
 

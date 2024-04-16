@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 @Component
 @Slf4j
@@ -22,14 +23,18 @@ public final class LinkScrapperClient implements ScrapperClient {
     private static final String ID = "Tg-Chat-Id";
     private static final String BASE_URI = "http://localhost:80";
     private final WebClient webClient;
+    private final Retry retry;
 
-    public LinkScrapperClient(String baseUri) {
-        this.webClient = WebClient.create(baseUri);
+    public LinkScrapperClient(String baseUri, Retry retry) {
+        this.webClient = WebClient.builder()
+            .baseUrl(baseUri)
+            .build();
+        this.retry = retry;
     }
 
     @Autowired
-    public LinkScrapperClient() {
-        this(BASE_URI);
+    public LinkScrapperClient(Retry retry) {
+        this(BASE_URI, retry);
     }
 
     @Override
@@ -45,7 +50,8 @@ public final class LinkScrapperClient implements ScrapperClient {
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
-            .bodyToMono(Void.class);
+            .bodyToMono(Void.class)
+            .retryWhen(retry);
     }
 
     @Override
@@ -66,7 +72,8 @@ public final class LinkScrapperClient implements ScrapperClient {
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
-            .bodyToMono(Void.class);
+            .bodyToMono(Void.class)
+            .retryWhen(retry);
     }
 
     @Override
@@ -83,7 +90,8 @@ public final class LinkScrapperClient implements ScrapperClient {
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
-            .bodyToMono(ListLinksResponse.class);
+            .bodyToMono(ListLinksResponse.class)
+            .retryWhen(retry);
     }
 
     @Override
@@ -101,7 +109,8 @@ public final class LinkScrapperClient implements ScrapperClient {
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
-            .bodyToMono(LinkResponse.class);
+            .bodyToMono(LinkResponse.class)
+            .retryWhen(retry);
     }
 
     @Override
@@ -124,6 +133,7 @@ public final class LinkScrapperClient implements ScrapperClient {
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
-            .bodyToMono(LinkResponse.class);
+            .bodyToMono(LinkResponse.class)
+            .retryWhen(retry);
     }
 }

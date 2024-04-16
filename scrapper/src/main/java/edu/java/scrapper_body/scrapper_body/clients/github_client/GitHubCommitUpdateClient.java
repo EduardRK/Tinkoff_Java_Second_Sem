@@ -11,25 +11,26 @@ import java.util.Objects;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 
 public final class GitHubCommitUpdateClient extends AbstractClient {
     private static final String BASE_URI = "https://api.github.com";
     private static final String HOST = "github.com";
 
-    public GitHubCommitUpdateClient(String baseURI, Client nextClient) {
-        super(WebClient.create(baseURI), nextClient);
+    public GitHubCommitUpdateClient(String baseURI, Retry retry, Client nextClient) {
+        super(WebClient.create(baseURI), retry, nextClient);
     }
 
-    public GitHubCommitUpdateClient(Client nextClient) {
-        this(BASE_URI, nextClient);
+    public GitHubCommitUpdateClient(Client nextClient, Retry retry) {
+        this(BASE_URI, retry, nextClient);
     }
 
-    public GitHubCommitUpdateClient(String baseURI) {
-        this(baseURI, new UnsupportedClient());
+    public GitHubCommitUpdateClient(String baseURI, Retry retry) {
+        this(baseURI, retry, new UnsupportedClient());
     }
 
-    public GitHubCommitUpdateClient() {
-        this(BASE_URI, new UnsupportedClient());
+    public GitHubCommitUpdateClient(Retry retry) {
+        this(BASE_URI, retry, new UnsupportedClient());
     }
 
     @Override
@@ -46,6 +47,7 @@ public final class GitHubCommitUpdateClient extends AbstractClient {
             .bodyToMono(new ParameterizedTypeReference<List<GitHubResponse>>() {
             })
             .onErrorReturn(new ArrayList<>())
+            .retryWhen(retry)
             .block();
 
         if (Objects.requireNonNull(gitHubResponses).isEmpty()) {
