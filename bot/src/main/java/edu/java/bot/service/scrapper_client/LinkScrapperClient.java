@@ -50,6 +50,11 @@ public final class LinkScrapperClient implements ScrapperClient {
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
+            )
             .bodyToMono(Void.class)
             .retryWhen(retry);
     }
@@ -72,6 +77,11 @@ public final class LinkScrapperClient implements ScrapperClient {
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
+            )
             .bodyToMono(Void.class)
             .retryWhen(retry);
     }
@@ -87,6 +97,16 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
+            )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
+            )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
@@ -106,6 +126,11 @@ public final class LinkScrapperClient implements ScrapperClient {
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
+            )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
@@ -130,6 +155,11 @@ public final class LinkScrapperClient implements ScrapperClient {
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
+                clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
+            )
+            .onStatus(
+                HttpStatus.TOO_MANY_REQUESTS::equals,
                 clientResponse -> clientResponse.bodyToMono(ApiErrorResponse.class)
                     .flatMap(apiErrorResponse -> Mono.error(new ApiErrorException(apiErrorResponse)))
             )
