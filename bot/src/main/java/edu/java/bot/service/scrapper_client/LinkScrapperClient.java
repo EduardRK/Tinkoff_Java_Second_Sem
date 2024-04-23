@@ -26,7 +26,8 @@ public final class LinkScrapperClient implements ScrapperClient {
     private final Retry retry;
 
     public LinkScrapperClient(String baseUri, Retry retry) {
-        this.webClient = WebClient.builder()
+        this.webClient = WebClient
+            .builder()
             .baseUrl(baseUri)
             .build();
         this.retry = retry;

@@ -7,7 +7,7 @@ class ApplicationConfigTest {
 
     @Test
     void telegramToken() {
-        ApplicationConfig applicationConfig = new ApplicationConfig("Some token");
+        ApplicationConfig applicationConfig = new ApplicationConfig("Some token", true);
 
         Assertions.assertEquals(
             "Some token",

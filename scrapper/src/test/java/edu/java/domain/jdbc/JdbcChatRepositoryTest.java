@@ -27,10 +27,10 @@ class JdbcChatRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void registerChat() {
-        jdbcChatRepository.registerChat(1);
+        jdbcChatRepository.registerChat(3);
 
         Assertions.assertTrue(
-            jdbcChatRepository.chatRegistered(1)
+            jdbcChatRepository.chatRegistered(3)
         );
     }
 
@@ -38,16 +38,16 @@ class JdbcChatRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void deleteChat() {
-        jdbcChatRepository.registerChat(1);
+        jdbcChatRepository.registerChat(5);
 
         Assertions.assertTrue(
-            jdbcChatRepository.chatRegistered(1)
+            jdbcChatRepository.chatRegistered(5)
         );
 
-        jdbcChatRepository.deleteChat(1);
+        jdbcChatRepository.deleteChat(5);
 
         Assertions.assertFalse(
-            jdbcChatRepository.chatRegistered(1)
+            jdbcChatRepository.chatRegistered(5)
         );
     }
 

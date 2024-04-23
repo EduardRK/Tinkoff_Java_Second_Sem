@@ -4,12 +4,16 @@ import edu.java.domain.dto.Link;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 public class JdbcLinkRepository implements LinkRepository {
     private final JdbcClient jdbcClient;
 
+    @Autowired
     public JdbcLinkRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }

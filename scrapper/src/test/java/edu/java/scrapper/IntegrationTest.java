@@ -18,8 +18,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 @DirtiesContext
@@ -29,9 +31,11 @@ public abstract class IntegrationTest {
         .withDatabaseName("scrapper")
         .withUsername("postgres")
         .withPassword("postgres");
+    public static KafkaContainer KAFKA = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.2"));
 
     static {
         POSTGRES.start();
+        KAFKA.start();
 
         try {
             runMigrations(POSTGRES);
@@ -71,5 +75,11 @@ public abstract class IntegrationTest {
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
         registry.add("spring.datasource.driver-class-name", POSTGRES::getDriverClassName);
+    }
+
+    @DynamicPropertySource
+    static void kafkaProperty(DynamicPropertyRegistry registry) {
+        registry.add("kafka.bootstrap-server", KAFKA::getBootstrapServers);
+        registry.add("app.use-queue", () -> "true");
     }
 }

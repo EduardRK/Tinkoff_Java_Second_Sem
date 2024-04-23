@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import reactor.util.retry.Retry;
 
 class StackOverflowQuestionClientTest {
-    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer();
+    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer(8070);
     private static final String ANSWER_LINK =
         "https://stackoverflow.com/questions/78040876/maven-generate-sources-generates-classes-with-javax-instead-of-jakarta-namespace";
     Retry retry = Retry.fixedDelay(1, Duration.ofSeconds(10));
@@ -30,8 +30,12 @@ class StackOverflowQuestionClientTest {
     public static void serverStart() throws IOException {
         WIRE_MOCK_SERVER
             .stubFor(
-                WireMock.get(WireMock.urlEqualTo(
-                        "/questions/78040876/answers?order=desc&sort=votes&site=stackoverflow&filter=!nNPvSNdWme"))
+                WireMock
+                    .get(
+                        WireMock.urlEqualTo(
+                            "/questions/78040876/answers?order=desc&sort=votes&site=stackoverflow&filter=!nNPvSNdWme"
+                        )
+                    )
                     .willReturn(WireMock.aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")

@@ -20,14 +20,13 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 public class JdbcScrapperService implements ScrapperService {
     private final JdbcChatRepository chatRepository;
     private final JdbcLinkRepository linkRepository;
     private final JdbcChatLinkRepository chatLinkRepository;
 
-    @Autowired
     public JdbcScrapperService(
         JdbcLinkRepository linkRepository,
         JdbcChatRepository chatRepository,
@@ -50,6 +49,7 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
+    @Transactional
     public void deleteChat(long tgChatId) throws BadRequestException, NotFoundException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -62,6 +62,7 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
+    @Transactional
     public LinkResponse add(long tgChatId, String uri) throws BadRequestException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);
@@ -76,6 +77,7 @@ public class JdbcScrapperService implements ScrapperService {
     }
 
     @Override
+    @Transactional
     public LinkResponse remove(long tgChatId, String uri) throws BadRequestException, NotFoundException {
         if (!chatRepository.correctChatId(tgChatId)) {
             throw new IncorrectDataException(tgChatId);

@@ -1,6 +1,5 @@
 package edu.java.bot.controller;
 
-import edu.java.bot.service.services.update_service.UpdateHandlerService;
 import edu.java.bot.service.services.update_service.UpdateService;
 import edu.java.exceptions.BadRequestException.BadRequestException;
 import edu.java.requests.LinkUpdateRequest;
@@ -26,7 +25,7 @@ public final class UpdateController {
     private final UpdateService updateService;
 
     @Autowired
-    public UpdateController(UpdateHandlerService updateService) {
+    public UpdateController(UpdateService updateService) {
         this.updateService = updateService;
     }
 
@@ -52,6 +51,7 @@ public final class UpdateController {
     @PostMapping(produces = "application/json")
     ResponseEntity<?> newUpdateFromClient(@RequestBody LinkUpdateRequest linkUpdateRequest) throws BadRequestException {
         updateService.handleUpdate(linkUpdateRequest);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

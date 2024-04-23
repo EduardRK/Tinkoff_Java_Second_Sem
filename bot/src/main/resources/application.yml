@@ -1,11 +1,48 @@
 app:
   telegram-token: 6466351131:AAFWa5nnV2BlBzemkwcPwzJ7Rl2T3xwhcAU
+  use-queue: true
 
 retry:
   type: constant
   base-delay: 5
   max-attempts: 5
   status-codes: [ 429, 500, 501, 502, 503 ]
+
+kafka:
+  update-queue:
+    bootstrap-server: localhost:9092
+    group-id: bot
+    topic-name: update_topic
+    concurrency: 3
+    poll-timeout: 3000
+    partitions: 1
+    replications-factor: 1
+  dlq:
+    bootstrap-server: localhost:9092
+    group-id: bot
+    auto-offset-reset: earliest
+    linger-ms: 10
+    topic-name: dlq_topic
+    partitions: 1
+    replications-factor: 1
+
+management:
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: info, health, prometheus
+      path-mapping:
+        prometheus: "metrics"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  server:
+    port: 8091
 
 spring:
   application:

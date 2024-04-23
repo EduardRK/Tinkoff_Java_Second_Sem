@@ -1,15 +1,43 @@
 app:
   scheduler:
     enable: true
-    interval: 30s
-    force-check-delay: 30s
-  database-access-type: JDBC
+    interval: 10s
+    force-check-delay: 10s
+  database-access-type: jpa
+  use-queue: true
 
 retry:
   type: exponential
   base-delay: 5
   max-attempts: 3
   status-codes: [ 429, 500, 501, 502, 503 ]
+
+kafka:
+  bootstrap-server: localhost:9092
+  group-id: scrapper
+  auto-offset-reset: earliest
+  linger-ms: 10
+  topic-name: update_topic
+  partitions: 1
+  replications-factor: 1
+
+management:
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: info, health, prometheus
+      path-mapping:
+        prometheus: "metrics"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  server:
+    port: 8081
 
 rate-limiting:
   capacity: 200
@@ -31,12 +59,16 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+    properties:
       dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/scrapper
     username: postgres
     password: postgres
+  sql:
+    init:
+      mode: always
 
 server:
   port: 80

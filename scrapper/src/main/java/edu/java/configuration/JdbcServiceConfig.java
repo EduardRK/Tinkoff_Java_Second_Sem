@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
 @Configuration
-@ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "JDBC")
+@ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jdbc")
 public class JdbcServiceConfig {
     public JdbcServiceConfig() {
     }

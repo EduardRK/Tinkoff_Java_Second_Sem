@@ -17,7 +17,6 @@ import edu.java.exceptions.NotFoundException.NotFoundException;
 import edu.java.responses.LinkResponse;
 import edu.java.responses.ListLinksResponse;
 import edu.java.service.ScrapperService;
-import jakarta.persistence.EntityManager;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -28,16 +27,10 @@ import java.util.Optional;
 public class JpaScrapperService implements ScrapperService {
     private final JpaChatRepository chatRepository;
     private final JpaLinkRepository linkRepository;
-    private final EntityManager entityManager;
 
-    public JpaScrapperService(
-        JpaLinkRepository linkRepository,
-        JpaChatRepository chatRepository,
-        EntityManager entityManager
-    ) {
+    public JpaScrapperService(JpaLinkRepository linkRepository, JpaChatRepository chatRepository) {
         this.chatRepository = chatRepository;
         this.linkRepository = linkRepository;
-        this.entityManager = entityManager;
     }
 
     @Override

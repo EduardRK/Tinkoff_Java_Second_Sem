@@ -2,10 +2,10 @@ package edu.java.scrapper_body.schedulers;
 
 import edu.java.domain.dto.Chat;
 import edu.java.requests.LinkUpdateRequest;
-import edu.java.scrapper_body.bot_client.BotClient;
 import edu.java.scrapper_body.scrapper_body.clients.ClientChain;
 import edu.java.scrapper_body.scrapper_body.clients_body.Response;
 import edu.java.service.ScrapperService;
+import edu.java.service.send_update.SendUpdateService;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -19,18 +19,18 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public final class LinkUpdaterScheduler implements UpdateScheduler {
-    private static final Duration UPDATE_CHECK_TIME = Duration.ofMinutes(1);
-    private final BotClient botClient;
+    private static final Duration UPDATE_CHECK_TIME = Duration.ofSeconds(30);
+    private final SendUpdateService sendUpdateService;
     private final ClientChain clientChain;
     private final ScrapperService scrapperService;
 
     @Autowired
     public LinkUpdaterScheduler(
-        BotClient botClient,
+        SendUpdateService sendUpdateService,
         ClientChain clientChain,
         ScrapperService scrapperService
     ) {
-        this.botClient = botClient;
+        this.sendUpdateService = sendUpdateService;
         this.clientChain = clientChain;
         this.scrapperService = scrapperService;
     }
@@ -46,7 +46,7 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
             .forEach(link -> {
                     List<? extends Response> responseList = clientChain.newUpdates(URI.create(link.uri()));
 
-                    botClient.sendUpdates(
+                    sendUpdateService.send(
                         responseList
                             .parallelStream()
                             .filter(response -> response
@@ -74,6 +74,8 @@ public final class LinkUpdaterScheduler implements UpdateScheduler {
                     );
                 }
             );
+
+        scrapperService.updateAllLastUpdateTime();
 
         log.info("Finish update");
     }

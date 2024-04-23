@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import reactor.util.retry.Retry;
 
 class GitHubCommitUpdateClientTest {
-    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer();
+    private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer(8070);
     private static final String REPOSITORY_LINK = "https://github.com/EduardRK/Fractal-Flame";
     Retry retry = Retry.fixedDelay(1, Duration.ofSeconds(10));
 
@@ -28,7 +28,8 @@ class GitHubCommitUpdateClientTest {
     public static void serverStart() throws IOException {
         WIRE_MOCK_SERVER
             .stubFor(
-                WireMock.get(WireMock.urlEqualTo("/repos/EduardRK/Fractal-Flame/commits"))
+                WireMock
+                    .get(WireMock.urlEqualTo("/repos/EduardRK/Fractal-Flame/commits"))
                     .willReturn(WireMock.aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
