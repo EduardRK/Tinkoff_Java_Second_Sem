@@ -3,6 +3,7 @@ package edu.java.domain.jpa.entity;
 import edu.java.domain.dto.Link;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "link")
 public class LinkEntity {
-    @ManyToMany(mappedBy = "links")
+    @ManyToMany(mappedBy = "links", fetch = FetchType.EAGER)
     Set<ChatEntity> chats = new HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

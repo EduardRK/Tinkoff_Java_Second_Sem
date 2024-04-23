@@ -11,7 +11,7 @@ public abstract class KafkaIntegrationTest {
     public static KafkaContainer KAFKA;
 
     static {
-        KAFKA = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.0"));
+        KAFKA = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.2"));
         KAFKA.start();
     }
 

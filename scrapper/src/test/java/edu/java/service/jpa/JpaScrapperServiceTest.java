@@ -52,7 +52,7 @@ class JpaScrapperServiceTest extends IntegrationTest {
             jdbcClient.sql("SELECT id FROM chat WHERE id = 2").query(Long.class).single()
         );
 
-        scrapperService.deleteChat(12);
+        scrapperService.deleteChat(2);
     }
 
     @Test

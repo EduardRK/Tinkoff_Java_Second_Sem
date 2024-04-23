@@ -56,10 +56,11 @@ public class ConsumerKafkaConfig {
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();
 
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, updateKafkaConfig.bootstrapServer());
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, updateKafkaConfig.bootstrapServer());
         props.put(ConsumerConfig.GROUP_ID_CONFIG, updateKafkaConfig.groupId());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put("spring.json.trusted.packages", "edu.java.requests");
 
         return props;
     }
@@ -80,7 +81,6 @@ public class ConsumerKafkaConfig {
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, dlqKafkaConfig.bootstrapServer());
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, dlqKafkaConfig.groupId());
         props.put(ProducerConfig.LINGER_MS_CONFIG, dlqKafkaConfig.lingerMs());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);

@@ -31,7 +31,7 @@ public abstract class IntegrationTest {
         .withDatabaseName("scrapper")
         .withUsername("postgres")
         .withPassword("postgres");
-    public static KafkaContainer KAFKA = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.0"));
+    public static KafkaContainer KAFKA = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.2"));
 
     static {
         POSTGRES.start();
