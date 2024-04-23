@@ -14,7 +14,7 @@ public interface LinkRepository {
 
     long removeLink(Link link);
 
-    void updateLastUpdateTime(Link link);
+    void updateLastUpdateTime(Link link, OffsetDateTime now);
 
     void updateAllLastUpdateTime(OffsetDateTime now);
 }

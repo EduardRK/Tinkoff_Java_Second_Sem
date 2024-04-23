@@ -38,17 +38,23 @@ public final class StackOverflowQuestionClient extends AbstractClient {
     }
 
     @Override
-    public List<Response> newUpdates(URI uri) {
+    public List<? extends Response> newUpdates(URI uri) {
         if (notValid(uri)) {
             return nextClient.newUpdates(uri);
         }
 
         Matcher matcher = PATTERN.matcher(uri.toString());
-        matcher.matches();
+        String group;
+
+        if (matcher.find()) {
+            group = matcher.group(2);
+        } else {
+            return new ArrayList<>();
+        }
 
         StackOverflowResponse stackOverflowResponse = webClient
             .get()
-            .uri("/questions/" + matcher.group(2) + "/answers" + FILTERS)
+            .uri("/questions/" + group + "/answers" + FILTERS)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToMono(StackOverflowResponse.class)
@@ -60,10 +66,7 @@ public final class StackOverflowQuestionClient extends AbstractClient {
             return new ArrayList<>();
         }
 
-        return stackOverflowResponse.answers()
-            .stream()
-            .map(answer -> new Response(uri, answer.author(), answer.message(), answer.date()))
-            .toList();
+        return stackOverflowResponse.answers();
     }
 
     @Override

@@ -59,15 +59,17 @@ public class DatabaseIntegrationTest extends IntegrationTest {
         );
 
         Statement statement = connection.createStatement();
-        statement.execute("INSERT INTO chat (id) VALUES (2)");
+        statement.execute("INSERT INTO chat (id) VALUES (1)");
 
         ResultSet resultSet = statement.executeQuery("SELECT id FROM chat");
 
         resultSet.next();
         Assertions.assertEquals(
-            2,
+            1,
             resultSet.getInt("id")
         );
+
+        statement.execute("DELETE FROM chat WHERE id = 1");
     }
 
     @Test

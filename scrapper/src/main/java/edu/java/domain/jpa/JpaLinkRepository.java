@@ -35,6 +35,7 @@ public interface JpaLinkRepository extends JpaRepository<LinkEntity, Long> {
     @Query("update LinkEntity l set l.lastUpdate = ?1")
     void updateLastUpdateBy(OffsetDateTime lastUpdate);
 
+    @Transactional
     long deleteByUri(String uri);
 
     boolean existsByUri(String uri);

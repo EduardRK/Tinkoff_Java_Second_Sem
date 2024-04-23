@@ -4,13 +4,16 @@ import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.service.bot_body.commands.Command;
 import edu.java.bot.service.bot_body.commands.CommandComplete;
 import edu.java.bot.service.bot_body.commands.EmptyCommand;
+import edu.java.bot.service.scrapper_client.ApiErrorException;
 import edu.java.bot.service.scrapper_client.ScrapperClient;
-import edu.java.exceptions.BadRequestException.BadRequestException;
+import edu.java.responses.ApiErrorResponse;
 import edu.java.responses.ListLinksResponse;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 
 public final class ListCommand extends AbstractCommand {
@@ -25,7 +28,7 @@ public final class ListCommand extends AbstractCommand {
     }
 
     public ListCommand() {
-        this(null, null);
+        super(null, null);
     }
 
     @Override
@@ -35,11 +38,19 @@ public final class ListCommand extends AbstractCommand {
         }
 
         long id = message.chat().id();
+        AtomicReference<ApiErrorResponse> apiErrorResponse = new AtomicReference<>();
 
         Optional<ListLinksResponse> linksResponse = scrapperClient.allTrackedLinks(id)
-            .onErrorResume(BadRequestException.class, e -> Mono.empty())
-            .then(Mono.just(new ListLinksResponse(new ArrayList<>(), 0)))
+            .onErrorResume(ApiErrorException.class, e -> {
+                apiErrorResponse.set(e.apiErrorResponse());
+                return Mono.just(new ListLinksResponse(new ArrayList<>(), 0));
+            })
             .blockOptional();
+
+        if (apiErrorResponse.get() != null
+            && apiErrorResponse.get().code().equals(HttpStatus.TOO_MANY_REQUESTS.toString())) {
+            return new CommandComplete(apiErrorResponse.get().description(), id);
+        }
 
         if (linksResponse.isEmpty() || linksResponse.get().size() == 0) {
             return new CommandComplete(NOTHING_TRACK, id);
@@ -49,7 +60,10 @@ public final class ListCommand extends AbstractCommand {
         StringBuilder stringBuilder = new StringBuilder();
 
         listLinksResponse.links().forEach(
-            linkResponse -> stringBuilder.append(linkResponse.url()).append(System.lineSeparator())
+            linkResponse -> stringBuilder
+                .append(linkResponse.url())
+                .append(System.lineSeparator())
+                .append(System.lineSeparator())
         );
 
         return new CommandComplete(stringBuilder.toString(), id);

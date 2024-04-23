@@ -4,6 +4,7 @@ import edu.java.domain.jpa.JpaChatRepository;
 import edu.java.domain.jpa.JpaLinkRepository;
 import edu.java.service.ScrapperService;
 import edu.java.service.jpa.JpaScrapperService;
+import jakarta.persistence.EntityManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,9 @@ public class JpaServiceConfig {
     @Bean
     public ScrapperService jpaScrapperService(
         JpaChatRepository chatRepository,
-        JpaLinkRepository linkRepository
+        JpaLinkRepository linkRepository,
+        EntityManager entityManager
     ) {
-        return new JpaScrapperService(linkRepository, chatRepository);
+        return new JpaScrapperService(linkRepository, chatRepository, entityManager);
     }
 }

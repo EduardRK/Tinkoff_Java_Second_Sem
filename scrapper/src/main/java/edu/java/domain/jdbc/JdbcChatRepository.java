@@ -2,9 +2,7 @@ package edu.java.domain.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class JdbcChatRepository implements ChatRepository {
     private final JdbcClient jdbcClient;
 

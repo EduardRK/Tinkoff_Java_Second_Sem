@@ -3,19 +3,18 @@ package edu.java.configuration;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
-import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties(prefix = "retry", ignoreUnknownFields = false)
-public record RetryConfig(
+@ConfigurationProperties(prefix = "cache", ignoreUnknownFields = false)
+public record CacheConfig(
+    int maximumSize,
+    @NotNull
+    Duration expireAfterWrite,
+    @NotNull
+    Duration expireAfterAccess,
     @NotBlank
-    String type,
-    @NotNull
-    Duration baseDelay,
-    long maxAttempts,
-    @NotNull
-    List<Integer> statusCodes
+    String evictionStrategy
 ) {
 }

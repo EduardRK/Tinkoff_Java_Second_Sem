@@ -52,18 +52,36 @@ class GitHubCommitUpdateClientTest {
 
         List<Response> responses = new ArrayList<>(
             List.of(
-                new Response(
-                    new URI(REPOSITORY_LINK),
-                    "EduardRK",
-                    "Fractal flame",
-                    OffsetDateTime.parse("2024-01-11T18:51:01Z")
-                )
+                new Response() {
+                    @Override
+                    public String author() {
+                        return "EduardRK";
+                    }
+
+                    @Override
+                    public String message() {
+                        return "Fractal flame";
+                    }
+
+                    @Override
+                    public OffsetDateTime date() {
+                        return OffsetDateTime.parse("2024-01-11T18:51:01Z");
+                    }
+                }
             )
         );
 
         Assertions.assertEquals(
-            responses,
-            client.newUpdates(new URI(REPOSITORY_LINK))
+            responses.getFirst().author(),
+            client.newUpdates(new URI(REPOSITORY_LINK)).getFirst().author()
+        );
+        Assertions.assertEquals(
+            responses.getFirst().message(),
+            client.newUpdates(new URI(REPOSITORY_LINK)).getFirst().message()
+        );
+        Assertions.assertEquals(
+            responses.getFirst().date(),
+            client.newUpdates(new URI(REPOSITORY_LINK)).getFirst().date()
         );
     }
 

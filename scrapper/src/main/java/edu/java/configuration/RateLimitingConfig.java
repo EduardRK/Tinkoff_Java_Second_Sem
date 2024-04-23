@@ -8,11 +8,9 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "rate-limiting", ignoreUnknownFields = false)
 public record RateLimitingConfig(
-    long bucketSize,
-    long tokens,
+    long capacity,
+    long refillTokens,
     @NotNull
-    Duration refillInterval,
-    @NotNull
-    Duration cacheDuration
+    Duration refillInterval
 ) {
 }

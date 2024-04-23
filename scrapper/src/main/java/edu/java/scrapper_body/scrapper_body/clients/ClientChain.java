@@ -22,7 +22,7 @@ public final class ClientChain implements Client {
     }
 
     @Override
-    public List<Response> newUpdates(URI uri) {
+    public List<? extends Response> newUpdates(URI uri) {
         return chain.newUpdates(uri);
     }
 

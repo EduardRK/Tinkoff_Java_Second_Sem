@@ -12,12 +12,6 @@ retry:
   max-attempts: 3
   status-codes: [ 429, 500, 501, 502, 503 ]
 
-rate-limiting:
-  bucket-size: 100
-  tokens: 50
-  refill-interval: 5m
-  cache-duration: 15m
-
 kafka:
   bootstrap-server: localhost:9092
   group-id: scrapper
@@ -45,22 +39,33 @@ management:
   server:
     port: 8081
 
+rate-limiting:
+  capacity: 200
+  refill-tokens: 20
+  refill-interval: 5s
+
+cache:
+  maximum-size: 100
+  expire-after-write: 15m
+  expire-after-access: 10m
+  eviction-strategy: LRU
 
 spring:
   application:
     name: scrapper
   liquibase:
     enabled: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/scrapper
     username: postgres
     password: postgres
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
   sql:
     init:
       mode: always

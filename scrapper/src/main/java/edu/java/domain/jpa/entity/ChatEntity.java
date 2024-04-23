@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "chat")
@@ -54,6 +55,17 @@ public class ChatEntity {
     public void addLink(LinkEntity linkEntity) {
         links.add(linkEntity);
         linkEntity.chats().add(this);
+    }
 
+    public void removeLink(LinkEntity linkEntity) {
+        links.remove(linkEntity);
+    }
+
+    public boolean containsLink(String uri) {
+        return links
+            .parallelStream()
+            .map(LinkEntity::uri)
+            .collect(Collectors.toSet())
+            .contains(uri);
     }
 }
