@@ -1,5 +1,5 @@
 app:
-  telegram-token: ${TELEGRAM_TOKEN}
+  telegram-token: 6466351131:AAFID18XGGax3qOiKrG-KnA7yf6iRrZUvDc
   use-queue: true
 
 retry:
