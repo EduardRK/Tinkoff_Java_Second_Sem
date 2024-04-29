@@ -3,8 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-bot/src/main/resources/variables.env
-scrapper/src/main/resources/variables.env
+
 ### STS ###
 .apt_generated
 .classpath
@@ -32,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/bot/src/main/resources/variables.env
+/scrapper/src/main/resources/variables.env
