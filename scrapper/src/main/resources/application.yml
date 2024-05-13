@@ -37,7 +37,7 @@ management:
       export:
         enabled: true
   server:
-    port: 8081
+    port: 81
 
 rate-limiting:
   capacity: 200
