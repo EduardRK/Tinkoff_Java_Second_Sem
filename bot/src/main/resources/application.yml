@@ -42,7 +42,7 @@ management:
       export:
         enabled: true
   server:
-    port: 8091
+    port: 91
 
 spring:
   application:
@@ -51,7 +51,7 @@ spring:
     time-zone: UTC
 
 server:
-  port: 8090
+  port: 90
 
 logging:
   config: classpath:log4j2-plain.xml
